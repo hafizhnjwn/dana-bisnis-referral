@@ -1,0 +1,24 @@
+{
+  "name": "dana-bisnis-merchant-referral-prototype",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node src/rewards.test.mjs && npm run test:screens",
+    "test:screens": "vite build --ssr screens.smoke.jsx --outDir node_modules/.smoke --logLevel warn && node node_modules/.smoke/screens.smoke.js"
+  },
+  "dependencies": {
+    "qrcode.react": "4.2.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@vitejs/plugin-react": "6.1.1",
+    "tailwindcss": "4.3.3",
+    "vite": "8.3.0"
+  }
+}

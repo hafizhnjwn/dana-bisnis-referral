@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-dana-50: #eff8ff;
+  --color-dana-100: #dbeefe;
+  --color-dana-200: #b9ddfb;
+  --color-dana-500: #108ee9;
+  --color-dana-600: #0d7ad0;
+  --color-dana-700: #0b5da7;
+  --color-dana-900: #064e8a;
+}
+
+body {
+  @apply bg-slate-100 text-slate-800 antialiased;
+}
+
+/* Hide the phone's inner scrollbar so the frame keeps looking like a device. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.screen-in {
+  animation: screen-in 0.22s ease-out;
+}
