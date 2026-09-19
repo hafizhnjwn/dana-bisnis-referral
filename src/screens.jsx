@@ -596,48 +596,28 @@ function Tracker(p) {
               </div>
 
               {r.stage === 0 && (
-                <div className="mt-3 space-y-2">
-                  <p className="rounded-xl bg-slate-50 px-3 py-2 text-[10px] text-slate-600">
-                    Undangan terkirim. Menunggu pemilik warung menyelesaikan pendaftaran cepat (3 data, KYC Light).
-                  </p>
-                  <button
-                    onClick={() => nudge(r)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
-                  >
-                    <Icon name="share" className="h-3.5 w-3.5" /> Ingatkan via WhatsApp
-                  </button>
-                </div>
+                <button
+                  onClick={() => nudge(r)}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
+                >
+                  <Icon name="share" className="h-3.5 w-3.5" /> Ingatkan via WhatsApp
+                </button>
               )}
               {isRegisteredNoTx && (
-                <div className="mt-3 space-y-2">
-                  <p className="rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
-                    Pendaftaran selesai &amp; QRIS aktif. Dampingi warung menerima pembayaran pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).
-                  </p>
-                  <button
-                    onClick={() => nudge(r)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
-                  >
-                    <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi Pertama via WhatsApp
-                  </button>
-                </div>
+                <button
+                  onClick={() => nudge(r)}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
+                >
+                  <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi Pertama via WhatsApp
+                </button>
               )}
               {isStage1Done && (
-                <div className="mt-3 space-y-2">
-                  <p className="rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
-                    🎉 Tahap 1 Selesai: Transaksi pertama ≥Rp10k berhasil (Reward Rp20.000 cair). Menuju Tahap 2: dampingi 5 transaksi unik dari pembeli berbeda agar bonus Rp25.000 cair!
-                  </p>
-                  <button
-                    onClick={() => nudge(r)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
-                  >
-                    <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi via WhatsApp
-                  </button>
-                </div>
-              )}
-              {isStage2Done && (
-                <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-[10px] font-bold text-emerald-700">
-                  ✓ Tahap 2 Selesai! 5 transaksi unik lolos verifikasi validitas. Total reward Rp45.000 lengkap masuk ke Pocket DANA.
-                </p>
+                <button
+                  onClick={() => nudge(r)}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
+                >
+                  <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi via WhatsApp
+                </button>
               )}
             </div>
           );
