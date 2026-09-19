@@ -873,23 +873,37 @@ function Inbox(p) {
     m.firstPayment >= 10000 && {
       tone: 'emerald',
       icon: 'bolt',
-      title: `Reward Tahap 1 (Rp20.000) Masuk ke Saldo DANA!`,
+      title: `Tahap 1 Selesai: Reward Rp20.000 Masuk!`,
       body: `Pembayaran ${rupiah(m.firstPayment)} di ${m.name} terverifikasi. Reward Tahap 1 sebesar Rp20.000 telah otomatis masuk ke Saldo Pocket DANA Anda.`,
       time: 'Baru saja',
     },
     m.issued && {
       tone: 'dana',
       icon: 'store',
-      title: `${m.name} selesai pendaftaran & QRIS terbit`,
-      body: 'Pendaftaran selesai. Dampingi warung menerima transaksi pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).',
+      title: `Warung Terdaftar: ${m.name}`,
+      body: `${m.name} selesai pendaftaran & QRIS terbit. Dampingi warung menerima transaksi pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).`,
       time: '2 menit lalu',
     },
     {
       tone: 'emerald',
       icon: 'trophy',
-      title: 'Reward Tahap 2 (Rp25.000) Masuk: Toko Kelontong Jaya',
-      body: '5 transaksi unik lolos verifikasi audit validitas DANA. Saldo tambahan Rp25.000 (Total Rp45.000) telah otomatis masuk ke akun Anda.',
+      title: 'Tahap 2 Selesai: Reward Rp25.000 Masuk',
+      body: '5 transaksi unik di Toko Kelontong Jaya lolos audit validitas DANA. Saldo tambahan Rp25.000 (Total Rp45.000) telah otomatis masuk ke akun Anda.',
       time: 'Kemarin',
+    },
+    {
+      tone: 'emerald',
+      icon: 'bolt',
+      title: 'Tahap 1 Selesai: Reward Rp20.000 Masuk',
+      body: 'Transaksi pertama di Kopi Pak Rudi terverifikasi. Reward Tahap 1 sebesar Rp20.000 telah otomatis masuk ke Saldo Pocket DANA Anda.',
+      time: '3 hari lalu',
+    },
+    {
+      tone: 'dana',
+      icon: 'store',
+      title: 'Warung Terdaftar: Kopi Pak Rudi',
+      body: 'Kopi Pak Rudi berhasil aktivasi DANA Bisnis & QRIS terbit via kode referral Anda.',
+      time: '5 hari lalu',
     },
   ].filter(Boolean);
 
