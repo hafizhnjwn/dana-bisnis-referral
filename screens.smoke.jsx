@@ -71,5 +71,5 @@ if (!jokoHome.includes('96.500')) throw new Error('Home does not show the active
 const jokoBiz = renderToStaticMarkup(<screens.bizdash {...joko} />);
 if (!jokoBiz.includes('Martabak Pak Joko')) throw new Error('Bisnis tab does not show the merchant store');
 const jokoHub = renderToStaticMarkup(<screens.hub {...joko} />);
-if (!jokoHub.includes('Mitra Bisnis') || !jokoHub.includes('Joko')) throw new Error('Hub does not adapt to merchant');
+if (!jokoHub.includes('Mitra Bisnis')) throw new Error('Hub does not adapt to merchant');
 console.log('persona isolation: ok');

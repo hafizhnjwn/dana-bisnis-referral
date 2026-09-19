@@ -273,21 +273,10 @@ function Hub(p) {
       <AffiliateCarouselGuide isOpen={showGuide} onClose={() => setShowGuide(false)} />
 
       <div className="px-4 pt-3 pb-8">
-        <div className="flex items-center gap-2 rounded-2xl bg-white p-3 shadow-sm">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-dana-50 text-sm font-bold text-dana-700">
-            {user.initial}
-          </span>
-          <div className="flex-1">
-            <p className="text-xs font-bold text-slate-800">{user.name}</p>
-            <p className="text-[10px] text-slate-400">{biz ? 'Merchant DANA Bisnis' : 'Pengguna DANA'}</p>
-          </div>
-          <Pill tone="dana">{trackLabel}</Pill>
-        </div>
-
         {/* Guide banner */}
         <button
           onClick={() => setShowGuide(true)}
-          className="mt-3 flex w-full items-center justify-between rounded-2xl border border-dana-200 bg-dana-50/80 px-3.5 py-2.5 text-left transition active:bg-dana-100"
+          className="flex w-full items-center justify-between rounded-2xl border border-dana-200 bg-dana-50/80 px-3.5 py-2.5 text-left transition active:bg-dana-100"
         >
           <div className="flex items-center gap-2.5">
             <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-dana-500 text-white text-xs">
@@ -320,13 +309,10 @@ function Hub(p) {
 
         {mode === 'warung' ? (
           <div className="mt-4 space-y-4">
-            {/* Summary card with auto-credit note */}
+            {/* Summary card */}
             <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-4 text-white shadow-lg shadow-dana-700/25">
               <p className="text-[11px] text-white/80">Total Saldo Reward Masuk ke Akun Anda</p>
               <p className="text-3xl font-extrabold">{rupiah(earned)}</p>
-              <p className="mt-1 text-[10px] text-emerald-200">
-                ✓ Otomatis masuk ke Saldo Pocket DANA saat transaksi pertama berhasil
-              </p>
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                 {[
                   [inProgress, 'Menunggu Transaksi'],
@@ -445,15 +431,6 @@ function Hub(p) {
                   <Icon name="next" className="h-3.5 w-3.5 text-slate-400" />
                 </button>
               ))}
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <Btn variant="ghost" onClick={() => go('tracker')}>
-                <Icon name="users" className="h-4 w-4" /> Referal Saya
-              </Btn>
-              <Btn variant="ghost" onClick={() => go('inbox')}>
-                <Icon name="bell" className="h-4 w-4" /> Notifikasi Saldo
-              </Btn>
             </div>
           </div>
 
