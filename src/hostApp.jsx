@@ -708,14 +708,14 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
       {/* Backdrop overlay saat Tour Panduan Fitur Aktif */}
       {tourStep !== null && (
         <div
-          className="absolute inset-0 z-30 bg-slate-950/65 backdrop-blur-xs transition-opacity duration-300"
+          className="fixed inset-0 z-30 bg-slate-950/65 backdrop-blur-xs transition-opacity duration-300"
           onClick={() => setTourStep(null)}
         />
       )}
 
       {/* Interactive Modal Popover Penjelasan Fitur */}
       {tourStep !== null && (
-        <div className="absolute inset-x-3 bottom-18 z-50 rounded-2xl border border-amber-300/60 bg-white p-4 shadow-2xl animate-fade-in text-slate-900">
+        <div className="sticky bottom-20 z-50 mx-3 -mt-16 rounded-2xl border border-amber-300/60 bg-white p-4 shadow-2xl animate-fade-in text-slate-900">
           <div className="flex items-center justify-between border-b border-slate-100 pb-2">
             <span className="flex items-center gap-1.5 rounded-full bg-dana-50 px-2.5 py-0.5 text-[10px] font-extrabold text-dana-700">
               <span className="h-1.5 w-1.5 rounded-full bg-dana-500 animate-pulse" />

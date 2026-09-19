@@ -208,7 +208,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
   const curr = slides[step];
 
   return (
-    <div className="absolute inset-0 z-50 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0D5995] via-[#108EE9] to-[#083556] text-white animate-in fade-in duration-200">
+    <div className="relative h-full w-full flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0D5995] via-[#108EE9] to-[#083556] text-white animate-in fade-in duration-200">
       <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
       <div className="pointer-events-none absolute top-1/3 -left-24 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
 
@@ -260,7 +260,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
         </div>
       </div>
 
-      <div className="pointer-events-none relative flex-1 px-5 py-4 flex flex-col justify-center">
+      <div className="pointer-events-none relative flex-1 px-5 py-2 flex flex-col justify-center">
         <div>
           <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase text-amber-200">
             {curr.tag}
@@ -268,7 +268,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
           <h2 className="mt-2 text-xl font-black leading-tight text-white">{curr.title}</h2>
           <p className="mt-1 text-xs text-white/85 leading-snug">{curr.subtitle}</p>
 
-          <div className="mt-4">{curr.visual}</div>
+          <div className="mt-3">{curr.visual}</div>
         </div>
       </div>
 
@@ -301,9 +301,16 @@ function Hub(p) {
   const biz = s.role === 'merchant';
   const inProgress = s.referrals.filter((r) => r.stage === 1).length;
 
+  if (showGuide) {
+    return (
+      <div className="relative h-full w-full overflow-hidden bg-slate-900">
+        <AffiliateCarouselGuide isOpen={true} onClose={handleCloseGuide} />
+      </div>
+    );
+  }
+
   return (
     <MiniShell title="Affiliate DANA Bisnis" tab="hub" {...p} unread={2}>
-      <AffiliateCarouselGuide isOpen={showGuide} onClose={handleCloseGuide} />
 
       <div className="px-4 pt-3 pb-8">
         {/* Guide banner */}
