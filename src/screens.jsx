@@ -83,95 +83,174 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
 
 /* -------------------------------- Mini Program Beranda (hub) */
 
-function AffiliateGuideModal({ isOpen, onClose }) {
+function AffiliateCarouselGuide({ isOpen, onClose }) {
   const [step, setStep] = useState(0);
   if (!isOpen) return null;
 
-  const guides = [
+  const slides = [
     {
-      badge: 'LANGKAH 1 DARI 4',
-      title: 'Temukan Warung di Sekitarmu',
-      desc: 'Cari warung makan, toko kelontong, kedai kopi, atau rekan usaha di sekitarmu yang belum memiliki QRIS pembayaran digital.',
-      icon: 'store',
-      tip: 'Banyak pemilik usaha ingin menerima pembayaran QRIS, namun enggan mendaftar sendiri karena takut proses yang rumit.',
+      tag: 'LANGKAH 1 DARI 4 · PELUANG EMAS',
+      title: 'Ajak Warung Langganan, Raih s/d Rp45.000',
+      desc: 'Bantu warung makan, kedai kopi, dan rekan usaha sekitar memiliki QRIS digital resmi tanpa proses berbelit dan tanpa biaya pendaftaran.',
+      points: [
+        { icon: 'bolt', title: 'Terobosan "Bantu Daftarkan"', desc: 'Kamu yang isikan 3 data ringkas, kode referral tertanam otomatis.' },
+        { icon: 'shield', title: 'KYC Light Instan (Rp0)', desc: 'Tanpa syarat upload e-KTP dan tanpa selfie biometrik di awal.' },
+        { icon: 'qr', title: 'QRIS Terbit < 5 Detik', desc: 'Siap langsung menerima pembayaran dari seluruh bank & e-wallet.' },
+      ],
+      tip: 'Banyak pemilik usaha ingin QRIS, namun enggan mendaftar sendiri karena takut proses rumit. Kamu adalah jembatannya!',
     },
     {
-      badge: 'LANGKAH 2 DARI 4',
-      title: 'Bantu Daftarkan Tanpa Ribet (30 Detik)',
-      desc: 'Cukup masukkan 3 data ringkas (Nama Usaha, Kategori, WhatsApp) via tombol "Bantu Daftarkan". Tanpa perlu upload e-KTP di awal berkat KYC Light.',
-      icon: 'users',
-      tip: 'Kode referralmu sudah tertanam otomatis di link undangan, pemilik warung tidak perlu mengetik kode secara manual.',
+      tag: 'LANGKAH 2 DARI 4 · TAHAP 1 REWARD',
+      title: 'Tahap 1: Pendaftaran & Transaksi Pertama ≥Rp10k',
+      desc: 'Dampingi warung menerima pembayaran pertama min. Rp10.000 dari pembeli. Saldo DANA Rp20.000 langsung otomatis masuk ke akunmu!',
+      points: [
+        { icon: 'wallet', title: 'Kamu Dapat: Rp20.000 Saldo DANA', desc: 'Otomatis masuk ke Pocket DANA tanpa perlu klaim manual.' },
+        { icon: 'gift', title: 'Warung Dapat: 0% MDR & Modal Rp15.000', desc: 'Semua uang masuk utuh 100% + bonus modal usaha awal Rp15.000.' },
+        { icon: 'sound', title: 'Fitur Suara Nada DANA Gratis', desc: 'HP toko otomatis menyebutkan nominal uang masuk secara real-time.' },
+      ],
+      tip: 'Tahap pendaftaran & QRIS instan tidak ada reward uang (Rp0) untuk mencegah akun fiktif. Reward terbuka dari transaksi pertama.',
     },
     {
-      badge: 'LANGKAH 3 DARI 4',
-      title: 'QRIS Terbit & Dampingi Transaksi Pertama',
-      desc: 'QRIS toko langsung terbit instan. Dampingi warung untuk menerima pembayaran pertama pelanggan minimal Rp 10.000.',
-      icon: 'bolt',
-      tip: 'Tahap pendaftaran & QRIS instan tidak ada reward uang (Rp 0) untuk mencegah akun palsu. Reward terbuka dari transaksi pertama.',
+      tag: 'LANGKAH 3 DARI 4 · TAHAP 2 REWARD',
+      title: 'Tahap 2: 5 Transaksi Unik & Validasi 1–14 Hari',
+      desc: 'Dampingi warung hingga membukukan 5 transaksi unik dari pembeli berbeda. Tim DANA memverifikasi keabsahan transaksi dalam 1–14 hari kerja.',
+      points: [
+        { icon: 'wallet', title: 'Kamu Dapat: Tambahan Rp25.000 Saldo', desc: 'Total komisi penuh mencapai Rp45.000 per warung binaan.' },
+        { icon: 'gift', title: 'Warung Dapat: Kupon 0% MDR 30 Hari', desc: 'Perpanjangan bebas potongan transaksi untuk memaksimalkan laba.' },
+        { icon: 'shield', title: 'Badge Merchant Juara & DANA Sekitar', desc: 'Toko dipromosikan gratis ke ratusan pengguna di radius terdekat.' },
+      ],
+      tip: '5 transaksi dari pembeli riil membuktikan warung benar-benar aktif bertransaksi digital sehari-hari.',
     },
     {
-      badge: 'LANGKAH 4 DARI 4',
-      title: 'Reward Rp 10.000 Langsung Cair ke Saldo DANA!',
-      desc: 'Begitu transaksi pertama min. Rp 10.000 berhasil, reward Rp 10.000 langsung otomatis masuk ke Saldo Pocket DANA Anda tanpa perlu klaim manual di Pusat Hadiah.',
-      icon: 'wallet',
-      tip: 'Warung binaanmu juga menikmati 0% MDR bebas potongan biaya dan fitur Nada DANA gratis!',
+      tag: 'LANGKAH 4 DARI 4 · AUTO-CREDIT & MILESTONE',
+      title: 'Cair Otomatis & Hadiah Rp1.000.000',
+      desc: 'Semua saldo reward masuk otomatis tanpa repot klaim di Pusat Hadiah. Kembangkan jaringan merchant dan raih bonus milestone jutaan rupiah!',
+      points: [
+        { icon: 'check', title: '100% Otomatis Masuk Saldo', desc: 'Bebas khawatir reward hangus atau lupa diklaim.' },
+        { icon: 'trophy', title: 'Bonus Rp1.000.000 / 50 Mitra Aktif', desc: 'Raih hadiah pencapaian ekstra setiap 50 warung menyelesaikan program.' },
+        { icon: 'users', title: 'Dukungan WhatsApp 1-Tap', desc: 'Tombol dampingi transaksi memudahkan edukasi ke pemilik warung.' },
+      ],
+      tip: 'Makin banyak warung yang kamu bantu digitalisasi, makin besar penghasilan pasif yang kamu nikmati.',
     },
   ];
 
-  const curr = guides[step];
+  const curr = slides[step];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/70 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl animate-in fade-in zoom-in-95">
-        <div className="bg-gradient-to-br from-dana-600 to-dana-800 p-5 text-white">
-          <div className="flex items-center justify-between">
-            <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[9px] font-extrabold tracking-wider uppercase">
-              {curr.badge}
-            </span>
+    <div className="absolute inset-0 z-50 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0D5995] via-[#108EE9] to-[#083556] text-white animate-in fade-in duration-200">
+      {/* Top background glow elements */}
+      <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
+      <div className="pointer-events-none absolute top-1/3 -left-24 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
+
+      {/* Notch clearance & Story Progress Bars */}
+      <div className="relative pt-8 px-4 shrink-0">
+        <div className="flex items-center gap-1.5">
+          {slides.map((_, i) => (
             <button
-              onClick={onClose}
-              aria-label="Tutup panduan"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-xs active:bg-white/30"
+              key={i}
+              onClick={() => setStep(i)}
+              aria-label={`Slide ${i + 1}`}
+              className="h-1 flex-1 overflow-hidden rounded-full bg-white/25 transition-all"
             >
-              ✕
+              <div
+                className={`h-full transition-all duration-300 ${
+                  step === i ? 'w-full bg-white shadow-sm' : step > i ? 'w-full bg-white/90' : 'w-0'
+                }`}
+              />
             </button>
-          </div>
-          <h3 className="mt-3 text-lg font-black leading-tight text-white">{curr.title}</h3>
+          ))}
         </div>
 
-        <div className="p-5">
-          <p className="text-xs leading-relaxed text-slate-600">{curr.desc}</p>
-          <div className="mt-3 rounded-2xl bg-amber-50 p-3 text-[11px] leading-relaxed font-medium text-amber-800">
-            💡 <strong>Prinsip:</strong> {curr.tip}
+        {/* Top Navbar */}
+        <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[#108EE9] text-[10px] font-black">
+              D
+            </span>
+            <span className="text-[10px] font-extrabold tracking-wider text-white/90">
+              PANDUAN LENGKAP AFFILIATE
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-extrabold tracking-wider text-white backdrop-blur-xs transition hover:bg-white/25 active:scale-95"
+          >
+            LEWATI <Icon name="close" className="h-3 w-3" />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Slide Content */}
+      <div className="relative flex-1 overflow-y-auto px-5 py-3 no-scrollbar flex flex-col justify-between">
+        <div>
+          {/* Badge & Title */}
+          <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase backdrop-blur-xs text-amber-200">
+            {curr.tag}
+          </div>
+          <h2 className="mt-2 text-xl font-black leading-tight text-white">{curr.title}</h2>
+          <p className="mt-1 text-xs leading-relaxed text-white/85">{curr.desc}</p>
+
+          {/* Value Props Card */}
+          <div className="mt-4 space-y-2 rounded-2xl bg-white/10 p-3.5 backdrop-blur-md border border-white/20">
+            {curr.points.map((pt, idx) => (
+              <div key={idx} className="flex items-start gap-2.5">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/20 text-white mt-0.5">
+                  <Icon name={pt.icon} className="h-3.5 w-3.5" />
+                </span>
+                <div className="flex-1">
+                  <p className="text-[11px] font-extrabold text-white">{pt.title}</p>
+                  <p className="text-[10px] leading-snug text-white/80">{pt.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-5 flex items-center justify-between gap-3">
-            <div className="flex gap-1.5">
-              {guides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setStep(i)}
-                  aria-label={`Slide ${i + 1}`}
-                  className={`h-2 rounded-full transition-all ${
-                    step === i ? 'w-6 bg-dana-600' : 'w-2 bg-slate-200'
-                  }`}
-                />
-              ))}
-            </div>
+          {/* Principle / Tip card */}
+          <div className="mt-3 rounded-2xl bg-amber-400/20 border border-amber-300/30 p-3 text-[10px] leading-relaxed text-amber-100">
+            💡 <strong>Prinsip Program:</strong> {curr.tip}
+          </div>
+        </div>
+      </div>
 
-            {step < guides.length - 1 ? (
+      {/* Bottom Controls */}
+      <div className="relative shrink-0 border-t border-white/15 bg-black/10 px-5 pt-3 pb-6 backdrop-blur-md">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1.5">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setStep(i)}
+                aria-label={`Slide ${i + 1}`}
+                className={`h-2 rounded-full transition-all ${
+                  step === i ? 'w-6 bg-amber-300' : 'w-2 bg-white/40'
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            {step > 0 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                className="rounded-xl border border-white/30 bg-white/10 px-3.5 py-2 text-xs font-bold text-white transition active:bg-white/20"
+              >
+                Kembali
+              </button>
+            )}
+
+            {step < slides.length - 1 ? (
               <button
                 onClick={() => setStep(step + 1)}
-                className="rounded-xl bg-dana-500 px-4 py-2 text-xs font-bold text-white shadow-sm active:bg-dana-600"
+                className="flex items-center gap-1 rounded-xl bg-white px-5 py-2.5 text-xs font-black text-[#108EE9] shadow-lg shadow-black/20 transition active:scale-95"
               >
-                Lanjut
+                Lanjut <Icon name="next" className="h-3.5 w-3.5" />
               </button>
             ) : (
               <button
                 onClick={onClose}
-                className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-sm active:bg-emerald-700"
+                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 px-5 py-2.5 text-xs font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-95"
               >
-                Mulai Sekarang!
+                Mulai Sekarang! <Icon name="check" className="h-4 w-4" />
               </button>
             )}
           </div>
@@ -191,7 +270,7 @@ function Hub(p) {
 
   return (
     <MiniShell title="Affiliate DANA Bisnis" tab="hub" {...p} unread={2}>
-      <AffiliateGuideModal isOpen={showGuide} onClose={() => setShowGuide(false)} />
+      <AffiliateCarouselGuide isOpen={showGuide} onClose={() => setShowGuide(false)} />
 
       <div className="px-4 pt-3 pb-8">
         <div className="flex items-center gap-2 rounded-2xl bg-white p-3 shadow-sm">
@@ -215,8 +294,8 @@ function Hub(p) {
               💡
             </span>
             <div>
-              <p className="text-xs font-bold text-dana-900">Panduan Memulai Affiliate</p>
-              <p className="text-[10px] text-dana-700">4 langkah mudah mengajak warung & dapat Rp10.000</p>
+              <p className="text-xs font-bold text-dana-900">Panduan Lengkap Affiliate (Carousel)</p>
+              <p className="text-[10px] text-dana-700">Skema 2 tahap reward s/d Rp45.000 per warung</p>
             </div>
           </div>
           <span className="rounded-lg bg-white px-2 py-1 text-[10px] font-bold text-dana-700 shadow-2xs">
@@ -332,7 +411,7 @@ function Hub(p) {
                 ))}
               </div>
               <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
-                <strong>Catatan:</strong> Tahap KYC Light &amp; QRIS instan tidak ada reward uang (Rp 0) untuk mencegah akun palsu. Reward <strong>Rp10.000</strong> cair langsung ke Saldo Pocket DANA setelah transaksi pertama minimal Rp10.000 berhasil.
+                <strong>Catatan Skema 2 Tahap:</strong> Tahap 1 (<strong>Rp20.000</strong>) cair saat pendaftaran selesai &amp; transaksi pertama ≥Rp10.000 berhasil. Tahap 2 (<strong>Rp25.000</strong>) cair setelah 5 transaksi unik lolos audit validitas DANA (1–14 hari). Total komisi utuh: <strong>Rp45.000</strong> per warung binaan!
               </p>
             </div>
 
@@ -362,7 +441,7 @@ function Hub(p) {
               {[
                 ['Kelebihan QRIS DANA Bisnis', 'Potongan 0%, saldo langsung ditarik, Nada DANA, AI foto produk, Rekan DANA'],
                 ['Cara Daftar DANA Bisnis', 'Jalur cepat: 3 data lewat link undangan, e-KTP menyusul saat pencairan'],
-                ['FAQ Komisi & Saldo', 'Reward Rp10.000 otomatis masuk tanpa perlu klaim manual'],
+                ['FAQ Komisi & Saldo', 'Reward 2 tahap otomatis masuk saldo Pocket DANA tanpa perlu klaim manual'],
               ].map(([title, desc]) => (
                 <button
                   key={title}
@@ -386,7 +465,7 @@ function Hub(p) {
                   dan audit {LEGACY.verification}. Warung yang berhenti di 2 transaksi = Rp0 untuk kamu.
                 </p>
                 <p>
-                  <strong>Sekarang:</strong> Verifikasi KYC Light tanpa syarat e-KTP di awal (Rp0). Begitu transaksi pertama ≥ Rp10.000 berhasil, reward Rp10.000 langsung otomatis masuk ke Saldo Pocket DANA tanpa perlu klaim di Pusat Hadiah.
+                  <strong>Sekarang (2 Tahap):</strong> Tahap 1 langsung mengunci komisi <strong>Rp20.000</strong> begitu pendaftaran beres dan transaksi pertama ≥ Rp10.000 tercatat. Dilanjutkan Tahap 2 bonus <strong>Rp25.000</strong> setelah 5 transaksi unik lolos audit validitas (Total Rp45.000). Otomatis masuk ke Saldo Pocket DANA!
                 </p>
               </div>
             </div>
@@ -619,14 +698,22 @@ function Tracker(p) {
               </div>
 
               {r.stage === 0 && (
-                <p className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-[10px] text-slate-600">
-                  Undangan terkirim. Menunggu pemilik warung menyetujui pendaftaran cepat.
-                </p>
+                <div className="mt-3 space-y-2">
+                  <p className="rounded-xl bg-slate-50 px-3 py-2 text-[10px] text-slate-600">
+                    Undangan terkirim. Menunggu pemilik warung menyelesaikan pendaftaran cepat (3 data, KYC Light).
+                  </p>
+                  <button
+                    onClick={() => nudge(r)}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
+                  >
+                    <Icon name="share" className="h-3.5 w-3.5" /> Ingatkan via WhatsApp
+                  </button>
+                </div>
               )}
               {r.stage === 1 && (
                 <div className="mt-3 space-y-2">
                   <p className="rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
-                    QRIS sudah aktif (KYC Light). Ajak lakukan transaksi pertama min. Rp10.000 agar reward Rp10.000 langsung cair ke saldo Anda.
+                    🎉 Tahap 1 Selesai: Transaksi pertama ≥Rp10k berhasil (Reward Rp20.000 cair). Menuju Tahap 2: dampingi 5 transaksi unik dari pembeli berbeda agar bonus Rp25.000 cair!
                   </p>
                   <button
                     onClick={() => nudge(r)}
@@ -638,16 +725,16 @@ function Tracker(p) {
               )}
               {r.stage >= 2 && (
                 <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-[10px] font-bold text-emerald-700">
-                  ✓ Transaksi pertama sukses! Saldo Rp10.000 telah otomatis masuk ke Pocket DANA.
+                  ✓ Tahap 2 Selesai! 5 transaksi unik lolos verifikasi validitas. Total reward Rp45.000 lengkap masuk ke Pocket DANA.
                 </p>
               )}
             </div>
           );
         })}
         <div className="rounded-2xl bg-dana-50 p-3 text-[10px] leading-relaxed text-dana-700">
-          <p className="font-bold">Keuntungan Sistem Baru:</p>
+          <p className="font-bold">Keuntungan Sistem 2 Tahap:</p>
           <p className="mt-0.5">
-            Tidak perlu menunggu verifikasi 1–14 hari. Saat transaksi pertama min. Rp10.000 berhasil dengan QRIS yang terbit, reward Rp10.000 langsung masuk ke saldo DANA Anda secara real-time.
+            Komisi langsung cair di Tahap 1 (Rp20.000) begitu warung beres mendaftar dan menerima transaksi pertama min. Rp10.000. Tambahan Rp25.000 cair saat 5 transaksi unik lolos audit validitas DANA (1–14 hari). Total komisi utuh: Rp45.000.
           </p>
         </div>
         <Btn variant="subtle" onClick={() => go('hub')}>
@@ -662,7 +749,7 @@ function Tracker(p) {
 
 function Rewards(p) {
   const { go, earned, activeCount, user, s } = p;
-  const activeReferrals = s.referrals.filter((r) => r.stage >= 2);
+  const activeReferrals = s.referrals.filter((r) => r.stage >= 1);
 
   return (
     <MiniShell title="Riwayat Saldo Hadiah" onBack={() => go('tracker')} {...p}>
@@ -680,7 +767,7 @@ function Rewards(p) {
           <p className="text-xs font-bold text-slate-500">Rincian Saldo Masuk per Merchant</p>
           {activeReferrals.length === 0 && (
             <p className="mt-3 text-[11px] text-slate-400">
-              Belum ada reward masuk. Reward Rp10.000 akan otomatis masuk saat warung binaan menyelesaikan transaksi pertama ≥ Rp10.000.
+              Belum ada reward masuk. Reward Tahap 1 (Rp20.000) akan otomatis masuk saat warung binaan menyelesaikan transaksi pertama ≥ Rp10.000.
             </p>
           )}
           {activeReferrals.map((r) => (
@@ -690,10 +777,14 @@ function Rewards(p) {
               </span>
               <div className="flex-1">
                 <p className="text-xs font-bold text-slate-800">{r.name}</p>
-                <p className="text-[10px] text-slate-500">Transaksi QRIS pertama ≥ Rp10.000 berhasil</p>
+                <p className="text-[10px] text-slate-500">
+                  {r.stage >= 2 ? 'Tahap 1 & 2 selesai (5 transaksi unik lolos audit)' : 'Tahap 1 selesai (Transaksi pertama ≥ Rp10k)'}
+                </p>
               </div>
               <div className="text-right">
-                <p className="text-xs font-extrabold text-emerald-600">+Rp10.000</p>
+                <p className="text-xs font-extrabold text-emerald-600">
+                  {r.stage >= 2 ? '+Rp45.000' : '+Rp20.000'}
+                </p>
                 <p className="text-[9px] font-bold text-emerald-600 uppercase">SUDAH MASUK</p>
               </div>
             </div>
@@ -715,10 +806,10 @@ function Rewards(p) {
 
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
           <p className="flex items-center gap-2 text-[11px] font-bold text-emerald-800">
-            <Icon name="bolt" className="h-4 w-4" /> Transaksi Langsung Cair
+            <Icon name="bolt" className="h-4 w-4" /> Sistem Pencairan 2 Tahap Otomatis
           </p>
           <p className="mt-2 text-[10px] leading-relaxed text-emerald-900/90">
-            Pemeriksaan transaksi pertama berjalan otomatis secara real-time. Saldo Rp10.000 langsung ditransfer ke akun DANA Anda tanpa potongan dan tanpa masa tunggu 14 hari.
+            Tahap 1 (Rp20.000) cair langsung saat pendaftaran &amp; transaksi pertama ≥Rp10k berhasil. Dilanjutkan Tahap 2 (Rp25.000) saat 5 transaksi unik lolos verifikasi validitas tim DANA. Saldo langsung masuk tanpa potongan.
           </p>
         </div>
       </div>
@@ -844,36 +935,36 @@ function Inbox(p) {
     m.firstPayment >= 10000 && {
       tone: 'emerald',
       icon: 'bolt',
-      title: `Reward Rp10.000 Masuk ke Saldo DANA!`,
-      body: `Pembayaran ${rupiah(m.firstPayment)} di ${m.name} terverifikasi. Reward Rp10.000 telah otomatis masuk ke Saldo Pocket DANA Anda.`,
+      title: `Reward Tahap 1 (Rp20.000) Masuk ke Saldo DANA!`,
+      body: `Pembayaran ${rupiah(m.firstPayment)} di ${m.name} terverifikasi. Reward Tahap 1 sebesar Rp20.000 telah otomatis masuk ke Saldo Pocket DANA Anda.`,
       time: 'Baru saja',
     },
     m.issued && {
       tone: 'dana',
       icon: 'store',
-      title: `${m.name} selesai KYC Light & QRIS aktif`,
-      body: 'Pendaftaran 30 detik selesai. Dampingi warung melakukan transaksi pertama min. Rp10.000 untuk mencairkan reward Rp10.000.',
+      title: `${m.name} selesai pendaftaran & QRIS terbit`,
+      body: 'Pendaftaran 30 detik selesai. Dampingi warung menerima transaksi pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).',
       time: '2 menit lalu',
     },
     {
       tone: 'emerald',
-      icon: 'wallet',
-      title: 'Reward Rp10.000 Masuk: Toko Kelontong Jaya',
-      body: 'Transaksi pertama ≥ Rp10.000 telah berhasil. Saldo Rp10.000 telah otomatis masuk ke akun Anda.',
+      icon: 'trophy',
+      title: 'Reward Tahap 2 (Rp25.000) Masuk: Toko Kelontong Jaya',
+      body: '5 transaksi unik lolos verifikasi audit validitas DANA. Saldo tambahan Rp25.000 (Total Rp45.000) telah otomatis masuk ke akun Anda.',
       time: 'Kemarin',
     },
     {
       tone: 'slate',
       icon: 'wallet',
-      title: 'Informasi Reward Otomatis',
-      body: `Mulai versi baru, reward referral Rp10.000 langsung masuk ke Saldo Utama tanpa perlu klaim manual di Pusat Hadiah.`,
+      title: 'Informasi Reward 2 Tahap Otomatis',
+      body: `Mulai versi baru, reward referral Tahap 1 (Rp20.000) dan Tahap 2 (Rp25.000) langsung masuk ke Saldo Pocket DANA tanpa perlu klaim manual di Pusat Hadiah.`,
       time: '3 hari lalu',
     },
     {
       tone: 'amber',
       icon: 'lock',
       title: 'Info Keamanan & Anti-Fraud',
-      body: 'KYC Light bebas biaya Rp0. Transaksi pertama min. Rp10.000 diverifikasi otomatis untuk mencegah akun palsu.',
+      body: 'KYC Light bebas biaya Rp0. Transaksi pertama min. Rp10.000 & 5 transaksi unik diverifikasi otomatis untuk mencegah akun palsu.',
       time: '1 minggu lalu',
     },
   ].filter(Boolean);
@@ -1086,8 +1177,8 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
     },
     {
       done: isPaid,
-      title: 'Terima pembayaran pertama ≥ Rp10.000',
-      desc: 'Omzet masuk utuh (0% MDR). Pengundang mendapat reward Rp10.000.',
+      title: 'Terima pembayaran pertama ≥ Rp10.000 (Selesaikan Tahap 1)',
+      desc: 'Omzet masuk utuh (0% MDR) + Modal Usaha Rp15.000. Pengundang mendapat reward Rp20.000.',
       action: { label: 'Simulasi Pelanggan Bayar', onClick: () => receivePayment(12000) },
     },
   ];
@@ -1129,7 +1220,7 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
               <Icon name="sound" className="h-4 w-4" /> Pembayaran pertama {rupiah(m.firstPayment)} diterima
             </p>
             <p className="mt-1 text-[11px] leading-relaxed text-emerald-700">
-              Uang penjualan masuk 100% utuh tanpa potongan MDR. {inviter.split(' ')[0]} juga menerima reward Rp10.000 langsung ke Saldo DANA.
+              Tahap 1 Berhasil! Uang penjualan masuk 100% utuh tanpa potongan MDR + Saldo Modal Usaha Rp15.000. {inviter.split(' ')[0]} juga menerima reward Rp20.000 langsung ke Saldo DANA.
             </p>
           </div>
         )}
@@ -1281,13 +1372,13 @@ function BizProfile({ s, go, notify, receivePayment, inviter }) {
                 {isPaid ? '✓' : '2'}
               </span>
               <div className="flex-1">
-                <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama (Min. Rp 10.000)</p>
+                <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama Min. Rp 10.000 (Tahap 1)</p>
                 <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500">
-                  Ajak pelanggan atau rekan referral membayar pesanan pertama. Penjualan masuk utuh tanpa potongan biaya MDR.
+                  Ajak pelanggan atau rekan referral membayar pesanan pertama. Penjualan masuk utuh tanpa potongan MDR + bonus saldo modal usaha.
                 </p>
                 {isPaid ? (
-                  <div className="mt-2 rounded-xl bg-emerald-50 p-2 text-[10px] font-semibold text-emerald-700">
-                    🎉 Pembayaran Rp{new Intl.NumberFormat('id-ID').format(m.firstPayment)} berhasil diterima! Reward Rp10.000 otomatis masuk ke pengundang ({inviter.split(' ')[0]}).
+                  <div className="mt-2 rounded-xl bg-emerald-50 p-2.5 text-[10px] font-semibold text-emerald-700">
+                    🎉 Pembayaran Rp{new Intl.NumberFormat('id-ID').format(m.firstPayment)} berhasil! Tahap 1 Selesai: Bonus Modal Usaha Rp15.000 masuk ke tokomu &amp; Reward Tahap 1 (Rp20.000) otomatis masuk ke pengundang ({inviter.split(' ')[0]}).
                   </div>
                 ) : (
                   <div className="mt-2">

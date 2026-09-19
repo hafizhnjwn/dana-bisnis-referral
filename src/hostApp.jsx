@@ -36,12 +36,12 @@ function ProgramHeroBanner({ onClick }) {
       <p className="text-2xl leading-tight font-extrabold text-white">
         Ajak <span className="text-amber-300">Warung Langganan</span>
       </p>
-      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo Rp10.000</p>
+      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo s/d Rp45.000</p>
       <span className="mt-2 inline-block rounded-full border-2 border-amber-200 bg-amber-400 px-4 py-1.5 text-xs font-extrabold text-amber-900">
         AJAK SEKARANG
       </span>
       <p className="mt-2 text-[9px] text-white/70">
-        Reward otomatis masuk saldo saat transaksi pertama ≥Rp10k. S&amp;K berlaku.
+        Tahap 1: Rp20.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp25.000 (5 tx &amp; validasi). S&amp;K berlaku.
       </p>
       <span className="absolute right-4 bottom-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15">
         <Icon name="store" className="h-10 w-10 text-white" />
@@ -64,7 +64,7 @@ function ProgramWideBanner({ onClick }) {
         Bantu daftarkan, 3 data saja.
       </p>
       <p className="mt-1 text-[10px] text-white/80">
-        Kamu dapat Saldo Rp10.000 langsung begitu transaksi pertama berhasil.
+        Raih Saldo DANA hingga Rp45.000 per warung (Rp20.000 cair otomatis di transaksi pertama).
       </p>
       <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
         Bantu Daftarkan <Icon name="next" className="h-3 w-3" />
@@ -432,14 +432,14 @@ export function BizDash({ s, user, go, notify }) {
           className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-dana-600 to-[#1B4E9B] p-4 text-left text-white shadow-sm"
         >
           <span className="absolute -top-8 -right-6 h-28 w-28 rounded-full bg-white/10" />
-          <p className="text-[10px] font-bold text-amber-300">TRACK MITRA BISNIS</p>
+          <p className="text-[10px] font-bold text-amber-300">PROGRAM MITRA BISNIS</p>
           <p className="mt-1 text-base leading-tight font-extrabold">
             Ajak rekan usaha sebelah,
             <br />
-            raih saldo Rp10.000 per rekan
+            raih saldo hingga Rp45.000 per rekan
           </p>
           <p className="mt-1 text-[10px] text-white/85">
-            Saldo DANA otomatis masuk begitu transaksi pertama ≥Rp10.000 berhasil.
+            Tahap 1: Rp20.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp25.000 (5 tx &amp; validasi).
           </p>
           <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
             Buka Program <Icon name="next" className="h-3 w-3" />
@@ -447,20 +447,52 @@ export function BizDash({ s, user, go, notify }) {
         </button>
 
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <p className="text-center text-[11px] font-bold tracking-wide text-slate-500">KEUNTUNGAN QRIS DANA</p>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {[
-              ['qr', 'Terima Semua Pembayaran Digital'],
-              ['gift', 'Gratis Biaya Potongan Transaksi'],
-              ['wallet', 'Saldo Bisa Langsung Ditarik'],
-            ].map(([icon, label]) => (
-              <div key={label} className="rounded-xl bg-slate-50 p-2 text-center">
-                <span className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#1B4E9B] text-white">
-                  <Icon name={icon} className="h-4 w-4" />
-                </span>
-                <p className="mt-2 text-[9px] leading-tight font-semibold text-slate-700">{label}</p>
+          <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <div>
+              <p className="text-xs font-bold text-slate-900">Keuntungan Mengajak Bisnis Lain</p>
+              <p className="text-[10px] text-slate-500">Benefit eksklusif tokomu saat memperluas jaringan QRIS</p>
+            </div>
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-extrabold text-amber-800">
+              B2B REWARD
+            </span>
+          </div>
+
+          <div className="mt-3 space-y-2.5">
+            <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-2.5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#1B4E9B] text-white">
+                <Icon name="wallet" className="h-4 w-4" />
+              </span>
+              <div className="flex-1">
+                <p className="text-[11px] font-bold text-slate-900">Komisi Saldo DANA s/d Rp45.000 / Rekan</p>
+                <p className="text-[10px] leading-relaxed text-slate-500">
+                  Rp20.000 cair saat QRIS terbit &amp; transaksi pertama ≥Rp10k + Rp25.000 saat 5 transaksi unik lolos verifikasi.
+                </p>
               </div>
-            ))}
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-2.5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white">
+                <Icon name="gift" className="h-4 w-4" />
+              </span>
+              <div className="flex-1">
+                <p className="text-[11px] font-bold text-slate-900">Ekstra Kupon Bebas Biaya MDR Tokomu</p>
+                <p className="text-[10px] leading-relaxed text-slate-500">
+                  Tiap 1 rekan aktif, tokomu dapat perpanjangan bebas MDR 0% selama 30 hari tambahan, hemat jutaan rupiah.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-2.5">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-dana-600 text-white">
+                <Icon name="shield" className="h-4 w-4" />
+              </span>
+              <div className="flex-1">
+                <p className="text-[11px] font-bold text-slate-900">Prioritas Plafon Modal Usaha &amp; DANA Juara</p>
+                <p className="text-[10px] leading-relaxed text-slate-500">
+                  Menaikkan skor reputasi toko untuk akses limit DANA Cicil Usaha hingga Rp50.000.000 dan prioritas fitur Rekan DANA.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

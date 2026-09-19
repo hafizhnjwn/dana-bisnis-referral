@@ -14,23 +14,23 @@
 export const TIERS = [
   {
     stage: 1,
-    label: 'Pendaftaran selesai & QRIS terbit (KYC Light)',
-    detail: 'QRIS terbit instan & siap pakai (Tanpa reward uang untuk cegah akun fiktif)',
-    amount: 0,
-    type: 'none',
-    merchant: 'QRIS aktif instan, MDR 0%, tanpa syarat e-KTP di awal',
+    label: 'Tahap 1: Pendaftaran s/d QRIS terbit & transaksi min. Rp10.000',
+    detail: 'Saldo DANA Rp20.000 otomatis masuk ke Pocket DANA',
+    amount: 20000,
+    type: 'saldo',
+    merchant: 'Saldo Modal Usaha Rp15.000 + 0% MDR + Nada DANA suara transaksi',
   },
   {
     stage: 2,
-    label: 'Transaksi QRIS pertama ≥ Rp10.000',
-    detail: 'Saldo DANA Rp10.000 otomatis masuk ke Pocket DANA',
-    amount: 10000,
+    label: 'Tahap 2: 5 transaksi unik & lolos validasi transaksi (1–14 hari)',
+    detail: 'Saldo DANA Rp25.000 otomatis masuk ke Pocket DANA (Total Rp45.000)',
+    amount: 25000,
     type: 'saldo',
-    merchant: 'Omzet masuk utuh 0% MDR + Nada DANA + pembukuan otomatis',
+    merchant: 'Kupon Bebas MDR 30 Hari + Badge Merchant Juara & Prioritas DANA Sekitar',
   },
 ];
 
-export const MAX_PER_REFERRAL = 10000;
+export const MAX_PER_REFERRAL = 45000;
 
 /** Angka program produksi yang sedang berjalan, dipakai untuk pembanding di UI. */
 export const LEGACY = {
@@ -44,8 +44,8 @@ export const LEGACY = {
 
 export const STAGES = [
   { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 20 },
-  { label: 'Pendaftaran selesai & QRIS terbit (KYC Light)', short: 'QRIS Siap', color: 'amber', progress: 55 },
-  { label: 'Transaksi pertama ≥Rp10k berhasil (Reward cair)', short: 'Aktif', color: 'emerald', progress: 100 },
+  { label: 'Tahap 1: Pendaftaran, QRIS terbit & Transaksi ≥Rp10k', short: 'Tahap 1 Selesai', color: 'amber', progress: 60 },
+  { label: 'Tahap 2: 5 transaksi unik & validasi lolos (1–14 hari)', short: 'Tahap 2 Selesai', color: 'emerald', progress: 100 },
 ];
 
 /** Tiers already unlocked but not yet credited for one referral. */
@@ -77,8 +77,8 @@ export const paidTotal = (referrals) =>
 export const claimAll = (referrals) =>
   referrals.map((r) => ({ ...r, claimedStage: Math.max(r.claimedStage ?? 0, r.stage) }));
 
-/** "Usaha aktif" counter (merchants with at least 1 real transaction >= Rp10k). */
-export const activeMerchants = (referrals) => referrals.filter((r) => r.stage >= 2).length;
+/** "Usaha aktif" counter (merchants completing at least Stage 1: first transaction >= Rp10k). */
+export const activeMerchants = (referrals) => referrals.filter((r) => r.stage >= 1).length;
 
 export const rupiah = (n) => `Rp${new Intl.NumberFormat('id-ID').format(n)}`;
 

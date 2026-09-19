@@ -60,8 +60,8 @@ const SEED_REFERRALS = [
     phone: '0812••••1121',
     stage: 2,
     claimedStage: 2,
-    tx: 3,
-    day: 'Aktif 4 hari',
+    tx: 8,
+    day: 'Tahap 2 lolos audit validasi',
   },
   {
     id: 2,
@@ -71,7 +71,7 @@ const SEED_REFERRALS = [
     stage: 2,
     claimedStage: 2,
     tx: 41,
-    day: 'Aktif 18 hari',
+    day: 'Tahap 2 lolos audit validasi',
   },
   {
     id: 3,
@@ -79,9 +79,9 @@ const SEED_REFERRALS = [
     category: 'F&B / Warung Makan',
     phone: '0813••••2210',
     stage: 1,
-    claimedStage: 0,
-    tx: 0,
-    day: 'Daftar 3 hari lalu',
+    claimedStage: 1,
+    tx: 1,
+    day: 'Tahap 1 selesai · Menunggu 5 tx',
   },
   {
     id: 4,
@@ -91,7 +91,7 @@ const SEED_REFERRALS = [
     stage: 2,
     claimedStage: 2,
     tx: 96,
-    day: 'Aktif 28 hari',
+    day: 'Tahap 2 lolos audit validasi',
   },
 ];
 
@@ -218,26 +218,26 @@ export default function App() {
       notify('Transaksi uji Rp1.000 masuk. Nada DANA berbunyi, notifikasi aktif.');
     },
 
-    /** Transaksi pelanggan pertama: jika >= Rp10.000, reward Rp10.000 langsung masuk otomatis ke saldo referrer */
+    /** Transaksi pelanggan pertama (Tahap 1): jika >= Rp10.000, reward Rp20.000 langsung masuk otomatis ke saldo referrer */
     receivePayment: (amount = 12000) => {
       const qualifies = amount >= 10000;
 
       patch((prev) => {
         const target = prev.referrals.find((r) => r.id === prev.nominatedId);
-        const willPromote = target && target.stage < 2 && qualifies;
+        const willPromote = target && target.stage < 1 && qualifies;
 
         return {
-          merchant: { ...prev.merchant, firstPayment: amount, modalBonus: 0 },
+          merchant: { ...prev.merchant, firstPayment: amount, modalBonus: 15000 },
           balances: {
             ...prev.balances,
-            // Reward Rp10.000 otomatis masuk ke saldo DANA pengundang (consumer / inviter)
-            consumer: prev.balances.consumer + (willPromote ? 10000 : 0),
-            // Uang pembayaran masuk ke saldo DANA Bisnis merchant
-            referred: prev.balances.referred + amount,
+            // Reward Tahap 1: Rp20.000 otomatis masuk ke saldo DANA pengundang (consumer / inviter)
+            consumer: prev.balances.consumer + (willPromote ? 20000 : 0),
+            // Uang pembayaran + bonus modal usaha Rp15.000 masuk ke saldo DANA Bisnis merchant
+            referred: prev.balances.referred + amount + (willPromote ? 15000 : 0),
           },
           referrals: prev.referrals.map((r) =>
-            r.id === prev.nominatedId && r.stage < 2
-              ? { ...r, stage: qualifies ? 2 : 1, claimedStage: qualifies ? 2 : 0, tx: r.tx + 1, day: 'Aktif hari ini' }
+            r.id === prev.nominatedId && r.stage < 1 && qualifies
+              ? { ...r, stage: 1, claimedStage: 1, tx: r.tx + 1, day: 'Tahap 1 selesai · Menuju 5 tx' }
               : r,
           ),
         };
@@ -246,8 +246,34 @@ export default function App() {
       announce(amount);
       notify(
         qualifies
-          ? `🎉 Pembayaran ${rupiah(amount)} diterima! Reward Rp10.000 telah otomatis masuk ke Saldo DANA pengundang.`
+          ? `🎉 Pembayaran ${rupiah(amount)} diterima! Tahap 1 Selesai: Reward Rp20.000 otomatis masuk ke Saldo DANA pengundang & Bonus Modal Rp15.000 ke toko.`
           : `Pembayaran ${rupiah(amount)} diterima (belum memenuhi syarat minimal Rp10.000).`,
+      );
+    },
+
+    /** Simulasi Tahap 2: 5 transaksi unik dari pembeli berbeda & lolos audit validitas DANA (1-14 hari) */
+    completeStage2: () => {
+      patch((prev) => {
+        const target = prev.referrals.find((r) => r.id === prev.nominatedId);
+        const willPromote = target && target.stage === 1;
+
+        return {
+          balances: {
+            ...prev.balances,
+            // Reward Tahap 2: Rp25.000 otomatis masuk ke saldo DANA pengundang (Total Rp45.000)
+            consumer: prev.balances.consumer + (willPromote ? 25000 : 0),
+          },
+          referrals: prev.referrals.map((r) =>
+            r.id === prev.nominatedId && r.stage === 1
+              ? { ...r, stage: 2, claimedStage: 2, tx: Math.max(r.tx + 4, 5), day: 'Tahap 2 lolos audit validasi' }
+              : r,
+          ),
+        };
+      });
+
+      playChime();
+      notify(
+        '🎉 5 Transaksi unik lolos validasi DANA! Tahap 2 Selesai: Tambahan Rp25.000 otomatis masuk ke Saldo DANA pengundang (Total komisi Rp45.000).'
       );
     },
 
@@ -298,7 +324,7 @@ export default function App() {
             Merchant Referral Program
           </h1>
           <p className="mt-3 text-sm text-slate-600">
-            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah, dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), reward Rp10.000 otomatis masuk saldo setelah transaksi pertama ≥Rp10.000, serta panduan step-by-step di profil bisnis merchant.
+            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah, dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), skema 2 tahap reward (Tahap 1: Rp20.000 cair di transaksi pertama ≥Rp10k; Tahap 2: Rp25.000 cair setelah 5 transaksi unik &amp; audit lolos, total Rp45.000), Carousel Onboarding Guide layar penuh, dan benefit khusus pengundang di profil bisnis.
           </p>
 
           <div className="mt-6 space-y-2">
@@ -325,7 +351,13 @@ export default function App() {
                 Scan uji Rp1.000
               </SimButton>
               <SimButton onClick={() => actions.receivePayment(12000)} disabled={!s.merchant.issued}>
-                Pelanggan bayar Rp12.000
+                Pelanggan bayar Rp12.000 (Tahap 1)
+              </SimButton>
+              <SimButton
+                onClick={() => actions.completeStage2()}
+                disabled={!s.merchant.issued || !s.referrals.find((r) => r.id === s.nominatedId && r.stage === 1)}
+              >
+                5 tx &amp; audit lolos (Tahap 2)
               </SimButton>
               <SimButton onClick={() => go('bizprofile')} disabled={!s.merchant.issued}>
                 Profil Bisnis Bu Siti
@@ -334,7 +366,7 @@ export default function App() {
             </div>
             <p className="mt-3 text-xs text-slate-500">
               {s.merchant.issued
-                ? 'KYC Light = Rp0. Begitu transaksi pertama ≥ Rp10.000 tercatat, reward Rp10.000 otomatis masuk ke Saldo DANA referrer.'
+                ? 'Sistem 2 Tahap: Transaksi pertama ≥ Rp10.000 mencairkan Rp20.000 (Tahap 1). Kemudian 5 transaksi unik & audit mencairkan Rp25.000 (Tahap 2, Total Rp45.000).'
                 : 'Terbitkan QRIS dulu di peran Bu Siti agar simulasi transaksi & profil bisnis aktif.'}
             </p>
           </div>
