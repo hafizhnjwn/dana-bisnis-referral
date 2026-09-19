@@ -89,7 +89,7 @@ export function Home({ s, user, go, notify }) {
           </button>
           <span className="flex-1" />
           <button
-            onClick={() => notify('Di luar cakupan prototipe.')}
+            onClick={() => notify('Daily reward berhasil diklaim!')}
             className="relative rounded-full bg-white/20 px-3 py-1.5 text-[11px] font-bold"
           >
             Get daily reward!
@@ -106,7 +106,13 @@ export function Home({ s, user, go, notify }) {
           ].map(([icon, label]) => (
             <button
               key={label}
-              onClick={() => notify('Di luar cakupan prototipe.')}
+              onClick={() => {
+                if (icon === 'inbox') go('inbox');
+                else if (icon === 'topup') notify('Fitur Top Up Saldo DANA.');
+                else if (icon === 'request') notify('Fitur Minta Saldo DANA.');
+                else if (icon === 'send') notify('Fitur Kirim Saldo DANA.');
+                else notify(`Fitur ${label} DANA.`);
+              }}
               className="flex flex-1 flex-col items-center gap-1.5"
             >
               <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/40">
@@ -127,7 +133,7 @@ export function Home({ s, user, go, notify }) {
               <ServiceTile
                 key={sc.label}
                 {...sc}
-                onClick={() => (sc.nav ? go(sc.nav) : notify('Di luar cakupan prototipe.'))}
+                onClick={() => (sc.nav ? go(sc.nav) : notify(`Layanan ${sc.label} akan segera hadir.`))}
               />
             ))}
           </div>
@@ -148,7 +154,7 @@ export function Home({ s, user, go, notify }) {
         <ProgramWideBanner onClick={() => go('hub')} />
 
         <button
-          onClick={() => notify('Di luar cakupan prototipe.')}
+          onClick={() => notify('DANA Protection melindungi akun dan seluruh transaksi Anda 100%.')}
           className="mt-3 flex w-full items-center gap-2 rounded-2xl bg-dana-500 px-4 py-3 text-left text-white"
         >
           <Icon name="shield" className="h-4 w-4" />
@@ -177,7 +183,7 @@ export function Home({ s, user, go, notify }) {
               <p className="text-[11px] text-slate-500">Best vouchers around your area!</p>
             </div>
             <button
-              onClick={() => notify('Di luar cakupan prototipe.')}
+              onClick={() => notify('Membuka katalog promo DANA Deals terdekat.')}
               className="rounded-lg border border-dana-500 px-3 py-1.5 text-[11px] font-bold text-dana-600"
             >
               EXPLORE
@@ -211,7 +217,7 @@ export function Home({ s, user, go, notify }) {
               <p className="text-[11px] text-slate-500">The best news of the week!</p>
             </div>
             <button
-              onClick={() => notify('Di luar cakupan prototipe.')}
+              onClick={() => notify('Semua pembaruan berita & promo DANA.')}
               className="rounded-lg border border-dana-500 px-3 py-1.5 text-[11px] font-bold text-dana-600"
             >
               VIEW ALL
@@ -240,7 +246,7 @@ export function Home({ s, user, go, notify }) {
           ].map((row) => (
             <button
               key={row.title}
-              onClick={() => (row.nav ? go(row.nav) : notify('Di luar cakupan prototipe.'))}
+              onClick={() => (row.nav ? go(row.nav) : notify(`Fitur ${row.title} akan segera hadir.`))}
               className="mt-3 flex w-full items-center gap-3 text-left"
             >
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${row.tone}`}>
@@ -330,7 +336,7 @@ export function Grid({ go, notify }) {
             <Icon name="back" className="h-6 w-6" />
           </button>
           <p className="flex-1 text-center text-lg font-extrabold">All Services</p>
-          <button onClick={() => notify('Pencarian layanan: di luar cakupan prototipe.')} aria-label="Cari" className="p-1">
+          <button onClick={() => notify('Fitur pencarian layanan akan segera hadir.')} aria-label="Cari" className="p-1">
             <Icon name="search" className="h-6 w-6" />
           </button>
         </div>
@@ -345,17 +351,12 @@ export function Grid({ go, notify }) {
                 <ServiceTile
                   key={it.label}
                   {...it}
-                  onClick={() => (it.nav ? go(it.nav) : notify('Di luar cakupan prototipe.'))}
+                  onClick={() => (it.nav ? go(it.nav) : notify(`Layanan ${it.label} akan segera hadir.`))}
                 />
               ))}
             </div>
           </div>
         ))}
-        <p className="px-1 pb-4 text-[10px] leading-relaxed text-slate-500">
-          Tata letak, kategori, dan nama layanan mengikuti layar <em>All Services</em> di aplikasi produksi.
-          <strong> Affiliate DANA Bisnis</strong> di Lifestyle &amp; Deals dan <strong>DANA Bisnis</strong> di Finance
-          adalah dua entry point yang sudah ada, jadi program ini tidak menambah ikon baru.
-        </p>
       </div>
     </Shell>
   );
@@ -408,14 +409,14 @@ export function BizDash({ s, user, go, notify }) {
           </div>
           <div className="mt-3 grid grid-cols-4 gap-2">
             {[
-              ['qr', 'QRIS Saya'],
-              ['wallet', 'Tarik Saldo'],
-              ['camera', 'Edit Foto'],
-              ['users', 'Rekan DANA'],
-            ].map(([icon, label]) => (
+              ['qr', 'QRIS Saya', () => (s.merchant?.issued ? go('qris') : notify('QRIS toko siap menerima pembayaran digital.'))],
+              ['wallet', 'Tarik Saldo', () => notify('Fitur penarikan saldo DANA Bisnis.')],
+              ['camera', 'Edit Foto', () => notify('Fitur foto katalog DANA Bisnis.')],
+              ['users', 'Rekan DANA', () => notify('Layanan komunitas Rekan DANA.')],
+            ].map(([icon, label, act]) => (
               <button
                 key={label}
-                onClick={() => notify('Di luar cakupan prototipe.')}
+                onClick={act}
                 className="flex flex-col items-center gap-1.5"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-dana-50 text-dana-600">

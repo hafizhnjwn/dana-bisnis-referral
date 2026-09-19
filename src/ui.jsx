@@ -151,17 +151,17 @@ export function HostNav({ active, go, notify }) {
     <div className="sticky bottom-0 mt-auto border-t border-slate-200 bg-white/95 backdrop-blur">
       <div className="relative flex items-end px-2 pt-2 pb-5">
         {item('home', 'Home', () => go('home'))}
-        {item('activity', 'Activity', () => notify('Di luar cakupan prototipe.'))}
+        {item('activity', 'Activity', () => notify('Riwayat aktivitas akun DANA Anda.'))}
         <div className="flex flex-1 justify-center">
           <button
-            onClick={() => notify('Pemindai QRIS: di luar cakupan prototipe.')}
+            onClick={() => notify('Arahkan kamera ke kode QRIS pembayaran.')}
             className="-mt-7 flex h-16 w-16 flex-col items-center justify-center rounded-full bg-dana-500 text-white shadow-lg shadow-dana-500/40"
           >
             <Icon name="qr" className="h-6 w-6" />
             <span className="text-[10px] font-bold">PAY</span>
           </button>
         </div>
-        {item('wallet', 'Wallet', () => notify('Di luar cakupan prototipe.'))}
+        {item('wallet', 'Wallet', () => notify('Dompet digital dan kartu tersimpan DANA.'))}
         {item('person', 'Me', () => go('bizdash'))}
       </div>
     </div>

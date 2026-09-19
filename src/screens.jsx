@@ -93,7 +93,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
       title: 'Ajak Warung Langganan, Raih s/d Rp45.000',
       desc: 'Bantu warung makan, kedai kopi, dan rekan usaha sekitar memiliki QRIS digital resmi tanpa proses berbelit dan tanpa biaya pendaftaran.',
       points: [
-        { icon: 'bolt', title: 'Terobosan "Bantu Daftarkan"', desc: 'Kamu yang isikan 3 data ringkas, kode referral tertanam otomatis.' },
+        { icon: 'bolt', title: '"Bantu Daftarkan" Usaha', desc: 'Kamu yang isikan 3 data ringkas, kode referral tertanam otomatis.' },
         { icon: 'shield', title: 'KYC Light Instan (Rp0)', desc: 'Tanpa syarat upload e-KTP dan tanpa selfie biometrik di awal.' },
         { icon: 'qr', title: 'QRIS Terbit < 5 Detik', desc: 'Siap langsung menerima pembayaran dari seluruh bank & e-wallet.' },
       ],
@@ -294,7 +294,7 @@ function Hub(p) {
               💡
             </span>
             <div>
-              <p className="text-xs font-bold text-dana-900">Panduan Lengkap Affiliate (Carousel)</p>
+              <p className="text-xs font-bold text-dana-900">Panduan Lengkap Affiliate DANA</p>
               <p className="text-[10px] text-dana-700">Skema 2 tahap reward s/d Rp45.000 per warung</p>
             </div>
           </div>
@@ -317,11 +317,6 @@ function Hub(p) {
             </button>
           ))}
         </div>
-        <p className="mt-2 text-center text-[10px] text-slate-400">
-          {mode === 'warung'
-            ? 'Mode baru untuk referral komunitas offline'
-            : 'Mode yang sudah berjalan untuk kreator & promotor'}
-        </p>
 
         {mode === 'warung' ? (
           <div className="mt-4 space-y-4">
@@ -384,10 +379,6 @@ function Hub(p) {
                 </div>
                 <Icon name="next" className="h-4 w-4 text-dana-500" />
               </div>
-              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-[10px] leading-relaxed font-semibold text-amber-700">
-                Menghapus hambatan terbesar program lama: pemilik warung tidak perlu lagi mengetik kode referral
-                secara manual atau memikirkan kategori usaha dari nol.
-              </p>
             </button>
 
             {/* Updated Tiers */}
@@ -411,7 +402,7 @@ function Hub(p) {
                 ))}
               </div>
               <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
-                <strong>Catatan Skema 2 Tahap:</strong> Tahap 1 (<strong>Rp20.000</strong>) cair saat pendaftaran selesai &amp; transaksi pertama ≥Rp10.000 berhasil. Tahap 2 (<strong>Rp25.000</strong>) cair setelah 5 transaksi unik lolos audit validitas DANA (1–14 hari). Total komisi utuh: <strong>Rp45.000</strong> per warung binaan!
+                * Reward Tahap 1 &amp; 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.
               </p>
             </div>
 
@@ -422,8 +413,7 @@ function Hub(p) {
                 <Pill tone="amber">{rupiah(LEGACY.achievementBonus)}</Pill>
               </div>
               <p className="mt-2 text-[10px] text-slate-500">
-                Bonus {rupiah(LEGACY.achievementBonus)} setiap {LEGACY.achievementPer} usaha aktif memakai QRIS-nya
-                (tetap seperti program yang berjalan).
+                Bonus {rupiah(LEGACY.achievementBonus)} setiap {LEGACY.achievementPer} usaha aktif memakai QRIS-nya.
               </p>
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
                 <div
@@ -457,19 +447,6 @@ function Hub(p) {
               ))}
             </div>
 
-            <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-4">
-              <p className="text-xs font-extrabold text-emerald-800">Yang berubah dari program sekarang</p>
-              <div className="mt-2 space-y-2 text-[10px] leading-relaxed text-emerald-900/90">
-                <p>
-                  <strong>Dulu:</strong> {rupiah(LEGACY.commission)} hanya cair setelah {LEGACY.txCriteria} transaksi
-                  dan audit {LEGACY.verification}. Warung yang berhenti di 2 transaksi = Rp0 untuk kamu.
-                </p>
-                <p>
-                  <strong>Sekarang (2 Tahap):</strong> Tahap 1 langsung mengunci komisi <strong>Rp20.000</strong> begitu pendaftaran beres dan transaksi pertama ≥ Rp10.000 tercatat. Dilanjutkan Tahap 2 bonus <strong>Rp25.000</strong> setelah 5 transaksi unik lolos audit validitas (Total Rp45.000). Otomatis masuk ke Saldo Pocket DANA!
-                </p>
-              </div>
-            </div>
-
             <div className="grid grid-cols-2 gap-2">
               <Btn variant="ghost" onClick={() => go('tracker')}>
                 <Icon name="users" className="h-4 w-4" /> Referal Saya
@@ -483,7 +460,7 @@ function Hub(p) {
         ) : (
           <div className="mt-4 space-y-4">
             <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">Komisi Utama (program berjalan)</p>
+              <p className="text-xs font-bold text-slate-500">Komisi Utama Affiliate</p>
               <p className="text-3xl font-extrabold text-slate-900">{rupiah(LEGACY.commission)}</p>
               <p className="text-[10px] text-slate-500">per usaha aktif yang lolos audit</p>
               <div className="mt-3 space-y-1 text-[10px] text-slate-600">
@@ -496,7 +473,7 @@ function Hub(p) {
             <div className="rounded-3xl bg-gradient-to-r from-violet-600 to-dana-700 p-4 text-white">
               <p className="text-sm font-extrabold">Ada Affiliate yang sudah dapat Rp90 juta, lho!</p>
               <p className="mt-1 text-[11px] text-white/85">
-                Kreator teratas mendaftarkan 800–900 usaha aktif. Mode ini tetap dipertahankan apa adanya.
+                Kreator teratas telah mendaftarkan ratusan mitra usaha aktif setiap bulannya.
               </p>
               <button
                 onClick={() => go('peringkat')}
@@ -521,14 +498,6 @@ function Hub(p) {
                   <p className="flex-1 text-[11px] leading-snug text-slate-700">{step}</p>
                 </div>
               ))}
-            </div>
-
-            <div className="rounded-3xl border border-amber-200 bg-amber-50 p-4">
-              <p className="text-[11px] leading-relaxed text-amber-800">
-                <strong>Catatan produk:</strong> mode kreator sengaja tidak diubah. Yang ditambahkan adalah mode{' '}
-                <strong>{trackLabel}</strong> untuk pengguna harian yang hanya ingin warung langganannya menerima
-                QRIS, tanpa target ratusan merchant.
-              </p>
             </div>
           </div>
         )}
@@ -600,9 +569,6 @@ function Nominate(p) {
         <Btn disabled={!ready} onClick={() => nominate({ name: name.trim(), category, phone })}>
           Kirim Undangan Resmi DANA Bisnis
         </Btn>
-        <p className="text-center text-[10px] text-slate-400">
-          Setelah terkirim, ganti peran ke <strong>Bu Siti</strong> di panel kiri untuk melihat sisi warung.
-        </p>
         {s.referrals[0]?.stage === 0 && (
           <p className="text-center text-[10px] font-semibold text-emerald-600">
             Nominasi terakhir: {s.referrals[0].name} — menunggu konfirmasi pemilik.
@@ -731,12 +697,6 @@ function Tracker(p) {
             </div>
           );
         })}
-        <div className="rounded-2xl bg-dana-50 p-3 text-[10px] leading-relaxed text-dana-700">
-          <p className="font-bold">Keuntungan Sistem 2 Tahap:</p>
-          <p className="mt-0.5">
-            Komisi langsung cair di Tahap 1 (Rp20.000) begitu warung beres mendaftar dan menerima transaksi pertama min. Rp10.000. Tambahan Rp25.000 cair saat 5 transaksi unik lolos audit validitas DANA (1–14 hari). Total komisi utuh: Rp45.000.
-          </p>
-        </div>
         <Btn variant="subtle" onClick={() => go('hub')}>
           <Icon name="store" className="h-4 w-4" /> Kembali ke Beranda
         </Btn>
@@ -804,14 +764,9 @@ function Rewards(p) {
           ))}
         </div>
 
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-          <p className="flex items-center gap-2 text-[11px] font-bold text-emerald-800">
-            <Icon name="bolt" className="h-4 w-4" /> Sistem Pencairan 2 Tahap Otomatis
-          </p>
-          <p className="mt-2 text-[10px] leading-relaxed text-emerald-900/90">
-            Tahap 1 (Rp20.000) cair langsung saat pendaftaran &amp; transaksi pertama ≥Rp10k berhasil. Dilanjutkan Tahap 2 (Rp25.000) saat 5 transaksi unik lolos verifikasi validitas tim DANA. Saldo langsung masuk tanpa potongan.
-          </p>
-        </div>
+        <p className="text-center text-[10px] text-slate-400">
+          Seluruh saldo reward referral otomatis masuk ke akun Saldo DANA Anda.
+        </p>
       </div>
     </MiniShell>
   );
@@ -893,8 +848,7 @@ function Peringkat(p) {
             <div className="mt-3 rounded-2xl border-2 border-dana-500 bg-dana-50 p-4">
               <p className="text-[11px] font-bold text-dana-700">Peringkat kamu: #42</p>
               <p className="mt-1 text-[10px] leading-relaxed text-dana-700/80">
-                {activeCount} usaha aktif. Papan peringkat kreator dipertahankan, tapi mode Sahabat Warung tidak
-                menuntut ratusan merchant — cukup warung di sekitarmu.
+                Kamu memiliki {activeCount} usaha aktif binaan. Terus dampingi warung di sekitarmu untuk naik peringkat!
               </p>
             </div>
           </>
@@ -903,7 +857,7 @@ function Peringkat(p) {
             {videos.map(([handle, title]) => (
               <button
                 key={handle}
-                onClick={() => notify(`Video ${handle} diputar (simulasi).`)}
+                onClick={() => notify(`Memutar video inspirasi ${handle}...`)}
                 className="flex w-full items-center gap-3 rounded-2xl bg-white p-3 text-left shadow-sm"
               >
                 <span className="flex h-16 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white">
@@ -915,10 +869,6 @@ function Peringkat(p) {
                 </span>
               </button>
             ))}
-            <p className="rounded-2xl bg-white p-3 text-[10px] leading-relaxed text-slate-500 shadow-sm">
-              Tab ini milik program kreator yang sudah ada dan tidak diubah. Untuk pengguna Sahabat Warung, panduan
-              yang relevan dipindahkan ke kartu Panduan Affiliate di Beranda.
-            </p>
           </div>
         )}
       </div>
@@ -1168,18 +1118,16 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
   const isPaid = m.firstPayment >= 10000;
 
   const steps = [
-    { done: m.issued, title: 'QRIS berhasil diterbitkan (KYC Light)', desc: 'Akun siap menerima pembayaran digital.' },
+    { done: m.issued, title: 'QRIS toko aktif (KYC Light)', desc: 'Akun siap menerima pembayaran digital dari seluruh bank & e-wallet.' },
     {
       done: m.testScan,
-      title: 'Uji coba scan Rp1.000',
-      desc: 'Minta teman scan Rp1.000 dan dengarkan Nada DANA menyebut nominalnya.',
-      action: { label: 'Minta Scan Uji', onClick: testScan },
+      title: 'Uji coba scan QRIS toko',
+      desc: 'Scan QRIS untuk mencoba pembayaran dan mendengarkan Nada DANA.',
     },
     {
       done: isPaid,
-      title: 'Terima pembayaran pertama ≥ Rp10.000 (Selesaikan Tahap 1)',
-      desc: 'Omzet masuk utuh (0% MDR) + Modal Usaha Rp15.000. Pengundang mendapat reward Rp20.000.',
-      action: { label: 'Simulasi Pelanggan Bayar', onClick: () => receivePayment(12000) },
+      title: 'Terima pembayaran pertama min. Rp10.000',
+      desc: 'Uang penjualan masuk 100% utuh (0% MDR) dan aktifkan bonus modal usaha Rp15.000.',
     },
   ];
 
@@ -1220,7 +1168,7 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
               <Icon name="sound" className="h-4 w-4" /> Pembayaran pertama {rupiah(m.firstPayment)} diterima
             </p>
             <p className="mt-1 text-[11px] leading-relaxed text-emerald-700">
-              Tahap 1 Berhasil! Uang penjualan masuk 100% utuh tanpa potongan MDR + Saldo Modal Usaha Rp15.000. {inviter.split(' ')[0]} juga menerima reward Rp20.000 langsung ke Saldo DANA.
+              Pembayaran berhasil diterima! Uang penjualan masuk 100% utuh tanpa potongan MDR + Saldo Modal Usaha Rp15.000 telah ditambahkan ke saldo tokomu.
             </p>
           </div>
         )}
@@ -1372,22 +1320,13 @@ function BizProfile({ s, go, notify, receivePayment, inviter }) {
                 {isPaid ? '✓' : '2'}
               </span>
               <div className="flex-1">
-                <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama Min. Rp 10.000 (Tahap 1)</p>
+                <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama Min. Rp 10.000</p>
                 <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500">
-                  Ajak pelanggan atau rekan referral membayar pesanan pertama. Penjualan masuk utuh tanpa potongan MDR + bonus saldo modal usaha.
+                  Ajak pelanggan membayar pesanan pertama via QRIS. Penjualan masuk utuh tanpa potongan MDR + bonus saldo modal usaha Rp15.000.
                 </p>
-                {isPaid ? (
+                {isPaid && (
                   <div className="mt-2 rounded-xl bg-emerald-50 p-2.5 text-[10px] font-semibold text-emerald-700">
-                    🎉 Pembayaran Rp{new Intl.NumberFormat('id-ID').format(m.firstPayment)} berhasil! Tahap 1 Selesai: Bonus Modal Usaha Rp15.000 masuk ke tokomu &amp; Reward Tahap 1 (Rp20.000) otomatis masuk ke pengundang ({inviter.split(' ')[0]}).
-                  </div>
-                ) : (
-                  <div className="mt-2">
-                    <button
-                      onClick={() => receivePayment(12000)}
-                      className="rounded-xl bg-emerald-600 px-3 py-1.5 text-[10px] font-bold text-white shadow-sm active:bg-emerald-700"
-                    >
-                      ⚡ Simulasi Pelanggan Bayar Rp12.000
-                    </button>
+                    🎉 Pembayaran Rp{new Intl.NumberFormat('id-ID').format(m.firstPayment)} berhasil! Bonus Modal Usaha Rp15.000 telah masuk ke saldo tokomu.
                   </div>
                 )}
               </div>

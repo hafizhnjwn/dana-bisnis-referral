@@ -244,10 +244,13 @@ export default function App() {
       });
 
       announce(amount);
+      const isRefMerchant = s.role === 'referred';
       notify(
-        qualifies
-          ? `🎉 Pembayaran ${rupiah(amount)} diterima! Tahap 1 Selesai: Reward Rp20.000 otomatis masuk ke Saldo DANA pengundang & Bonus Modal Rp15.000 ke toko.`
-          : `Pembayaran ${rupiah(amount)} diterima (belum memenuhi syarat minimal Rp10.000).`,
+        isRefMerchant
+          ? `🎉 Pembayaran ${rupiah(amount)} berhasil! Bonus Modal Usaha Rp15.000 telah masuk ke saldo tokomu.`
+          : qualifies
+          ? `🎉 Pembayaran ${rupiah(amount)} berhasil! Reward Tahap 1 (Rp20.000) otomatis masuk ke Saldo Pocket DANA.`
+          : `Pembayaran ${rupiah(amount)} berhasil diterima.`
       );
     },
 
@@ -273,15 +276,17 @@ export default function App() {
 
       playChime();
       notify(
-        '🎉 5 Transaksi unik lolos validasi DANA! Tahap 2 Selesai: Tambahan Rp25.000 otomatis masuk ke Saldo DANA pengundang (Total komisi Rp45.000).'
+        s.role === 'referred'
+          ? '🎉 5 Transaksi unik berhasil diverifikasi! Tokomu resmi berstatus Merchant Juara.'
+          : '🎉 5 Transaksi unik warung binaan terverifikasi! Reward Tahap 2 (Rp25.000) otomatis masuk ke Saldo DANA.'
       );
     },
 
     nudge: (referral) =>
       notify(
         referral.stage === 0
-          ? `WhatsApp terbuka: "Halo, ini link pendaftaran DANA Bisnis untuk ${referral.name}. Tinggal konfirmasi ya, QRIS-nya langsung jadi."`
-          : `WhatsApp terbuka: "Halo ${referral.name}, QRIS DANA Bisnis-nya sudah aktif! Nanti saya bayar pakai DANA ya, agar dapat benefit operasional 0% MDR."`,
+          ? `Membuka WhatsApp untuk mengirim link pendaftaran ke ${referral.name}...`
+          : `Membuka WhatsApp untuk koordinasi transaksi dengan ${referral.name}...`
       ),
 
     claim: () => {
