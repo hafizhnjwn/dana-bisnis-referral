@@ -114,7 +114,7 @@ export function Pill({ children, tone = 'dana' }) {
 }
 
 export const Shell = ({ children, className = '' }) => (
-  <div className={`screen-in flex min-h-full flex-col bg-slate-100 ${className}`}>{children}</div>
+  <div className={`screen-in relative flex min-h-full flex-col overflow-hidden bg-slate-100 ${className}`}>{children}</div>
 );
 
 export const Field = ({ step, label, hint, children }) => (
