@@ -36,12 +36,12 @@ function ProgramHeroBanner({ onClick }) {
       <p className="text-2xl leading-tight font-extrabold text-white">
         Ajak <span className="text-amber-300">Warung Langganan</span>
       </p>
-      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo s/d Rp45.000</p>
+      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo s/d Rp40.000</p>
       <span className="mt-2 inline-block rounded-full border-2 border-amber-200 bg-amber-400 px-4 py-1.5 text-xs font-extrabold text-amber-900">
         AJAK SEKARANG
       </span>
       <p className="mt-2 text-[9px] text-white/70">
-        Tahap 1: Rp20.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp25.000 (5 tx &amp; validasi). S&amp;K berlaku.
+        Tahap 1: Rp10.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp30.000 (5 tx &amp; validasi). S&amp;K berlaku.
       </p>
       <span className="absolute right-4 bottom-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15">
         <Icon name="store" className="h-10 w-10 text-white" />
@@ -64,7 +64,7 @@ function ProgramWideBanner({ onClick }) {
         Bantu daftarkan, 3 data saja.
       </p>
       <p className="mt-1 text-[10px] text-white/80">
-        Raih Saldo DANA hingga Rp45.000 per warung (Rp20.000 cair otomatis di transaksi pertama).
+        Raih Saldo DANA hingga Rp40.000 per warung (Rp10.000 cair otomatis di transaksi pertama).
       </p>
       <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
         Bantu Daftarkan <Icon name="next" className="h-3 w-3" />
@@ -437,10 +437,10 @@ export function BizDash({ s, user, go, notify }) {
           <p className="mt-1 text-base leading-tight font-extrabold">
             Ajak rekan usaha sebelah,
             <br />
-            raih saldo hingga Rp45.000 per rekan
+            raih saldo hingga Rp40.000 per rekan
           </p>
           <p className="mt-1 text-[10px] text-white/85">
-            Tahap 1: Rp20.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp25.000 (5 tx &amp; validasi).
+            Tahap 1: Rp10.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp30.000 (5 tx &amp; validasi).
           </p>
           <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
             Buka Program <Icon name="next" className="h-3 w-3" />
@@ -464,9 +464,9 @@ export function BizDash({ s, user, go, notify }) {
                 <Icon name="wallet" className="h-4 w-4" />
               </span>
               <div className="flex-1">
-                <p className="text-[11px] font-bold text-slate-900">Komisi Saldo DANA s/d Rp45.000 / Rekan</p>
+                <p className="text-[11px] font-bold text-slate-900">Komisi Saldo DANA s/d Rp40.000 / Rekan</p>
                 <p className="text-[10px] leading-relaxed text-slate-500">
-                  Rp20.000 cair saat QRIS terbit &amp; transaksi pertama ≥Rp10k + Rp25.000 saat 5 transaksi unik lolos verifikasi.
+                  Rp10.000 cair saat QRIS terbit &amp; transaksi pertama ≥Rp10k + Rp30.000 saat 5 transaksi unik lolos verifikasi.
                 </p>
               </div>
             </div>

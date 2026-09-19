@@ -15,22 +15,22 @@ export const TIERS = [
   {
     stage: 1,
     label: 'Tahap 1: Pendaftaran s/d QRIS terbit & transaksi min. Rp10.000',
-    detail: 'Saldo DANA Rp20.000 otomatis masuk ke Pocket DANA',
-    amount: 20000,
+    detail: 'Saldo DANA Rp10.000 otomatis masuk ke Pocket DANA',
+    amount: 10000,
     type: 'saldo',
     merchant: 'Saldo Modal Usaha Rp15.000 + 0% MDR + Nada DANA suara transaksi',
   },
   {
     stage: 2,
     label: 'Tahap 2: 5 transaksi unik & lolos validasi transaksi (1–14 hari)',
-    detail: 'Saldo DANA Rp25.000 otomatis masuk ke Pocket DANA (Total Rp45.000)',
-    amount: 25000,
+    detail: 'Saldo DANA Rp30.000 otomatis masuk ke Pocket DANA (Total Rp40.000)',
+    amount: 30000,
     type: 'saldo',
     merchant: 'Kupon Bebas MDR 30 Hari + Badge Merchant Juara & Prioritas DANA Sekitar',
   },
 ];
 
-export const MAX_PER_REFERRAL = 45000;
+export const MAX_PER_REFERRAL = 40000;
 
 /** Angka program produksi yang sedang berjalan, dipakai untuk pembanding di UI. */
 export const LEGACY = {

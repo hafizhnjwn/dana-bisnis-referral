@@ -132,7 +132,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
     },
     {
       tag: 'LANGKAH 2 DARI 3',
-      title: 'Transaksi Pertama: Reward Rp20.000',
+      title: 'Transaksi Pertama: Reward Rp10.000',
       subtitle: 'Dampingi transaksi min. Rp10.000, saldo langsung cair.',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
@@ -153,7 +153,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
           <div className="mt-3 grid grid-cols-2 gap-2 text-center">
             <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5 animate-float-slow">
               <p className="text-[10px] font-bold text-amber-200">KAMU DAPAT</p>
-              <p className="mt-0.5 text-base font-black text-white">+Rp20.000</p>
+              <p className="mt-0.5 text-base font-black text-white">+Rp10.000</p>
               <p className="text-[9px] text-white/80">Saldo DANA Otomatis</p>
             </div>
             <div className="rounded-xl border border-white/20 bg-white/15 p-2.5">
@@ -167,7 +167,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
     },
     {
       tag: 'LANGKAH 3 DARI 3',
-      title: '5 Transaksi Unik: Total Rp45.000',
+      title: '5 Transaksi Unik: Total Rp40.000',
       subtitle: 'Verifikasi validitas 1–14 hari, bonus ekstra Rp1 Juta.',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
@@ -190,11 +190,11 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
             <div className="flex items-center justify-center gap-2">
               <span className="text-base">🏆</span>
               <span className="text-xs font-black text-amber-200">
-                Tahap 2 Cair: +Rp25.000
+                Tahap 2 Cair: +Rp30.000
               </span>
             </div>
             <p className="mt-1 text-sm font-black text-white">
-              Total Reward: <span className="text-emerald-300">Rp45.000 / Warung</span>
+              Total Reward: <span className="text-emerald-300">Rp40.000 / Warung</span>
             </p>
             <p className="mt-1 text-[10px] font-medium text-white/80">
               ⭐ Bonus Rp1.000.000 per 50 warung aktif
@@ -317,7 +317,7 @@ function Hub(p) {
             </span>
             <div>
               <p className="text-xs font-bold text-dana-900">Panduan Lengkap Affiliate DANA</p>
-              <p className="text-[10px] text-dana-700">Skema 2 tahap reward s/d Rp45.000 per warung</p>
+              <p className="text-[10px] text-dana-700">Skema 2 tahap reward s/d Rp40.000 per warung</p>
             </div>
           </div>
           <span className="rounded-lg bg-white px-2 py-1 text-[10px] font-bold text-dana-700 shadow-2xs">
@@ -684,7 +684,7 @@ function Rewards(p) {
           <p className="text-xs font-bold text-slate-500">Rincian Saldo Masuk per Merchant</p>
           {activeReferrals.length === 0 && (
             <p className="mt-3 text-[11px] text-slate-400">
-              Belum ada reward masuk. Reward Tahap 1 (Rp20.000) akan otomatis masuk saat warung binaan menyelesaikan transaksi pertama ≥ Rp10.000.
+              Belum ada reward masuk. Reward Tahap 1 (Rp10.000) akan otomatis masuk saat warung binaan menyelesaikan transaksi pertama ≥ Rp10.000.
             </p>
           )}
           {activeReferrals.map((r) => (
@@ -700,7 +700,7 @@ function Rewards(p) {
               </div>
               <div className="text-right">
                 <p className="text-xs font-extrabold text-emerald-600">
-                  {r.stage >= 2 ? '+Rp45.000' : '+Rp20.000'}
+                  {r.stage >= 2 ? '+Rp40.000' : '+Rp10.000'}
                 </p>
                 <p className="text-[9px] font-bold text-emerald-600 uppercase">SUDAH MASUK</p>
               </div>
@@ -843,7 +843,7 @@ function Inbox(p) {
       tone: 'emerald',
       icon: 'bolt',
       title: `Tahap 1 Selesai : ${m.name}`,
-      body: `Reward Rp20.000 otomatis masuk ke Saldo Pocket DANA.`,
+      body: `Reward Rp10.000 otomatis masuk ke Saldo Pocket DANA.`,
       time: 'Baru saja',
     },
     m.issued && {
@@ -857,14 +857,14 @@ function Inbox(p) {
       tone: 'emerald',
       icon: 'trophy',
       title: 'Tahap 2 Selesai : Toko Kelontong Jaya',
-      body: 'Reward Rp25.000 otomatis masuk ke Saldo Pocket DANA.',
+      body: 'Reward Rp30.000 otomatis masuk ke Saldo Pocket DANA.',
       time: 'Kemarin',
     },
     {
       tone: 'emerald',
       icon: 'bolt',
       title: 'Tahap 1 Selesai : Kopi Pak Rudi',
-      body: 'Reward Rp20.000 otomatis masuk ke Saldo Pocket DANA.',
+      body: 'Reward Rp10.000 otomatis masuk ke Saldo Pocket DANA.',
       time: '3 hari lalu',
     },
     {

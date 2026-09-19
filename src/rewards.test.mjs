@@ -7,19 +7,19 @@ const at = (stage, claimedStage = 0) => ({ name: 'Warung Uji', stage, claimedSta
 // Stage 0 (invited, waiting for registration) pays nothing.
 assert.equal(claimBreakdown([at(0)]).total, 0);
 
-// Stage 1 (Registration + QRIS issued + 1st payment >= Rp10k) unlocks Rp20.000 Saldo DANA.
+// Stage 1 (Registration + QRIS issued + 1st payment >= Rp10k) unlocks Rp10.000 Saldo DANA.
 const stage1 = claimBreakdown([at(1)]);
-assert.deepEqual([stage1.saldo, stage1.voucher, stage1.total], [20000, 0, 20000]);
+assert.deepEqual([stage1.saldo, stage1.voucher, stage1.total], [10000, 0, 10000]);
 
-// Stage 2 (5 unique transactions + 1-14 days audit) unlocks additional Rp25.000 (total Rp45.000).
+// Stage 2 (5 unique transactions + 1-14 days audit) unlocks additional Rp30.000 (total Rp40.000).
 const stage2 = claimBreakdown([at(2)]);
-assert.deepEqual([stage2.saldo, stage2.voucher, stage2.total], [45000, 0, 45000]);
+assert.deepEqual([stage2.saldo, stage2.voucher, stage2.total], [40000, 0, 40000]);
 
 // Claiming / crediting marks it paid and adds to paidTotal.
 const claimed = claimAll([at(2)]);
 assert.equal(claimBreakdown(claimed).total, 0);
-assert.equal(paidTotal(claimed), 45000);
-assert.equal(MAX_PER_REFERRAL, 45000);
+assert.equal(paidTotal(claimed), 40000);
+assert.equal(MAX_PER_REFERRAL, 40000);
 
 // Already-paid tiers are never paid twice.
 assert.deepEqual(pendingTiers(at(2, 2)), []);

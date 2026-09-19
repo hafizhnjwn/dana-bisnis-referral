@@ -229,7 +229,7 @@ export default function App() {
       notify('Transaksi uji Rp1.000 masuk. Nada DANA berbunyi, notifikasi aktif.');
     },
 
-    /** Transaksi pelanggan pertama (Tahap 1): jika >= Rp10.000, reward Rp20.000 langsung masuk otomatis ke saldo referrer */
+    /** Transaksi pelanggan pertama (Tahap 1): jika >= Rp10.000, reward Rp10.000 langsung masuk otomatis ke saldo referrer */
     receivePayment: (amount = 12000) => {
       const qualifies = amount >= 10000;
 
@@ -241,8 +241,8 @@ export default function App() {
           merchant: { ...prev.merchant, firstPayment: amount, modalBonus: 15000 },
           balances: {
             ...prev.balances,
-            // Reward Tahap 1: Rp20.000 otomatis masuk ke saldo DANA pengundang (consumer / inviter)
-            consumer: prev.balances.consumer + (willPromote ? 20000 : 0),
+            // Reward Tahap 1: Rp10.000 otomatis masuk ke saldo DANA pengundang (consumer / inviter)
+            consumer: prev.balances.consumer + (willPromote ? 10000 : 0),
             // Uang pembayaran + bonus modal usaha Rp15.000 masuk ke saldo DANA Bisnis merchant
             referred: prev.balances.referred + amount + (willPromote ? 15000 : 0),
           },
@@ -260,7 +260,7 @@ export default function App() {
         isRefMerchant
           ? `🎉 Pembayaran ${rupiah(amount)} berhasil! Bonus Modal Usaha Rp15.000 telah masuk ke saldo tokomu.`
           : qualifies
-          ? `🎉 Pembayaran ${rupiah(amount)} berhasil! Reward Tahap 1 (Rp20.000) otomatis masuk ke Saldo Pocket DANA.`
+          ? `🎉 Pembayaran ${rupiah(amount)} berhasil! Reward Tahap 1 (Rp10.000) otomatis masuk ke Saldo Pocket DANA.`
           : `Pembayaran ${rupiah(amount)} berhasil diterima.`
       );
     },
@@ -274,8 +274,8 @@ export default function App() {
         return {
           balances: {
             ...prev.balances,
-            // Reward Tahap 2: Rp25.000 otomatis masuk ke saldo DANA pengundang (Total Rp45.000)
-            consumer: prev.balances.consumer + (willPromote ? 25000 : 0),
+            // Reward Tahap 2: Rp30.000 otomatis masuk ke saldo DANA pengundang (Total Rp40.000)
+            consumer: prev.balances.consumer + (willPromote ? 30000 : 0),
           },
           referrals: prev.referrals.map((r) =>
             r.id === prev.nominatedId && r.stage === 1
@@ -289,7 +289,7 @@ export default function App() {
       notify(
         s.role === 'referred'
           ? '🎉 5 Transaksi unik berhasil diverifikasi! Tokomu resmi berstatus Merchant Juara.'
-          : '🎉 5 Transaksi unik warung binaan terverifikasi! Reward Tahap 2 (Rp25.000) otomatis masuk ke Saldo DANA.'
+          : '🎉 5 Transaksi unik warung binaan terverifikasi! Reward Tahap 2 (Rp30.000) otomatis masuk ke Saldo DANA.'
       );
     },
 
@@ -340,7 +340,7 @@ export default function App() {
             Merchant Referral Program
           </h1>
           <p className="mt-3 text-sm text-slate-600">
-            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah, dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), skema 2 tahap reward (Tahap 1: Rp20.000 cair di transaksi pertama ≥Rp10k; Tahap 2: Rp25.000 cair setelah 5 transaksi unik &amp; audit lolos, total Rp45.000), Carousel Onboarding Guide layar penuh, dan benefit khusus pengundang di profil bisnis.
+            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah, dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), skema 2 tahap reward (Tahap 1: Rp10.000 cair di transaksi pertama ≥Rp10k; Tahap 2: Rp30.000 cair setelah 5 transaksi unik &amp; audit lolos, total Rp40.000), Carousel Onboarding Guide layar penuh, dan benefit khusus pengundang di profil bisnis.
           </p>
 
           <div className="mt-6 space-y-2">
@@ -382,7 +382,7 @@ export default function App() {
             </div>
             <p className="mt-3 text-xs text-slate-500">
               {s.merchant.issued
-                ? 'Sistem 2 Tahap: Transaksi pertama ≥ Rp10.000 mencairkan Rp20.000 (Tahap 1). Kemudian 5 transaksi unik & audit mencairkan Rp25.000 (Tahap 2, Total Rp45.000).'
+                ? 'Sistem 2 Tahap: Transaksi pertama ≥ Rp10.000 mencairkan Rp10.000 (Tahap 1). Kemudian 5 transaksi unik & audit mencairkan Rp30.000 (Tahap 2, Total Rp40.000).'
                 : 'Terbitkan QRIS dulu di peran Bu Siti agar simulasi transaksi & profil bisnis aktif.'}
             </p>
           </div>
