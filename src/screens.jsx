@@ -212,7 +212,19 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
       <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
       <div className="pointer-events-none absolute top-1/3 -left-24 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
 
-      <div className="relative pt-8 px-4 shrink-0">
+      {/* Tap zones for left/right phone navigation */}
+      <div
+        onClick={() => step > 0 && setStep(step - 1)}
+        className="absolute inset-y-16 left-0 w-1/2 z-10 cursor-pointer"
+        aria-label="Slide sebelumnya"
+      />
+      <div
+        onClick={() => step < slides.length - 1 && setStep(step + 1)}
+        className="absolute inset-y-16 right-0 w-1/2 z-10 cursor-pointer"
+        aria-label="Slide berikutnya"
+      />
+
+      <div className="relative z-20 pt-8 px-4 shrink-0">
         <div className="flex items-center gap-1.5">
           {slides.map((_, i) => (
             <button
@@ -248,7 +260,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
         </div>
       </div>
 
-      <div className="relative flex-1 px-5 py-4 flex flex-col justify-center">
+      <div className="pointer-events-none relative flex-1 px-5 py-4 flex flex-col justify-center">
         <div>
           <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase text-amber-200">
             {curr.tag}
@@ -260,48 +272,48 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
         </div>
       </div>
 
-      <div className="relative shrink-0 border-t border-white/15 bg-black/10 px-5 pt-3 pb-6 backdrop-blur-md">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setStep(i)}
-                aria-label={`Slide ${i + 1}`}
-                className={`h-2 rounded-full transition-all ${
-                  step === i ? 'w-6 bg-amber-300' : 'w-2 bg-white/40'
-                }`}
-              />
-            ))}
+      <div className="relative z-20 shrink-0 border-t border-white/15 bg-black/15 px-5 pt-3 pb-6 backdrop-blur-md">
+        {step < slides.length - 1 ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setStep(i)}
+                  aria-label={`Slide ${i + 1}`}
+                  className={`h-1.5 rounded-full transition-all ${
+                    step === i ? 'w-6 bg-amber-300' : 'w-2 bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="flex items-center gap-1 text-[11px] font-semibold text-white/80">
+              <span>Ketuk kanan untuk lanjut</span>
+              <Icon name="next" className="h-3 w-3 animate-pulse text-amber-300" />
+            </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            {step > 0 && (
-              <button
-                onClick={() => setStep(step - 1)}
-                className="rounded-xl border border-white/30 bg-white/10 px-3.5 py-2 text-xs font-bold text-white transition active:bg-white/20"
-              >
-                Kembali
-              </button>
-            )}
-
-            {step < slides.length - 1 ? (
-              <button
-                onClick={() => setStep(step + 1)}
-                className="flex items-center gap-1 rounded-xl bg-white px-5 py-2.5 text-xs font-black text-[#108EE9] shadow-lg shadow-black/20 transition active:scale-95"
-              >
-                Lanjut <Icon name="next" className="h-3.5 w-3.5" />
-              </button>
-            ) : (
-              <button
-                onClick={onClose}
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 px-5 py-2.5 text-xs font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-95"
-              >
-                Mulai Sekarang! <Icon name="check" className="h-4 w-4" />
-              </button>
-            )}
+        ) : (
+          <div className="space-y-2">
+            <button
+              onClick={onClose}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98"
+            >
+              Mulai Sekarang! <Icon name="check" className="h-4 w-4" />
+            </button>
+            <div className="flex items-center justify-center gap-1.5 pt-1">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setStep(i)}
+                  aria-label={`Slide ${i + 1}`}
+                  className={`h-1.5 rounded-full transition-all ${
+                    step === i ? 'w-6 bg-amber-300' : 'w-2 bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
