@@ -815,7 +815,7 @@ function Inbox(p) {
       tone: 'dana',
       icon: 'store',
       title: `${m.name} selesai pendaftaran & QRIS terbit`,
-      body: 'Pendaftaran 30 detik selesai. Dampingi warung menerima transaksi pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).',
+      body: 'Pendaftaran selesai. Dampingi warung menerima transaksi pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).',
       time: '2 menit lalu',
     },
     {
@@ -824,20 +824,6 @@ function Inbox(p) {
       title: 'Reward Tahap 2 (Rp25.000) Masuk: Toko Kelontong Jaya',
       body: '5 transaksi unik lolos verifikasi audit validitas DANA. Saldo tambahan Rp25.000 (Total Rp45.000) telah otomatis masuk ke akun Anda.',
       time: 'Kemarin',
-    },
-    {
-      tone: 'slate',
-      icon: 'wallet',
-      title: 'Informasi Reward 2 Tahap Otomatis',
-      body: `Mulai versi baru, reward referral Tahap 1 (Rp20.000) dan Tahap 2 (Rp25.000) langsung masuk ke Saldo Pocket DANA tanpa perlu klaim manual di Pusat Hadiah.`,
-      time: '3 hari lalu',
-    },
-    {
-      tone: 'amber',
-      icon: 'lock',
-      title: 'Info Keamanan & Anti-Fraud',
-      body: 'KYC Light bebas biaya Rp0. Transaksi pertama min. Rp10.000 & 5 transaksi unik diverifikasi otomatis untuk mencegah akun palsu.',
-      time: '1 minggu lalu',
     },
   ].filter(Boolean);
 
@@ -852,25 +838,27 @@ function Inbox(p) {
   return (
     <MiniShell title="Inbox" tab="inbox" {...p}>
       <div className="space-y-3 px-4 pt-3 pb-8">
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-[11px] text-emerald-900">
-          <p className="font-bold">Notifikasi Reward Otomatis</p>
-          <p className="mt-0.5 text-[10px] text-emerald-800/90">
-            Setiap ada transaksi pertama dari warung binaanmu, dana reward langsung masuk ke Saldo DANA Anda.
-          </p>
-        </div>
-
         {items.map((it, i) => (
           <div key={i} className="flex gap-3 rounded-2xl bg-white p-4 shadow-sm">
             <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${tones[it.tone]}`}>
               <Icon name={it.icon} className="h-4 w-4" />
             </span>
             <div className="flex-1">
-              <p className="text-xs font-bold text-slate-800">{it.title}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-bold text-slate-800">{it.title}</p>
+                {i === 0 && <span className="h-1.5 w-1.5 rounded-full bg-dana-500" />}
+              </div>
               <p className="mt-0.5 text-[10px] leading-snug text-slate-500">{it.body}</p>
               <p className="mt-1 text-[9px] text-slate-400">{it.time}</p>
             </div>
           </div>
         ))}
+
+        {items.length === 0 && (
+          <div className="py-12 text-center text-xs text-slate-400">
+            Belum ada notifikasi
+          </div>
+        )}
       </div>
     </MiniShell>
   );
