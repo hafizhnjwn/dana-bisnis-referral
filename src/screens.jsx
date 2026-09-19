@@ -89,48 +89,119 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
 
   const slides = [
     {
-      tag: 'LANGKAH 1 DARI 4 · PELUANG EMAS',
-      title: 'Ajak Warung Langganan, Raih s/d Rp45.000',
-      desc: 'Bantu warung makan, kedai kopi, dan rekan usaha sekitar memiliki QRIS digital resmi tanpa proses berbelit dan tanpa biaya pendaftaran.',
-      points: [
-        { icon: 'bolt', title: '"Bantu Daftarkan" Usaha', desc: 'Kamu yang isikan 3 data ringkas, kode referral tertanam otomatis.' },
-        { icon: 'shield', title: 'KYC Light Instan (Rp0)', desc: 'Tanpa syarat upload e-KTP dan tanpa selfie biometrik di awal.' },
-        { icon: 'qr', title: 'QRIS Terbit < 5 Detik', desc: 'Siap langsung menerima pembayaran dari seluruh bank & e-wallet.' },
-      ],
-      tip: 'Banyak pemilik usaha ingin QRIS, namun enggan mendaftar sendiri karena takut proses rumit. Kamu adalah jembatannya!',
+      tag: 'LANGKAH 1 DARI 3',
+      title: 'Bantu Daftarkan Warung',
+      subtitle: 'Cukup 3 data singkat, QRIS langsung terbit < 5 detik.',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-xs">
+              <span className="text-white/80">🏪 Nama Warung</span>
+              <span className="flex items-center gap-1 font-bold text-white">
+                Warung Bu Siti <span className="font-black text-emerald-300 animate-pop-check">✓</span>
+              </span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-xs">
+              <span className="text-white/80">🏷️ Kategori</span>
+              <span className="flex items-center gap-1 font-bold text-white">
+                F&B / Warung <span className="font-black text-emerald-300 animate-pop-check">✓</span>
+              </span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-xs">
+              <span className="text-white/80">📱 No. WhatsApp</span>
+              <span className="flex items-center gap-1 font-bold text-white">
+                0812-xxxx-4409 <span className="font-black text-emerald-300 animate-pop-check">✓</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/20 py-2 text-xs font-black text-emerald-200 animate-float-slow">
+            <Icon name="bolt" className="h-4 w-4 text-amber-300 animate-pulse" />
+            <span>QRIS Terbit Instan &lt; 5 Detik</span>
+          </div>
+
+          <div className="mt-2.5 flex items-center justify-around text-[10px] font-semibold text-white/80">
+            <span>🛡️ Tanpa e-KTP di Awal</span>
+            <span>•</span>
+            <span>Rp0 Biaya Daftar</span>
+            <span>•</span>
+            <span>Kode Referral Otomatis</span>
+          </div>
+        </div>
+      ),
     },
     {
-      tag: 'LANGKAH 2 DARI 4 · TAHAP 1 REWARD',
-      title: 'Tahap 1: Pendaftaran & Transaksi Pertama ≥Rp10k',
-      desc: 'Dampingi warung menerima pembayaran pertama min. Rp10.000 dari pembeli. Saldo DANA Rp20.000 langsung otomatis masuk ke akunmu!',
-      points: [
-        { icon: 'wallet', title: 'Kamu Dapat: Rp20.000 Saldo DANA', desc: 'Otomatis masuk ke Pocket DANA tanpa perlu klaim manual.' },
-        { icon: 'gift', title: 'Warung Dapat: 0% MDR & Modal Rp15.000', desc: 'Semua uang masuk utuh 100% + bonus modal usaha awal Rp15.000.' },
-        { icon: 'sound', title: 'Fitur Suara Nada DANA Gratis', desc: 'HP toko otomatis menyebutkan nominal uang masuk secara real-time.' },
-      ],
-      tip: 'Tahap pendaftaran & QRIS instan tidak ada reward uang (Rp0) untuk mencegah akun fiktif. Reward terbuka dari transaksi pertama.',
+      tag: 'LANGKAH 2 DARI 3',
+      title: 'Transaksi Pertama: Reward Rp20.000',
+      subtitle: 'Dampingi transaksi min. Rp10.000, saldo langsung cair.',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="relative mx-auto flex h-28 w-28 items-center justify-center rounded-2xl bg-white p-2 shadow-lg">
+            <div className="pointer-events-none absolute inset-x-2 top-2 h-0.5 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-laser" />
+            <QRCodeSVG value="https://dana.id" size={88} />
+          </div>
+
+          <div className="mt-2.5 flex items-center justify-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400 text-[11px] font-black text-slate-900 animate-bounce">
+              ✓
+            </span>
+            <span className="text-xs font-extrabold text-emerald-200">
+              Transaksi ≥ Rp10.000 Berhasil
+            </span>
+          </div>
+
+          <div className="mt-3 grid grid-cols-2 gap-2 text-center">
+            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5 animate-float-slow">
+              <p className="text-[10px] font-bold text-amber-200">KAMU DAPAT</p>
+              <p className="mt-0.5 text-base font-black text-white">+Rp20.000</p>
+              <p className="text-[9px] text-white/80">Saldo DANA Otomatis</p>
+            </div>
+            <div className="rounded-xl border border-white/20 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-emerald-200">WARUNG DAPAT</p>
+              <p className="mt-0.5 text-base font-black text-white">0% MDR</p>
+              <p className="text-[9px] text-white/80">Uang Utuh + Suara Kasir</p>
+            </div>
+          </div>
+        </div>
+      ),
     },
     {
-      tag: 'LANGKAH 3 DARI 4 · TAHAP 2 REWARD',
-      title: 'Tahap 2: 5 Transaksi Unik & Validasi 1–14 Hari',
-      desc: 'Dampingi warung hingga membukukan 5 transaksi unik dari pembeli berbeda. Tim DANA memverifikasi keabsahan transaksi dalam 1–14 hari kerja.',
-      points: [
-        { icon: 'wallet', title: 'Kamu Dapat: Tambahan Rp25.000 Saldo', desc: 'Total komisi penuh mencapai Rp45.000 per warung binaan.' },
-        { icon: 'gift', title: 'Warung Dapat: Kupon 0% MDR 30 Hari', desc: 'Perpanjangan bebas potongan transaksi untuk memaksimalkan laba.' },
-        { icon: 'shield', title: 'Badge Merchant Juara & DANA Sekitar', desc: 'Toko dipromosikan gratis ke ratusan pengguna di radius terdekat.' },
-      ],
-      tip: '5 transaksi dari pembeli riil membuktikan warung benar-benar aktif bertransaksi digital sehari-hari.',
-    },
-    {
-      tag: 'LANGKAH 4 DARI 4 · AUTO-CREDIT & MILESTONE',
-      title: 'Cair Otomatis & Hadiah Rp1.000.000',
-      desc: 'Semua saldo reward masuk otomatis tanpa repot klaim di Pusat Hadiah. Kembangkan jaringan merchant dan raih bonus milestone jutaan rupiah!',
-      points: [
-        { icon: 'check', title: '100% Otomatis Masuk Saldo', desc: 'Bebas khawatir reward hangus atau lupa diklaim.' },
-        { icon: 'trophy', title: 'Bonus Rp1.000.000 / 50 Mitra Aktif', desc: 'Raih hadiah pencapaian ekstra setiap 50 warung menyelesaikan program.' },
-        { icon: 'users', title: 'Dukungan WhatsApp 1-Tap', desc: 'Tombol dampingi transaksi memudahkan edukasi ke pemilik warung.' },
-      ],
-      tip: 'Makin banyak warung yang kamu bantu digitalisasi, makin besar penghasilan pasif yang kamu nikmati.',
+      tag: 'LANGKAH 3 DARI 3',
+      title: '5 Transaksi Unik: Total Rp45.000',
+      subtitle: 'Verifikasi validitas 1–14 hari, bonus ekstra Rp1 Juta.',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <p className="text-center text-[11px] font-bold text-white/90">
+            5 Pembeli Berbeda dalam 1–14 Hari
+          </p>
+
+          <div className="mt-2.5 flex items-center justify-center gap-2">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <div key={num} className="flex flex-col items-center gap-1">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-400 text-xs font-black text-slate-900 shadow-md shadow-emerald-400/30 animate-pulse">
+                  ✓
+                </div>
+                <span className="text-[9px] font-bold text-white/80">Tx #{num}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3.5 rounded-xl border border-amber-300/40 bg-gradient-to-r from-amber-400/25 to-emerald-400/25 p-3 text-center animate-float-slow">
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-base">🏆</span>
+              <span className="text-xs font-black text-amber-200">
+                Tahap 2 Cair: +Rp25.000
+              </span>
+            </div>
+            <p className="mt-1 text-sm font-black text-white">
+              Total Reward: <span className="text-emerald-300">Rp45.000 / Warung</span>
+            </p>
+            <p className="mt-1 text-[10px] font-medium text-white/80">
+              ⭐ Bonus Rp1.000.000 per 50 warung aktif
+            </p>
+          </div>
+        </div>
+      ),
     },
   ];
 
@@ -138,11 +209,9 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
 
   return (
     <div className="absolute inset-0 z-50 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0D5995] via-[#108EE9] to-[#083556] text-white animate-in fade-in duration-200">
-      {/* Top background glow elements */}
       <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
       <div className="pointer-events-none absolute top-1/3 -left-24 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
 
-      {/* Notch clearance & Story Progress Bars */}
       <div className="relative pt-8 px-4 shrink-0">
         <div className="flex items-center gap-1.5">
           {slides.map((_, i) => (
@@ -161,14 +230,13 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
           ))}
         </div>
 
-        {/* Top Navbar */}
         <div className="mt-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[#108EE9] text-[10px] font-black">
+          <div className="flex items-center gap-1.5">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-black text-[#108EE9]">
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              PANDUAN LENGKAP AFFILIATE
+              CARA KERJA AFFILIATE
             </span>
           </div>
           <button
@@ -180,39 +248,18 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* Main Slide Content */}
-      <div className="relative flex-1 overflow-y-auto px-5 py-3 no-scrollbar flex flex-col justify-between">
+      <div className="relative flex-1 px-5 py-4 flex flex-col justify-center">
         <div>
-          {/* Badge & Title */}
-          <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase backdrop-blur-xs text-amber-200">
+          <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase text-amber-200">
             {curr.tag}
           </div>
           <h2 className="mt-2 text-xl font-black leading-tight text-white">{curr.title}</h2>
-          <p className="mt-1 text-xs leading-relaxed text-white/85">{curr.desc}</p>
+          <p className="mt-1 text-xs text-white/85 leading-snug">{curr.subtitle}</p>
 
-          {/* Value Props Card */}
-          <div className="mt-4 space-y-2 rounded-2xl bg-white/10 p-3.5 backdrop-blur-md border border-white/20">
-            {curr.points.map((pt, idx) => (
-              <div key={idx} className="flex items-start gap-2.5">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/20 text-white mt-0.5">
-                  <Icon name={pt.icon} className="h-3.5 w-3.5" />
-                </span>
-                <div className="flex-1">
-                  <p className="text-[11px] font-extrabold text-white">{pt.title}</p>
-                  <p className="text-[10px] leading-snug text-white/80">{pt.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Principle / Tip card */}
-          <div className="mt-3 rounded-2xl bg-amber-400/20 border border-amber-300/30 p-3 text-[10px] leading-relaxed text-amber-100">
-            💡 <strong>Prinsip Program:</strong> {curr.tip}
-          </div>
+          <div className="mt-4">{curr.visual}</div>
         </div>
       </div>
 
-      {/* Bottom Controls */}
       <div className="relative shrink-0 border-t border-white/15 bg-black/10 px-5 pt-3 pb-6 backdrop-blur-md">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
@@ -261,19 +308,26 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
 }
 
 function Hub(p) {
-  const { s, go, notify, earned, activeCount } = p;
-  const [showGuide, setShowGuide] = useState(true);
+  const { s, patch, go, notify, earned, activeCount } = p;
+  const [manualGuide, setManualGuide] = useState(false);
+  const showGuide = (!s.hasSeenAffiliateGuide && s.role === 'consumer') || manualGuide;
+  const handleCloseGuide = () => {
+    setManualGuide(false);
+    if (!s.hasSeenAffiliateGuide && patch) {
+      patch({ hasSeenAffiliateGuide: true });
+    }
+  };
   const biz = s.role === 'merchant';
   const inProgress = s.referrals.filter((r) => r.stage === 1).length;
 
   return (
     <MiniShell title="Affiliate DANA Bisnis" tab="hub" {...p} unread={2}>
-      <AffiliateCarouselGuide isOpen={showGuide} onClose={() => setShowGuide(false)} />
+      <AffiliateCarouselGuide isOpen={showGuide} onClose={handleCloseGuide} />
 
       <div className="px-4 pt-3 pb-8">
         {/* Guide banner */}
         <button
-          onClick={() => setShowGuide(true)}
+          onClick={() => setManualGuide(true)}
           className="flex w-full items-center justify-between rounded-2xl border border-dana-200 bg-dana-50/80 px-3.5 py-2.5 text-left transition active:bg-dana-100"
         >
           <div className="flex items-center gap-2.5">
@@ -880,65 +934,77 @@ function BrowserBar() {
 }
 
 function Landing({ s, go, inviter }) {
-  const props = [
-    ['wallet', 'QRIS bebas potongan (0% MDR)', 'Semua hasil jualan masuk utuh, tanpa biaya bulanan atau admin.'],
-    ['bolt', 'Saldo bisa langsung ditarik', 'Cairkan ke rekening kapan saja tanpa hambatan.'],
-    ['sound', 'Suara di tiap transaksi', 'Nada DANA menyebut nominal setiap pembayaran masuk.'],
-    ['camera', 'Percantik foto produk', 'Rapikan foto menu dan poster jualan otomatis.'],
-    ['users', 'Bisa jadi Rekan DANA', 'Tambah penghasilan dari layanan isi saldo tetangga.'],
+  const benefits = [
+    {
+      icon: 'qr',
+      title: 'Terima Semua Bank & E-Wallet',
+      desc: 'Satu QRIS untuk BCA, BRI, Mandiri, DANA, GoPay, dan lainnya.',
+    },
+    {
+      icon: 'wallet',
+      title: 'Bebas Potongan (0% MDR)',
+      desc: 'Hasil jualan masuk 100% utuh tanpa biaya potongan admin.',
+    },
+    {
+      icon: 'sound',
+      title: 'HP Bersuara Otomatis',
+      desc: 'Nada DANA otomatis menyebut nominal saat uang masuk.',
+    },
   ];
+
   return (
-    <Shell className="bg-white">
+    <Shell className="bg-slate-50">
       <StatusBar />
       <BrowserBar />
-      <div className="bg-gradient-to-b from-dana-500 to-dana-700 px-5 pt-6 pb-8 text-white">
-        <span className="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold">UNDANGAN RESMI DANA BISNIS</span>
-        <p className="mt-3 text-xl leading-tight font-extrabold">
-          {inviter} mengundang {s.merchant.name} bergabung ke DANA Bisnis
+      <div className="bg-gradient-to-b from-dana-600 to-dana-700 px-5 pt-6 pb-6 text-white">
+        <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold tracking-wide">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+          UNDANGAN DARI PELANGGAN ANDA
+        </span>
+        <h1 className="mt-2.5 text-lg leading-snug font-extrabold">
+          {inviter} mengajak {s.merchant.name} bergabung ke DANA Bisnis
+        </h1>
+        <p className="mt-1 text-[11px] leading-relaxed text-white/85">
+          Data pendaftaran sudah dibantu siapkan. Tinggal 1 langkah konfirmasi!
         </p>
-        <p className="mt-2 text-[11px] leading-relaxed text-white/85">
-          Pelanggan setia Anda sudah menyiapkan pendaftarannya. Cukup konfirmasi 3 data, QRIS langsung terbit seketika!
-        </p>
-        <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white/15 p-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/25 text-xs font-bold">
-            {inviter[0]}
-          </span>
-          <p className="text-[11px] leading-snug text-white/90">
-            “Bu, biar saya dan pelanggan lain bisa bayar pakai QRIS kalau jajan di sini.”
-          </p>
-        </div>
       </div>
 
-      <div className="space-y-3 px-5 py-5">
-        <div className="rounded-2xl bg-emerald-50 p-3 text-center">
-          <p className="text-xs font-extrabold text-emerald-800">Biaya Pendaftaran Rp0 · QRIS Instan</p>
-          <p className="text-[10px] text-emerald-700">Terima pembayaran dari seluruh Bank (BCA, BRI, Mandiri) dan E-Wallet.</p>
+      <div className="space-y-3 px-4 pt-4 pb-6">
+        <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-[11px] font-bold text-emerald-800">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-bold text-white">
+            ✓
+          </span>
+          <span>Gratis Rp0 · Siap pakai tanpa upload e-KTP di awal</span>
         </div>
 
-        {props.map(([icon, title, desc]) => (
-          <div key={title} className="flex gap-3 rounded-2xl border border-slate-100 bg-white p-3 shadow-sm">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-dana-50 text-dana-600">
-              <Icon name={icon} />
-            </span>
-            <div>
-              <p className="text-xs font-bold text-slate-900">{title}</p>
-              <p className="text-[10px] leading-snug text-slate-500">{desc}</p>
+        <div className="space-y-2">
+          {benefits.map((b) => (
+            <div key={b.title} className="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-xs">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-dana-50 text-dana-600">
+                <Icon name={b.icon} className="h-5 w-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-slate-800">{b.title}</p>
+                <p className="mt-0.5 text-[10px] leading-tight text-slate-500">{b.desc}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
 
-        <div className="rounded-2xl bg-slate-50 p-3">
-          <p className="text-[10px] leading-relaxed text-slate-500">
-            <strong>Tidak perlu di awal:</strong> foto e-KTP, selfie biometrik, NPWP, atau mengetik kode referral. Cukup 3 data usaha berkat jalur cepat <strong>KYC Light</strong>.
+        <div className="pt-2">
+          <button
+            onClick={() => go('register')}
+            className="w-full rounded-2xl bg-emerald-600 py-3.5 text-center text-sm font-extrabold text-white shadow-md shadow-emerald-600/25 transition active:scale-98"
+          >
+            Aktifkan QRIS Sekarang
+          </button>
+          <p className="mt-2 text-center text-[10px] text-slate-400">
+            Hanya 3 data singkat · Aktif dalam 30 detik
+          </p>
+          <p className="mt-2 text-center text-[9px] text-slate-400">
+            🔒 Berizin & Diawasi Bank Indonesia · Standar QRIS ASPI
           </p>
         </div>
-
-        <Btn variant="green" onClick={() => go('register')}>
-          Daftar Gratis dalam 2 Menit
-        </Btn>
-        <p className="text-center text-[9px] leading-relaxed text-slate-400">
-          DANA Bisnis berizin dan diawasi Bank Indonesia & OJK. QRIS mengikuti standar ASPI.
-        </p>
       </div>
     </Shell>
   );

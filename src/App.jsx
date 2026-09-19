@@ -108,6 +108,7 @@ const SEED_REFERRALS = [
 const initialState = () => ({
   role: 'consumer',
   screen: 'home',
+  hasSeenAffiliateGuide: false,
   referrals: SEED_REFERRALS.map((r) => ({ ...r })),
   // Dompet per persona, reward masuk otomatis ke akun pengundang.
   balances: Object.fromEntries(ROLES.map((r) => [r.id, r.balance])),
