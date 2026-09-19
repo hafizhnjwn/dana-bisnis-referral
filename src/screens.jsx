@@ -272,49 +272,18 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
         </div>
       </div>
 
-      <div className="relative z-20 shrink-0 border-t border-white/15 bg-black/15 px-5 pt-3 pb-6 backdrop-blur-md">
-        {step < slides.length - 1 ? (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setStep(i)}
-                  aria-label={`Slide ${i + 1}`}
-                  className={`h-1.5 rounded-full transition-all ${
-                    step === i ? 'w-6 bg-amber-300' : 'w-2 bg-white/40'
-                  }`}
-                />
-              ))}
-            </div>
-            <p className="flex items-center gap-1 text-[11px] font-semibold text-white/80">
-              <span>Ketuk kanan untuk lanjut</span>
-              <Icon name="next" className="h-3 w-3 animate-pulse text-amber-300" />
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <button
-              onClick={onClose}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98"
-            >
-              Mulai Sekarang! <Icon name="check" className="h-4 w-4" />
-            </button>
-            <div className="flex items-center justify-center gap-1.5 pt-1">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setStep(i)}
-                  aria-label={`Slide ${i + 1}`}
-                  className={`h-1.5 rounded-full transition-all ${
-                    step === i ? 'w-6 bg-amber-300' : 'w-2 bg-white/40'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      {step === slides.length - 1 ? (
+        <div className="relative z-20 shrink-0 px-5 pb-8">
+          <button
+            onClick={onClose}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98"
+          >
+            Mulai Sekarang! <Icon name="check" className="h-4 w-4" />
+          </button>
+        </div>
+      ) : (
+        <div className="shrink-0 h-6" />
+      )}
     </div>
   );
 }
