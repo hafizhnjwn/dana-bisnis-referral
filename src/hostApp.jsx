@@ -36,12 +36,12 @@ function ProgramHeroBanner({ onClick }) {
       <p className="text-2xl leading-tight font-extrabold text-white">
         Ajak <span className="text-amber-300">Warung Langganan</span>
       </p>
-      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo Rp50.000</p>
+      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo Rp10.000</p>
       <span className="mt-2 inline-block rounded-full border-2 border-amber-200 bg-amber-400 px-4 py-1.5 text-xs font-extrabold text-amber-900">
         AJAK SEKARANG
       </span>
       <p className="mt-2 text-[9px] text-white/70">
-        Hadiah bertahap sejak QRIS warung terbit. S&amp;K berlaku.
+        Reward otomatis masuk saldo saat transaksi pertama ≥Rp10k. S&amp;K berlaku.
       </p>
       <span className="absolute right-4 bottom-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15">
         <Icon name="store" className="h-10 w-10 text-white" />
@@ -64,7 +64,7 @@ function ProgramWideBanner({ onClick }) {
         Bantu daftarkan, 3 data saja.
       </p>
       <p className="mt-1 text-[10px] text-white/80">
-        Kamu dapat s/d Rp50.000, warungnya dapat s/d Rp25.000.
+        Kamu dapat Saldo Rp10.000 langsung begitu transaksi pertama berhasil.
       </p>
       <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
         Bantu Daftarkan <Icon name="next" className="h-3 w-3" />
@@ -222,7 +222,7 @@ export function Home({ s, user, go, notify }) {
               icon: 'users',
               tone: 'bg-dana-50 text-dana-600',
               title: 'Ajak Warung Langganan',
-              desc: 'Bantu daftarkan, hadiah s/d Rp50.000',
+              desc: 'Bantu daftarkan, dapat Saldo Rp10.000',
               nav: 'hub',
             },
             {
@@ -436,10 +436,10 @@ export function BizDash({ s, user, go, notify }) {
           <p className="mt-1 text-base leading-tight font-extrabold">
             Ajak rekan usaha sebelah,
             <br />
-            raih saldo s/d Rp50.000
+            raih saldo Rp10.000 per rekan
           </p>
           <p className="mt-1 text-[10px] text-white/85">
-            Plus perpanjangan potongan 0% selama 30 hari tiap rekan usaha aktif.
+            Saldo DANA otomatis masuk begitu transaksi pertama ≥Rp10.000 berhasil.
           </p>
           <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
             Buka Program <Icon name="next" className="h-3 w-3" />

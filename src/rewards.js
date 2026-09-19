@@ -1,43 +1,36 @@
 /**
- * Milestone-gated reward engine (planning.md v2.0 §4.1).
+ * Milestone-gated reward engine (v2.1).
  *
  * A referral moves through stages:
- *   0 = Undangan terkirim (belum daftar)      -> no reward
- *   1 = KYC Light selesai & QRIS terbit       -> Tier 1
- *   2 = Transaksi QRIS pertama >= Rp10.000    -> Tier 2
- *   3 = 5 transaksi unik dalam 14 hari        -> Tier 3
+ *   0 = Undangan terkirim (menunggu pendaftaran)        -> no reward (Rp 0)
+ *   1 = KYC Light selesai & QRIS terbit                -> no reward (Rp 0, anti-abuse)
+ *   2 = Transaksi QRIS pertama >= Rp10.000             -> Rp10.000 Saldo DANA (auto-credited)
  *
- * `claimedStage` records the highest tier already paid out, so a referral that
- * was claimed at Tier 1 can still claim Tier 2 and Tier 3 later.
+ * Sesuai aturan:
+ * - KYC Light & QRIS instan TIDAK mendapatkan reward bagi referrer maupun referee (Rp 0).
+ * - Reward terbuka saat transaksi pertama minimal Rp 10.000 masuk via QRIS yang terbit.
+ * - Reward Rp 10.000 langsung masuk otomatis ke Saldo / Pocket DANA (tanpa klaim manual di Pusat Hadiah).
  */
 export const TIERS = [
   {
     stage: 1,
-    label: 'KYC Light selesai & QRIS terbit',
-    detail: 'Voucher tagihan (min. belanja Rp25k), belum bisa dicairkan',
-    amount: 5000,
-    type: 'voucher',
-    merchant: 'Rp10.000 voucher pulsa/tagihan',
+    label: 'Pendaftaran selesai & QRIS terbit (KYC Light)',
+    detail: 'QRIS terbit instan & siap pakai (Tanpa reward uang untuk cegah akun fiktif)',
+    amount: 0,
+    type: 'none',
+    merchant: 'QRIS aktif instan, MDR 0%, tanpa syarat e-KTP di awal',
   },
   {
     stage: 2,
     label: 'Transaksi QRIS pertama ≥ Rp10.000',
-    detail: 'Saldo DANA, cair seketika',
-    amount: 20000,
+    detail: 'Saldo DANA Rp10.000 otomatis masuk ke Pocket DANA',
+    amount: 10000,
     type: 'saldo',
-    merchant: 'Rp15.000 saldo modal usaha',
-  },
-  {
-    stage: 3,
-    label: '5 transaksi unik dalam 14 hari',
-    detail: 'Bonus retensi, minimal tersebar di 3 hari berbeda',
-    amount: 25000,
-    type: 'saldo',
-    merchant: 'Perpanjangan MDR 0% 30 hari + badge DANA Juara',
+    merchant: 'Omzet masuk utuh 0% MDR + Nada DANA + pembukuan otomatis',
   },
 ];
 
-export const MAX_PER_REFERRAL = TIERS.reduce((sum, t) => sum + t.amount, 0);
+export const MAX_PER_REFERRAL = 10000;
 
 /** Angka program produksi yang sedang berjalan, dipakai untuk pembanding di UI. */
 export const LEGACY = {
@@ -50,38 +43,42 @@ export const LEGACY = {
 };
 
 export const STAGES = [
-  { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 15 },
-  { label: 'Pendaftaran berhasil, QRIS sudah terbit', short: 'Dalam Proses', color: 'amber', progress: 45 },
-  { label: 'QRIS aktif, transaksi pertama masuk', short: 'Aktif', color: 'emerald', progress: 80 },
-  { label: 'Merchant Juara: 5 transaksi dalam 14 hari', short: 'Juara', color: 'violet', progress: 100 },
+  { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 20 },
+  { label: 'Pendaftaran selesai & QRIS terbit (KYC Light)', short: 'QRIS Siap', color: 'amber', progress: 55 },
+  { label: 'Transaksi pertama ≥Rp10k berhasil (Reward cair)', short: 'Aktif', color: 'emerald', progress: 100 },
 ];
 
-/** Tiers already unlocked but not yet paid out for one referral. */
+/** Tiers already unlocked but not yet credited for one referral. */
 export const pendingTiers = (referral) =>
-  TIERS.filter((t) => t.stage <= referral.stage && t.stage > (referral.claimedStage ?? 0));
+  TIERS.filter((t) => t.amount > 0 && t.stage <= referral.stage && t.stage > (referral.claimedStage ?? 0));
 
-/** Tiers already paid out for one referral. */
-export const paidTiers = (referral) => TIERS.filter((t) => t.stage <= (referral.claimedStage ?? 0));
+/** Tiers already credited for one referral. */
+export const paidTiers = (referral) =>
+  TIERS.filter((t) => t.amount > 0 && t.stage <= (referral.claimedStage ?? 0));
 
-/** { saldo, voucher, total } that a list of referrals can claim right now. */
+/** { saldo, voucher, total } that a list of referrals has unlocked. */
 export function claimBreakdown(referrals) {
-  const rows = referrals.flatMap((r) => pendingTiers(r).map((t) => ({ ...t, merchant: r.name })));
+  const rows = referrals.flatMap((r) =>
+    pendingTiers(r).map((t) => ({ ...t, merchant: r.name }))
+  );
   return {
     rows,
     saldo: rows.filter((t) => t.type === 'saldo').reduce((s, t) => s + t.amount, 0),
-    voucher: rows.filter((t) => t.type === 'voucher').reduce((s, t) => s + t.amount, 0),
+    voucher: 0,
     total: rows.reduce((s, t) => s + t.amount, 0),
   };
 }
 
-/** Lifetime value already paid out (the referrer's "total earned" card). */
+/** Lifetime value already paid out directly into DANA balance. */
 export const paidTotal = (referrals) =>
   referrals.reduce((sum, r) => sum + paidTiers(r).reduce((s, t) => s + t.amount, 0), 0);
 
-/** Marks every unlocked tier as paid. Returns a new array (no mutation). */
-export const claimAll = (referrals) => referrals.map((r) => ({ ...r, claimedStage: r.stage }));
+/** Marks every unlocked tier as credited. Returns a new array. */
+export const claimAll = (referrals) =>
+  referrals.map((r) => ({ ...r, claimedStage: Math.max(r.claimedStage ?? 0, r.stage) }));
 
-/** "Usaha aktif" counter that feeds the Rp1.000.000 / 50 merchants achievement bonus. */
-export const activeMerchants = (referrals) => referrals.filter((r) => r.stage >= 3).length;
+/** "Usaha aktif" counter (merchants with at least 1 real transaction >= Rp10k). */
+export const activeMerchants = (referrals) => referrals.filter((r) => r.stage >= 2).length;
 
 export const rupiah = (n) => `Rp${new Intl.NumberFormat('id-ID').format(n)}`;
+

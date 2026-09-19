@@ -30,7 +30,7 @@ const ROLES = [
   {
     id: 'referred',
     label: 'Bu Siti — Warung Diundang',
-    hint: 'Prospek: KYC Light & QRIS instan',
+    hint: 'Prospek: KYC Light, QRIS instan & Profil Bisnis',
     entry: 'landing',
     name: 'Siti Aminah',
     initial: 'S',
@@ -59,7 +59,7 @@ const SEED_REFERRALS = [
     category: 'F&B / Warung Makan',
     phone: '0812••••1121',
     stage: 2,
-    claimedStage: 0,
+    claimedStage: 2,
     tx: 3,
     day: 'Aktif 4 hari',
   },
@@ -68,8 +68,8 @@ const SEED_REFERRALS = [
     name: 'Toko Kelontong Jaya',
     category: 'Toko Kelontong',
     phone: '0857••••7788',
-    stage: 3,
-    claimedStage: 0,
+    stage: 2,
+    claimedStage: 2,
     tx: 41,
     day: 'Aktif 18 hari',
   },
@@ -88,8 +88,8 @@ const SEED_REFERRALS = [
     name: 'Bengkel Motor Jaya Abadi',
     category: 'Jasa / Bengkel',
     phone: '0898••••3345',
-    stage: 3,
-    claimedStage: 3,
+    stage: 2,
+    claimedStage: 2,
     tx: 96,
     day: 'Aktif 28 hari',
   },
@@ -99,7 +99,7 @@ const initialState = () => ({
   role: 'consumer',
   screen: 'home',
   referrals: SEED_REFERRALS.map((r) => ({ ...r })),
-  // Dompet per persona, supaya klaim hadiah masuk ke akun yang sedang aktif.
+  // Dompet per persona, reward masuk otomatis ke akun pengundang.
   balances: Object.fromEntries(ROLES.map((r) => [r.id, r.balance])),
   // Siapa yang mengundang warung ini; dipakai di seluruh sisi warung.
   inviter: roleOf('consumer').name,
@@ -218,46 +218,55 @@ export default function App() {
       notify('Transaksi uji Rp1.000 masuk. Nada DANA berbunyi, notifikasi aktif.');
     },
 
-    /** Transaksi pelanggan pertama: buka Tier 2 untuk referrer + modal usaha merchant. */
+    /** Transaksi pelanggan pertama: jika >= Rp10.000, reward Rp10.000 langsung masuk otomatis ke saldo referrer */
     receivePayment: (amount = 12000) => {
-      patch((prev) => ({
-        merchant: { ...prev.merchant, firstPayment: amount, modalBonus: amount >= 10000 ? 15000 : 0 },
-        referrals: prev.referrals.map((r) =>
-          r.id === prev.nominatedId && r.stage < 2 ? { ...r, stage: 2, tx: 1, day: 'Aktif hari ini' } : r,
-        ),
-      }));
+      const qualifies = amount >= 10000;
+
+      patch((prev) => {
+        const target = prev.referrals.find((r) => r.id === prev.nominatedId);
+        const willPromote = target && target.stage < 2 && qualifies;
+
+        return {
+          merchant: { ...prev.merchant, firstPayment: amount, modalBonus: 0 },
+          balances: {
+            ...prev.balances,
+            // Reward Rp10.000 otomatis masuk ke saldo DANA pengundang (consumer / inviter)
+            consumer: prev.balances.consumer + (willPromote ? 10000 : 0),
+            // Uang pembayaran masuk ke saldo DANA Bisnis merchant
+            referred: prev.balances.referred + amount,
+          },
+          referrals: prev.referrals.map((r) =>
+            r.id === prev.nominatedId && r.stage < 2
+              ? { ...r, stage: qualifies ? 2 : 1, claimedStage: qualifies ? 2 : 0, tx: r.tx + 1, day: 'Aktif hari ini' }
+              : r,
+          ),
+        };
+      });
+
       announce(amount);
       notify(
-        amount >= 10000
-          ? `Pembayaran pelanggan ${rupiah(amount)} diterima. Bonus modal usaha Rp15.000 terbuka.`
-          : `Pembayaran ${rupiah(amount)} diterima (belum memenuhi syarat ≥Rp10.000).`,
+        qualifies
+          ? `🎉 Pembayaran ${rupiah(amount)} diterima! Reward Rp10.000 telah otomatis masuk ke Saldo DANA pengundang.`
+          : `Pembayaran ${rupiah(amount)} diterima (belum memenuhi syarat minimal Rp10.000).`,
       );
-    },
-
-    /** 5 pembayar unik lintas ≥3 hari -> Tier 3. */
-    reachRetention: () => {
-      const target = s.referrals.find((r) => r.stage === 2);
-      if (!target) return notify('Belum ada merchant di tahap transaksi pertama untuk disimulasikan.');
-      mapReferral(target.id, (r) => ({ ...r, stage: 3, tx: 5, day: 'Aktif 14 hari' }));
-      notify(`${target.name} mencapai 5 transaksi unik dalam 14 hari. Bonus Rp25.000 terbuka.`);
     },
 
     nudge: (referral) =>
       notify(
         referral.stage === 0
           ? `WhatsApp terbuka: "Halo, ini link pendaftaran DANA Bisnis untuk ${referral.name}. Tinggal konfirmasi ya, QRIS-nya langsung jadi."`
-          : `WhatsApp terbuka: "Halo ${referral.name}, QRIS DANA Bisnis-nya sudah aktif! Nanti saya bayar pakai DANA ya, biar dapat bonus modal usaha Rp15.000."`,
+          : `WhatsApp terbuka: "Halo ${referral.name}, QRIS DANA Bisnis-nya sudah aktif! Nanti saya bayar pakai DANA ya, agar dapat benefit operasional 0% MDR."`,
       ),
 
     claim: () => {
       const { saldo, total } = claimBreakdown(s.referrals);
-      if (!total) return notify('Belum ada hadiah yang bisa diklaim.');
+      if (!total) return notify('Semua reward telah otomatis masuk ke saldo DANA Anda.');
       patch((prev) => ({
         balances: { ...prev.balances, [prev.role]: prev.balances[prev.role] + saldo },
         referrals: claimAll(prev.referrals),
       }));
       playChime();
-      notify(`${rupiah(saldo)} masuk ke Saldo DANA seketika. Voucher tersimpan di Kupon Saya.`);
+      notify(`${rupiah(saldo)} masuk ke Saldo DANA seketika.`);
     },
 
     reset: () => {
@@ -284,14 +293,12 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 px-4 py-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-start lg:justify-center">
         <div className="flex-1 lg:max-w-sm">
-          <p className="text-xs font-bold tracking-widest text-dana-700">AFFILIATE DANA BISNIS · V2.0</p>
+          <p className="text-xs font-bold tracking-widest text-dana-700">AFFILIATE DANA BISNIS · V2.1</p>
           <h1 className="mt-2 text-3xl leading-tight font-extrabold text-slate-900">
             Merchant Referral Program
           </h1>
           <p className="mt-3 text-sm text-slate-600">
-            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong> yang sudah berjalan
-            di produksi: tetap memakai runtime Mini Program, 4 tab bawah, kode referral, dan Hadiah Pencapaian
-            aslinya, lalu menambahkan <em>Bantu Daftarkan</em>, hadiah bertahap, dan tracker yang bisa ditindak.
+            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah, dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), reward Rp10.000 otomatis masuk saldo setelah transaksi pertama ≥Rp10.000, serta panduan step-by-step di profil bisnis merchant.
           </p>
 
           <div className="mt-6 space-y-2">
@@ -320,13 +327,15 @@ export default function App() {
               <SimButton onClick={() => actions.receivePayment(12000)} disabled={!s.merchant.issued}>
                 Pelanggan bayar Rp12.000
               </SimButton>
-              <SimButton onClick={actions.reachRetention}>5 transaksi / 14 hari</SimButton>
+              <SimButton onClick={() => go('bizprofile')} disabled={!s.merchant.issued}>
+                Profil Bisnis Bu Siti
+              </SimButton>
               <SimButton onClick={actions.reset}>Reset prototipe</SimButton>
             </div>
             <p className="mt-3 text-xs text-slate-500">
               {s.merchant.issued
-                ? 'Simulasi pembayaran memicu Nada DANA (soundbox) — pastikan volume perangkat aktif.'
-                : 'Terbitkan QRIS dulu di peran Bu Siti agar simulasi pembayaran aktif.'}
+                ? 'KYC Light = Rp0. Begitu transaksi pertama ≥ Rp10.000 tercatat, reward Rp10.000 otomatis masuk ke Saldo DANA referrer.'
+                : 'Terbitkan QRIS dulu di peran Bu Siti agar simulasi transaksi & profil bisnis aktif.'}
             </p>
           </div>
         </div>

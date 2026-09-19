@@ -66,22 +66,23 @@ DANA Indonesia | September 2026
 From Influencer-Only Promotion to Grassroots Merchant Digitisation
 
 +----------------------------------+----------------------------------+----------------------------------+
-| 1. DANA'S BASELINE TODAY         | 2. THE REAL FRICTION POINTS      | 3. THE V2.0 BREAKTHROUGH         |
+| 1. DANA'S BASELINE TODAY         | 2. THE REAL FRICTION POINTS      | 3. THE V2.1 BREAKTHROUGH         |
 +----------------------------------+----------------------------------+----------------------------------+
-| • "Affiliate DANA Bisnis" in     | • 5-Tx "All-or-Nothing" Cliff:   | • "Bantu Daftarkan": Referrer    |
-|   Lifestyle & Deals Mini Program.|   Referrer gets Rp 0 if warung   |   pre-fills 3 fields; warung gets|
-| • Rp45,000 base commission upon  |   stops at 2 or 3 transactions.  |   a personalized WA deep link.   |
-|   5 QRIS transactions + review.  | • 1-14 Days Verification Delay:  | • Milestone Payout: Rp5k (KYC) + |
-| • Rp1,000,000 bonus per 50 active|   Causes high referrer drop-off. |   Rp20k (1st tx) + Rp25k (5 txs).|
-|   merchants (creator leaderboard)| • One-Sided: Merchant gets no    | • Dual-Sided Incentives: Warung  |
-| • Merchant onboarding requires   |   referral-specific welcome perk.|   earns Rp15k Modal Usaha bonus. |
-|   DANA Premium + manual code.    | • Intimidating KYC form for UMKM.| • 1-Tap WhatsApp Nudge Button.   |
+| • "Affiliate DANA Bisnis" in     | • 5-Tx "All-or-Nothing" Cliff:   | • "Bantu Daftarkan" + KYC Light: |
+|   Lifestyle & Deals Mini Program.|   Referrer gets Rp 0 if warung   |   Referrer pre-fills 3 fields;   |
+| • Rp45,000 base commission upon  |   stops at 2 or 3 transactions.  |   QRIS issues in 5s without KTP. |
+|   5 QRIS transactions + review.  | • 1-14 Days Verification Delay:  | • Transaction-Gated Auto-Credit: |
+| • Rp1,000,000 bonus per 50 active|   Causes high referrer drop-off. |   KYC Light = Rp0 (anti-abuse);  |
+|   merchants (creator leaderboard)| • Intimidating manual claims     |   1st tx ≥Rp10k = Rp10,000 Saldo |
+| • Merchant onboarding requires   |   and complex reward centers.    |   auto-credited to DANA Pocket.  |
+|   DANA Premium + manual code.    | • No onboarding guidance for     | • DANA Bisnis Profil Guidance:   |
+| • Intimidating KYC form for UMKM.|   referred warung post-signup.   |   Step-by-step checklist in app. |
 +----------------------------------+----------------------------------+----------------------------------+
 
 KEY PROJECTED OUTCOMES:
 1. +42% Uplift in Merchant Onboarding Completion via "Bantu Daftarkan" pre-fill.
-2. 3.2-Day Average Time-to-First-Transaction (down from 11.4 days in baseline).
-3. Blended CAC capped at Rp34,500 with <2.5% fraud exposure and an 8.7x 1-Year LTV/CAC ratio.
+2. Direct 1st Transaction Activation: Reward Rp10.000 credited automatically without manual claim friction.
+3. Zero Fake Accounts: KYC Light pays Rp0; financial reward unlocks only after genuine customer payment ≥ Rp10k.
 ```
 
 ### Speaker Notes
@@ -285,57 +286,54 @@ WHY "BANTU DAFTARKAN" WORKS IN INDONESIA:
 
 ---
 
-## Slide 7: Progressive Milestone Incentive Economics (Tier 1, 2, 3)
+## Slide 7: Transaction-Gated Incentive Economics (v2.1)
 * **Slide Category:** Financial Modeling & Unit Economics
-* **Slide Layout:** 3-Tier Stepped Milestone Progression Bar comparing Referrer Payouts, Merchant Rewards, and Anti-Fraud Guardrails.
+* **Slide Layout:** 2-Stage Milestone Progression Bar comparing Referrer Payouts, Merchant Rewards, and Anti-Fraud Guardrails.
 
 ### Visual Design & Layout Prompts
-* **Visual Structure:** Stepped horizontal milestone roadmap:
-  - Step 1: Onboarding & KYC Light (Tier 1)
-  - Step 2: 1st QRIS Transaction ≥Rp10k (Tier 2)
-  - Step 3: 5 Unique QRIS Transactions across 14 Days (Tier 3)
-* **Color Coding:** Tier 1 in Sky Blue (`#0284C7`), Tier 2 in DANA Blue (`#108EE9`), Tier 3 in Emerald Green (`#10B981`).
-* **Summary Banner:** Total payout capped at DANA's benchmark: Rp50,000 max per retained merchant.
+* **Visual Structure:** Clean 2-Stage Milestone Roadmap:
+  - Stage 1: Pendaftaran & Terbit QRIS (KYC Light) -> Rp 0 (Anti-Abuse)
+  - Stage 2: Transaksi Pertama ≥ Rp10.000 -> Rp 10.000 Saldo DANA (Auto-Credited)
+* **Color Coding:** Stage 1 in Amber (`#F59E0B`), Stage 2 in Emerald Green (`#10B981`).
+* **Summary Banner:** Total payout: Rp10,000 Saldo DANA deposited directly into DANA Pocket upon first genuine QRIS transaction ≥ Rp10k.
 
 ### Slide Content (English)
 
 ```
 [TOP PILL: INCENTIVE ARCHITECTURE]
-Progressive Milestone Payout: Eliminating the "All-or-Nothing" Cliff
+Transaction-Gated Payout: Anti-Abuse Zero Cost at KYC Light, Instant Rp10,000 at First Sale
 
-TOTAL REWARD PER SUCCESSFUL MERCHANT: Referrer: Rp50,000 | Referred Warung: Rp25,000 + Perks
+TOTAL REWARD PER FIRST-TRANSACTING MERCHANT: Referrer: Rp10,000 Saldo DANA | Referred Warung: 0% MDR + Nada DANA
 
 +-----------------------+-----------------------+-----------------------+-----------------------------+
 | MILESTONE STAGE       | REFERRER REWARD       | REFERRED WARUNG PERK  | ANTI-FRAUD VERIFICATION     |
 +-----------------------+-----------------------+-----------------------+-----------------------------+
-| TIER 1: ONBOARDING    | Rp5,000               | Rp10,000              | • Device fingerprint check  |
-| • 3-Field KYC Light   | DANA Bill Voucher     | DANA Pulsa Voucher    | • Max 3 nominations/day     |
-| • Digital QRIS issued | (Min. spend Rp25,000) | (Min. spend Rp20,000) | • No cash-out at Tier 1     |
+| STAGE 1: ONBOARDING   | Rp 0                  | • Instant QRIS        | • Device fingerprint check  |
+| • 3-Field KYC Light   | (Zero Financial       | • 0% MDR (No fee)     | • Max 3 nominations/day     |
+| • Digital QRIS issued |  Incentive for Signup)| • No e-KTP required   | • Completely prevents ghost |
+|                       |                       |   at initial stage    |   account farming/fraud     |
 +-----------------------+-----------------------+-----------------------+-----------------------------+
-| TIER 2: 1ST TX ACTIVE | Rp20,000              | Rp15,000              | • Payer account age >14 days|
-| • 1st QRIS payment    | Saldo DANA Cash       | Saldo Modal Usaha     | • Payer & Merchant cannot   |
-|   value ≥ Rp10,000    | (Direct Wallet Credit)| (Direct Wallet Credit)|   share device ID, IP or NIK|
+| STAGE 2: ACTIVATION   | Rp 10,000             | • 100% revenue kept   | • Payer account age >14 days|
+| • 1st QRIS payment    | Saldo DANA Cash       | • Nada DANA soundbox  | • Payer & Merchant cannot   |
+|   value ≥ Rp 10,000   | (Auto-deposited to    | • Automated daily     |   share device ID, IP or NIK|
+|                       |  DANA Pocket Balance) |   bookkeeping ledger  | • Real-time fraud detection |
 +-----------------------+-----------------------+-----------------------+-----------------------------+
-| TIER 3: RETENTION     | Rp25,000              | 30 Days 0% MDR        | • 5 unique customer accounts|
-| • 5 unique customer   | Saldo DANA Cash       | Extension +           | • Distributed across ≥3 days|
-|   transactions in 14d | (High-Value Bounty)   | "DANA Juara" Badge    | • Velocity check on txs     |
-+-----------------------+-----------------------+-----------------------+-----------------------------+
-| TOTAL MAXIMUM REWARD  | Rp50,000 (Cash+Voucher| Rp25,000 + 0% MDR     | BLENDED FRAUD RATE: < 2.5%  |
+| VOLUME MILESTONE      | Rp 1,000,000 Bonus    | • DANA Juara badge    | • Multi-merchant velocity   |
+| • Per 50 active Toko  | (Hadiah Pencapaian)   | • Priority loan access|   audit across 14-day window|
 +-----------------------+-----------------------+-----------------------+-----------------------------+
 
-ALIGNMENT WITH DANA'S EXISTING BASELINE:
-• Keeps the existing Rp45,000 active criteria benchmark, but breaks the 5-tx barrier into progressive gates.
-• Introduces dual-sided value: The warung owner receives real working capital (Rp15k) to celebrate their 1st scan!
+KEY ECONOMIC PRINCIPLES:
+1. Anti-Ghost Signup: By awarding Rp0 at the KYC Light stage, we eliminate bot-farming and fake warung registrations.
+2. Direct Activation: Reward is 100% tied to economic utility—a real QRIS transaction of ≥ Rp10,000.
+3. Zero-Friction Disbursement: No manual "Pusat Hadiah" claim button. Funds credit directly into the referrer's Saldo DANA.
 ```
 
 ### Speaker Notes
-> "In Slide 7, we address the critical financial engineering of the program.
-> In DANA's existing program, an affiliate only receives money when the merchant completes 5 transactions and passes a 1-to-14 day review. If the merchant stops at 4 transactions, the referrer gets nothing.
-> We resolve this with a **3-Tier Milestone Payout**:
-> In **Tier 1**, when the merchant completes KYC Light and receives their digital QRIS, the referrer receives a Rp5,000 DANA Bill Voucher, and the merchant gets a Rp10,000 pulsa voucher. This provides instant gratification without cash leakage.
-> In **Tier 2**, when the merchant accepts their first real customer QRIS transaction of at least Rp10,000, the referrer receives Rp20,000 cash, and the merchant receives Rp15,000 in 'Saldo Modal Usaha'.
-> In **Tier 3**, when the merchant reaches 5 unique customer transactions across 14 days, the remaining Rp25,000 bounty is unlocked.
-> By structuring the incentives progressively, we protect DANA's marketing capital while keeping both parties hyper-motivated."
+> "In Slide 7, we address the critical incentive and anti-fraud engineering of the program.
+> In our updated v2.1 model, we implement an ironclad anti-abuse policy: **KYC Light and instant QRIS issuance awards Rp 0**. Neither the referrer nor the merchant receives money simply for filling out a 3-field form. This ensures DANA's budget is never drained by ghost accounts or fraudulent signups.
+> Instead, the incentive is unlocked only upon **economic utility**: when the merchant processes their first genuine customer QRIS transaction of at least Rp 10,000.
+> When this occurs, **Rp 10,000 Saldo DANA** is automatically credited directly into the referrer's DANA Pocket, with instant push and inbox notifications. There is no manual claim center ('Pusat Hadiah') or cumbersome voucher redemption.
+> The referred merchant simultaneously benefits from 0% MDR, automatic audio confirmations via Nada DANA, and instant sales bookkeeping directly in their business profile."
 
 ---
 
@@ -519,42 +517,42 @@ Result: The customer becomes an organic, zero-cost onboarding coach!
 
 ---
 
-## Slide 12: UX Showcase 4 — Reward Center & Instant Balance Redemption
+## Slide 12: UX Showcase 4 — Automated Balance Credit & Notification Center
 * **Slide Category:** User Experience & UI Design
-* **Slide Layout:** 1-Phone Focus Mockup (Screen 5: Reward Claim Center) with financial ledger breakdown and audio/haptic specs.
+* **Slide Layout:** 1-Phone Focus Mockup (Automated Ledger & Push Notification Center) with instant financial credit mechanics.
 
 ### Visual Design & Layout Prompts
-* **Phone Mockup:** Shows claimable balance (`Rp45.000`), a celebratory confetti illustration, an audit ledger of past milestone disbursements, and a 1-tap button `[Klaim ke Saldo DANA]`.
-* **Audio / Micro-Interaction Callout:** Details the signature DANA chime ("*D-A-N-A!*") and haptic pulse triggered upon redemption, referencing DANA's soundbox technology (`IMG_8067.PNG`).
+* **Phone Mockup:** Shows live DANA Wallet balance increase, high-visibility green toast banner: *"Pembayaran Rp12.000 terverifikasi! Reward Rp10.000 otomatis masuk ke Saldo Pocket DANA"*, and inbox notification receipts.
+* **Friction Elimination Callout:** Explains the removal of manual "Pusat Hadiah" claim screens—funds deposit automatically into primary DANA balance.
 
 ### Slide Content (English)
 
 ```
-[TOP PILL: UX SHOWCASE — REWARD CLAIM]
-Instant Wallet Gratification & Real-Time Financial Ledger
+[TOP PILL: UX SHOWCASE — ZERO-FRICTION REWARD DISBURSEMENT]
+Direct-to-Wallet Auto-Credit: Eliminating Manual Claim Centers
 
-KEY SCREEN ELEMENTS (SCREEN 5):
-• Total Claimable Balance Widget: High-visibility display: "Rp45.000 Siap Diklaim".
-• Itemized Milestone Ledger:
-  - ✓ Warung Soto Cak Mat: 1st QRIS Payment Verified (+Rp20,000 Saldo DANA)
-  - ✓ Toko Kelontong Jaya: 5x QRIS Transactions Retained (+Rp25,000 Saldo DANA)
-  - ⏳ Warung Bu Siti: Menunggu Transaksi Pertama (Rp20,000 Pending)
-• Primary CTA: ["Klaim ke Saldo DANA"]
-  - Instant ledger injection into primary DANA wallet in <300ms.
-  - Triggers signature DANA audio chime and haptic confirmation vibration!
+KEY SCREEN ELEMENTS (AUTOMATED LEDGER & INBOX):
+• Automatic Balance Credit (Zero-Friction):
+  - No manual "Pusat Hadiah" claim buttons to click.
+  - As soon as the warung's 1st transaction (≥ Rp 10.000) is verified, Rp 10.000 cash is automatically injected into the referrer's DANA Pocket.
+• Real-Time Notification & Audit Trail:
+  - High-priority Toast & Push Notification:
+    "Selamat! Transaksi pertama Warung Bu Siti berhasil. Reward Rp10.000 telah otomatis masuk ke Saldo DANA Anda."
+  - Permanent itemized receipt in the Inbox with emerald checkmark.
+• Clean Referral Code Box:
+  - Removed confusing external WhatsApp and QR invitation buttons.
+  - Focused exclusively on 1-tap Copy and the primary "Bantu Daftarkan" CTA.
 
-ALIGNMENT WITH DANA'S 48-HOUR DISBURSEMENT RULE (IMG_8066.PNG):
-• While DANA's terms state commission is disbursed within 48 hours of audit,
-  our automated Kafka milestone engine enables INSTANT claims the moment the 
-  qualifying QRIS payment is verified!
+WHY ZERO-MANUAL-CLAIM DRIVES RETENTION:
+• Traditional referral programs lose 30-40% of earned rewards due to neglected claim buttons or expired voucher windows.
+• Direct wallet credit delivers instant dopamine and builds absolute trust in DANA's referral promises.
 ```
 
 ### Speaker Notes
-> "Slide 12 covers the Reward Claim experience.
-> In DANA's current terms (`IMG_8066.PNG`), commissions are automatically deposited within 48 hours after manual audit.
-> With our automated Kafka event architecture, we introduce a dedicated **Reward Claim Center**. As soon as a qualifying QR payment is verified, the reward status changes to 'Siap Diklaim'.
-> When Dimas taps 'Klaim ke Saldo DANA', the system executes an atomic credit into his wallet. He immediately hears the familiar DANA audio chime and feels a haptic pulse.
-> Instant emotional gratification reinforces the behavior, prompting him to refer his favorite coffee shop next."
+> "Slide 12 highlights a key UX refinement based on user testing: **we completely removed the separate 'Pusat Hadiah' manual claim screen**.
+> In traditional programs, users often fail to receive their money because it sits locked in an obscure claim center or expires after 30 days.
+> In our v2.1 design, the moment the warung's first genuine transaction of at least Rp 10,000 settles, the system immediately credits **Rp 10,000 Saldo DANA directly into the referrer's wallet** via an atomic transaction.
+> The user receives an instant push notification and a clear inbox receipt. This zero-friction auto-disbursement eliminates claim drop-off and delivers immediate emotional reinforcement."
 
 ---
 
@@ -592,50 +590,57 @@ and manually type a code. The entire flow is completed in 3 taps on mobile web!
 ### Speaker Notes
 > "In Slide 13, we examine the onboarding experience from Bu Siti's perspective.
 > In DANA's current flow (`IMG_8068.PNG`), Bu Siti is instructed to open 'Saya', ensure she has an upgraded DANA Premium account with an e-KTP photo, switch to 'Bisnis', and manually type a code.
-> In v2.0, clicking the WhatsApp link opens a lightweight **Mobile Web Landing Page**. Bu Siti sees that Dimas invited her, and sees three clear guarantees: 0% fee, instant cashout, and voice announcements.
+> In v2.1, clicking the invitation link opens a lightweight **Mobile Web Landing Page**. Bu Siti sees that Dimas invited her, and sees three clear guarantees: 0% fee, instant cashout, and voice announcements.
 > When she taps 'Daftar', her store name and business category are already pre-filled from Dimas's submission. She simply taps 'Gunakan Lokasi Saat Ini' to tag her GPS coordinates and taps 'Terbitkan QRIS'.
 > She doesn't need to take a selfie holding her ID just to get a digital QR code. We defer full KTP compliance until her balance withdrawal exceeds regulatory thresholds, completely eliminating the onboarding wall."
 
 ---
 
-## Slide 14: UX Showcase 6 — Instant Digital QRIS & First-Day Activation Checklist
+## Slide 14: UX Showcase 6 — Instant QRIS & DANA Bisnis Profile Guidance
 * **Slide Category:** User Experience & Merchant Activation
-* **Slide Layout:** 1-Phone Focus Mockup (Screen 8: Digital QRIS & Activation Checklist) flanked by the printable A6 counter poster mockup.
+* **Slide Layout:** 2-Phone Focus Mockup (Screen 8: Instant QRIS; Screen 9: Profil DANA Bisnis Dashboard & Step-by-Step Guidance).
 
 ### Visual Design & Layout Prompts
-* **Center Phone Mockup:** Displays the generated National QRIS with merchant name (`WARUNG NASI BU SITI - DANA BISNIS`), NMID code, and 1-tap buttons: `[Unduh Poster Siap Cetak (PDF)]` and `[Bagikan Gambar QR]`.
-* **Below QR:** The "3-Step First-Day Checklist" with visual checkmarks and the Rp15.000 modal bonus hook.
-* **Right Graphic:** A realistic mockup of an acrylic QRIS stand displaying the DANA Bisnis branded header, QRIS logo, and GPN logo.
+* **Left Phone (Instant QRIS):** Generated National QRIS (`WARUNG NASI BU SITI - DANA BISNIS`), NMID code, and action buttons `[Unduh Poster PDF]` and `[Buka Profil DANA Bisnis & Panduan Toko]`.
+* **Right Phone (Profil Bisnis Dashboard):** Complete DANA Bisnis merchant dashboard displaying store profile, live balance (with 0% MDR), and the **5-step operational guidance checklist**.
 
 ### Slide Content (English)
 
 ```
-[TOP PILL: UX SHOWCASE — INSTANT ACTIVATION]
-Instant Digital QRIS Issuance & The 3-Step First-Day Checklist
+[TOP PILL: UX SHOWCASE — MERCHANT PROFILE & OPERATIONAL GUIDANCE]
+Guiding the Referred Merchant to Operational Success Inside "Profil Bisnis"
 
-SCREEN 8: INSTANT QRIS & STARTER KIT          THE 3-STEP FIRST-DAY ACTIVATION CHECKLIST
-(Issuance in <5 Seconds via DANA QRIS Engine) (Guarantees Real Counter Adoption)
-• Official National QRIS Issued Instantly:     [✓] Langkah 1: QRIS Berhasil Diterbitkan
-  - ASPI & Bank Indonesia compliant.               (Akun Anda telah siap menerima pembayaran)
-  - Merchant Name: WARUNG NASI BU SITI        [ ] Langkah 2: Uji Coba Scan Rp1.000
-• 1-Tap Action Options:                            (Scan Rp1.000 dengan teman/keluarga untuk
-  - "Unduh Poster Meja Siap Cetak (PDF)"            mendengar Nada DANA Transaksi Masuk!)
-  - "Simpan ke Galeri / Bagikan via WA"       [ ] Langkah 3: Terima Pembayaran Pertama ≥Rp10k
-                                                   (Klaim Bonus Modal Usaha Rp15.000!)
+SCREEN 8: INSTANT DIGITAL QRIS                SCREEN 9: DANA BISNIS PROFIL & GUIDANCE
+(Issued in <5 Seconds via ASPI Standard)      (Step-by-Step In-App Merchant Dashboard)
+• Official National QRIS Display              • Store Header: Warung Nasi Bu Siti
+• 1-Tap Counter Poster PDF Download             - Status: [QRIS AKTIF (KYC LIGHT)]
+• PRIMARY CTA:                                • Live DANA Bisnis Balance (0% MDR)
+  ["Buka Profil DANA Bisnis & Panduan Toko"]  • 5-STEP OPERATIONAL CHECKLIST:
+                                                1. [✓] Cetak & Pajang QRIS di Meja Toko
+                                                2. [⏳] Terima Transaksi Pertama (≥Rp10k)
+                                                       (Includes 1-Tap Test Scan Simulator)
+                                                3. [✓] Suara Transaksi Nada DANA Aktif
+                                                4. [4] Pantau Penjualan Harian Otomatis
+                                                5. [5] Upgrade ke KYC Full (Opsional)
 
-BRIDGING THE DIGITAL-TO-PHYSICAL GAP:
-• Solves the "Ghost Merchant" crisis: Warungs don't wait 5 days for physical stickers in the mail.
-• Step 2 trains the merchant on the "Suara di Tiap Transaksi" audio announcement (IMG_8067.PNG).
-• Step 3 provides a direct financial incentive (Rp15k modal) to display the QRIS on the counter today!
+CLOSING THE RETENTION LOOP:
+• Solves the "Ghost Merchant" crisis: Warungs are guided to print and display their QRIS.
+• Step 2 guides the merchant to their first Rp10k transaction to unlock 0% MDR operational benefits.
+• Step 3 confirms automatic audio announcements via Nada DANA (IMG_8067.PNG).
+• Step 5 explains how and when to upgrade to DANA Bisnis Premium with e-KTP.
 ```
 
 ### Speaker Notes
-> "Slide 14 solves the greatest operational dilemma in fintech merchant acquisition: the 'Ghost Merchant' problem. A merchant signs up, but never prints or displays the QR code on their counter.
-> In our design, within five seconds of tapping submit, Bu Siti receives her official **National QRIS**. She can save the image or download a beautifully formatted, print-ready PDF poster.
-> Right below the QR code is our **3-Step First-Day Checklist**.
-> Step 2 prompts her to do a quick Rp1,000 test scan with a friend so she can experience the DANA audio soundbox chime (`IMG_8067.PNG`).
-> Step 3 tells her that accepting her first real customer payment of at least Rp10,000 unlocks a Rp15,000 working capital bonus in her wallet.
-> This transforms passive digital registration into active counter adoption within hours."
+> "Slide 14 represents a vital completion of the merchant experience: **the post-issuance guidance inside their DANA Bisnis Profile**.
+> Generating a QR code is meaningless if the merchant leaves it inside their phone.
+> From the instant QRIS screen, tapping 'Buka Profil DANA Bisnis' transitions Bu Siti directly into her active **DANA Bisnis Dashboard**.
+> Here, she is greeted with an actionable **5-step checklist**:
+> First, she downloads the print-ready A6 counter poster to display at her cash register.
+> Second, she is guided to accept her first transaction of at least Rp 10,000, with an interactive testing simulation button so she can practice scanning.
+> Third, she sees that Nada DANA voice confirmation is active.
+> Fourth, she explores her automatic daily bookkeeping ledger.
+> And fifth, she receives clear advice on when and how to upgrade to DANA Bisnis Premium with e-KTP when her monthly sales exceed Rp 10 million.
+> This hands-on guidance ensures the warung doesn't just sign up—they become an active, permanent QRIS merchant."
 
 ---
 
