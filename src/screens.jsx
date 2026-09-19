@@ -497,18 +497,18 @@ function Nominate(p) {
 
 const TABS = [
   ['all', 'Semua'],
-  ['progress', 'Menunggu Transaksi'],
-  ['active', 'Reward Cair'],
+  ['registered', 'Terdaftar'],
+  ['active', 'Aktif'],
 ];
 
 function Tracker(p) {
-  const { s, go, nudge } = p;
+  const { s, nudge } = p;
   const [tab, setTab] = useState('all');
   const [q, setQ] = useState('');
   const list = s.referrals
     .filter((r) => r.name.toLowerCase().includes(q.toLowerCase()))
     .filter((r) => {
-      if (tab === 'progress') return r.stage === 1;
+      if (tab === 'registered') return r.stage === 1;
       if (tab === 'active') return r.stage >= 2;
       return true;
     });
@@ -531,8 +531,9 @@ function Tracker(p) {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-bold ${tab === id ? 'bg-dana-500 text-white' : 'bg-white text-slate-500 shadow-sm'
-              }`}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-bold transition ${
+              tab === id ? 'bg-dana-500 text-white shadow-sm' : 'bg-white text-slate-500 shadow-xs'
+            }`}
           >
             {label}
           </button>
@@ -544,7 +545,18 @@ function Tracker(p) {
           <p className="rounded-2xl bg-white p-6 text-center text-xs text-slate-400">Tidak ada usaha di kategori ini.</p>
         )}
         {list.map((r) => {
-          const st = STAGES[r.stage] || STAGES[0];
+          const isRegisteredNoTx = r.stage === 1 && (r.tx === 0 || !r.tx);
+          const isStage1Done = r.stage === 1 && r.tx >= 1;
+          const isStage2Done = r.stage >= 2;
+
+          const st = isStage2Done
+            ? { label: 'Tahap 2 Selesai · Merchant Aktif', short: 'Aktif', color: 'emerald', progress: 100 }
+            : isStage1Done
+            ? { label: 'Tahap 1 Selesai · Menuju 5 Transaksi Unik', short: 'Tahap 1 Selesai', color: 'amber', progress: 75 }
+            : isRegisteredNoTx
+            ? { label: 'Terdaftar (QRIS Aktif) · Menunggu Transaksi Pertama', short: 'Terdaftar', color: 'amber', progress: 50 }
+            : { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 25 };
+
           const style = STAGE_STYLE[st.color] || STAGE_STYLE.slate;
           return (
             <div key={r.id} className="rounded-2xl bg-white p-4 shadow-sm">
@@ -566,11 +578,17 @@ function Tracker(p) {
                 <div className={`h-full rounded-full ${style.bar}`} style={{ width: `${st.progress}%` }} />
               </div>
               <div className="mt-2 flex gap-1.5 text-[9px] font-bold">
-                {['Undangan', 'QRIS (KYC Light)', 'Transaksi ≥Rp10k'].map((label, i) => (
+                {[
+                  ['Undangan', true],
+                  ['Terdaftar', r.stage >= 1],
+                  ['Transaksi ≥Rp10k', r.stage >= 1 && r.tx >= 1],
+                  ['Aktif (5 tx)', r.stage >= 2],
+                ].map(([label, done]) => (
                   <span
                     key={label}
-                    className={`flex-1 rounded-md py-1 text-center ${r.stage > i ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-400'
-                      }`}
+                    className={`flex-1 rounded-md py-1 text-center ${
+                      done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-400'
+                    }`}
                   >
                     {label}
                   </span>
@@ -590,7 +608,20 @@ function Tracker(p) {
                   </button>
                 </div>
               )}
-              {r.stage === 1 && (
+              {isRegisteredNoTx && (
+                <div className="mt-3 space-y-2">
+                  <p className="rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
+                    Pendaftaran selesai &amp; QRIS aktif. Dampingi warung menerima pembayaran pertama min. Rp10.000 untuk mencairkan reward Tahap 1 (Rp20.000).
+                  </p>
+                  <button
+                    onClick={() => nudge(r)}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
+                  >
+                    <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi Pertama via WhatsApp
+                  </button>
+                </div>
+              )}
+              {isStage1Done && (
                 <div className="mt-3 space-y-2">
                   <p className="rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
                     🎉 Tahap 1 Selesai: Transaksi pertama ≥Rp10k berhasil (Reward Rp20.000 cair). Menuju Tahap 2: dampingi 5 transaksi unik dari pembeli berbeda agar bonus Rp25.000 cair!
@@ -603,7 +634,7 @@ function Tracker(p) {
                   </button>
                 </div>
               )}
-              {r.stage >= 2 && (
+              {isStage2Done && (
                 <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-[10px] font-bold text-emerald-700">
                   ✓ Tahap 2 Selesai! 5 transaksi unik lolos verifikasi validitas. Total reward Rp45.000 lengkap masuk ke Pocket DANA.
                 </p>
@@ -611,9 +642,6 @@ function Tracker(p) {
             </div>
           );
         })}
-        <Btn variant="subtle" onClick={() => go('hub')}>
-          <Icon name="store" className="h-4 w-4" /> Kembali ke Beranda
-        </Btn>
       </div>
     </MiniShell>
   );

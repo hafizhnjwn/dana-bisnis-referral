@@ -93,6 +93,16 @@ const SEED_REFERRALS = [
     tx: 96,
     day: 'Tahap 2 lolos audit validasi',
   },
+  {
+    id: 5,
+    name: 'Kedai Es Teh Mbak Sri',
+    category: 'F&B / Warung Makan',
+    phone: '0821••••9901',
+    stage: 1,
+    claimedStage: 0,
+    tx: 0,
+    day: 'QRIS aktif · Menunggu transaksi',
+  },
 ];
 
 const initialState = () => ({
