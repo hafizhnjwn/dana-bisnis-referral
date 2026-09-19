@@ -261,11 +261,9 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
 }
 
 function Hub(p) {
-  const { s, go, notify, user, earned, activeCount } = p;
-  const [mode, setMode] = useState('warung');
+  const { s, go, notify, earned, activeCount } = p;
   const [showGuide, setShowGuide] = useState(true);
   const biz = s.role === 'merchant';
-  const trackLabel = biz ? 'Mitra Bisnis' : 'Sahabat Warung';
   const inProgress = s.referrals.filter((r) => r.stage === 1).length;
 
   return (
@@ -292,192 +290,131 @@ function Hub(p) {
           </span>
         </button>
 
-        <div className="mt-3 flex rounded-full bg-slate-100 p-1 text-[11px] font-bold">
-          {[
-            ['warung', trackLabel],
-            ['kreator', 'Affiliate Kreator'],
-          ].map(([id, label]) => (
-            <button
-              key={id}
-              onClick={() => setMode(id)}
-              className={`flex-1 rounded-full py-2 ${mode === id ? 'bg-dana-500 text-white' : 'text-slate-500'}`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {mode === 'warung' ? (
-          <div className="mt-4 space-y-4">
-            {/* Summary card */}
-            <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-4 text-white shadow-lg shadow-dana-700/25">
-              <p className="text-[11px] text-white/80">Total Saldo Reward Masuk ke Akun Anda</p>
-              <p className="text-3xl font-extrabold">{rupiah(earned)}</p>
-              <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                {[
-                  [inProgress, 'Menunggu Transaksi'],
-                  [activeCount, 'Warung Aktif'],
-                  ['#42', 'Peringkat 30 hari'],
-                ].map(([v, k]) => (
-                  <span key={k} className="rounded-xl bg-white/15 p-2">
-                    <span className="block text-sm font-bold">{v}</span>
-                    <span className="text-[9px] text-white/80">{k}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Cleaned Referral Code Box: Removed WA and QR buttons */}
-            <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">Kode referral kamu</p>
-              <div className="mt-2 flex items-center gap-3">
-                <div className="flex-1 rounded-xl border border-dashed border-dana-200 bg-dana-50 py-3 text-center text-lg font-extrabold tracking-widest text-dana-700">
-                  {REFERRAL_CODE}
-                </div>
-                <button
-                  onClick={() => notify(`Kode ${REFERRAL_CODE} disalin ke clipboard.`)}
-                  aria-label="Salin kode"
-                  className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 active:bg-slate-200"
-                >
-                  <Icon name="copy" />
-                </button>
-              </div>
-              <p className="mt-2.5 text-[10px] leading-relaxed text-slate-500">
-                Salin kode di atas untuk dibagikan langsung, atau gunakan tombol <strong>Bantu Daftarkan</strong> di bawah agar pendaftaran terisi otomatis tanpa perlu mengetik kode.
-              </p>
-            </div>
-
-            <button
-              onClick={() => go('nominate')}
-              className="w-full rounded-3xl border-2 border-dana-500 bg-white p-4 text-left shadow-lg shadow-dana-500/10 active:bg-dana-50"
-            >
-              <div className="flex items-center gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-dana-500 text-white">
-                  <Icon name="store" />
-                </span>
-                <div className="flex-1">
-                  <p className="text-sm font-extrabold text-slate-900">
-                    {biz ? 'Bantu Daftarkan Rekan Usaha' : 'Bantu Daftarkan Warung Langganan'}
-                  </p>
-                  <p className="mt-0.5 text-[11px] leading-snug text-slate-500">
-                    Isi 3 data singkat, DANA kirim undangan pra-isi ke WhatsApp pemilik usaha.
-                  </p>
-                </div>
-                <Icon name="next" className="h-4 w-4 text-dana-500" />
-              </div>
-            </button>
-
-            {/* Updated Tiers */}
-            <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">Skema reward referral</p>
-              <div className="mt-3 space-y-3">
-                {TIERS.map((t, i) => (
-                  <div key={t.stage} className="flex gap-3">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-dana-50 text-[11px] font-bold text-dana-700">
-                      {i + 1}
-                    </span>
-                    <div className="flex-1">
-                      <p className="text-xs font-bold text-slate-800">{t.label}</p>
-                      <p className="text-[10px] text-slate-500">{t.detail}</p>
-                      <p className="mt-0.5 text-[9px] font-medium text-emerald-600">Benefit Warung: {t.merchant}</p>
-                    </div>
-                    <span className="text-xs font-extrabold text-dana-700">
-                      {t.amount > 0 ? rupiah(t.amount) : 'Rp 0'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
-                * Reward Tahap 1 &amp; 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2">
-                <Icon name="trophy" className="h-4 w-4 text-amber-500" />
-                <p className="flex-1 text-xs font-bold text-slate-700">Hadiah Pencapaian</p>
-                <Pill tone="amber">{rupiah(LEGACY.achievementBonus)}</Pill>
-              </div>
-              <p className="mt-2 text-[10px] text-slate-500">
-                Bonus {rupiah(LEGACY.achievementBonus)} setiap {LEGACY.achievementPer} usaha aktif memakai QRIS-nya.
-              </p>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-                <div
-                  className="h-full rounded-full bg-amber-500"
-                  style={{ width: `${Math.min(100, (activeCount / LEGACY.achievementPer) * 100)}%` }}
-                />
-              </div>
-              <p className="mt-1 text-[10px] font-bold text-slate-600">
-                {activeCount} / {LEGACY.achievementPer} usaha aktif
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">Panduan Affiliate</p>
+        <div className="mt-4 space-y-4">
+          {/* Summary card */}
+          <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-4 text-white shadow-lg shadow-dana-700/25">
+            <p className="text-[11px] text-white/80">Total Saldo Reward Masuk ke Akun Anda</p>
+            <p className="text-3xl font-extrabold">{rupiah(earned)}</p>
+            <div className="mt-3 grid grid-cols-3 gap-2 text-center">
               {[
-                ['Kelebihan QRIS DANA Bisnis', 'Potongan 0%, saldo langsung ditarik, Nada DANA, AI foto produk, Rekan DANA'],
-                ['Cara Daftar DANA Bisnis', 'Jalur cepat: 3 data lewat link undangan, e-KTP menyusul saat pencairan'],
-                ['FAQ Komisi & Saldo', 'Reward 2 tahap otomatis masuk saldo Pocket DANA tanpa perlu klaim manual'],
-              ].map(([title, desc]) => (
-                <button
-                  key={title}
-                  onClick={() => notify(`${title}: ${desc}`)}
-                  className="mt-3 flex w-full items-center gap-3 border-t border-slate-100 pt-3 text-left first:border-0 first:pt-0"
-                >
-                  <span className="flex-1">
-                    <span className="block text-xs font-bold text-slate-800">{title}</span>
-                    <span className="block text-[10px] leading-snug text-slate-500">{desc}</span>
-                  </span>
-                  <Icon name="next" className="h-3.5 w-3.5 text-slate-400" />
-                </button>
+                [inProgress, 'Menunggu Transaksi'],
+                [activeCount, 'Warung Aktif'],
+                ['#42', 'Peringkat 30 hari'],
+              ].map(([v, k]) => (
+                <span key={k} className="rounded-xl bg-white/15 p-2">
+                  <span className="block text-sm font-bold">{v}</span>
+                  <span className="text-[9px] text-white/80">{k}</span>
+                </span>
               ))}
             </div>
           </div>
 
-        ) : (
-          <div className="mt-4 space-y-4">
-            <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">Komisi Utama Affiliate</p>
-              <p className="text-3xl font-extrabold text-slate-900">{rupiah(LEGACY.commission)}</p>
-              <p className="text-[10px] text-slate-500">per usaha aktif yang lolos audit</p>
-              <div className="mt-3 space-y-1 text-[10px] text-slate-600">
-                <p>· Kriteria usaha aktif: minimal {LEGACY.txCriteria} transaksi QRIS.</p>
-                <p>· Pengecekan tim risiko: {LEGACY.verification}.</p>
-                <p>· Pencairan: {LEGACY.disbursement}.</p>
+          {/* Cleaned Referral Code Box: Removed WA and QR buttons */}
+          <div className="rounded-3xl bg-white p-4 shadow-sm">
+            <p className="text-xs font-bold text-slate-500">Kode referral kamu</p>
+            <div className="mt-2 flex items-center gap-3">
+              <div className="flex-1 rounded-xl border border-dashed border-dana-200 bg-dana-50 py-3 text-center text-lg font-extrabold tracking-widest text-dana-700">
+                {REFERRAL_CODE}
               </div>
-            </div>
-
-            <div className="rounded-3xl bg-gradient-to-r from-violet-600 to-dana-700 p-4 text-white">
-              <p className="text-sm font-extrabold">Ada Affiliate yang sudah dapat Rp90 juta, lho!</p>
-              <p className="mt-1 text-[11px] text-white/85">
-                Kreator teratas telah mendaftarkan ratusan mitra usaha aktif setiap bulannya.
-              </p>
               <button
-                onClick={() => go('peringkat')}
-                className="mt-3 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-violet-700"
+                onClick={() => notify(`Kode ${REFERRAL_CODE} disalin ke clipboard.`)}
+                aria-label="Salin kode"
+                className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600 active:bg-slate-200"
               >
-                Lihat Papan Peringkat
+                <Icon name="copy" />
               </button>
             </div>
+            <p className="mt-2.5 text-[10px] leading-relaxed text-slate-500">
+              Salin kode di atas untuk dibagikan langsung, atau gunakan tombol <strong>Bantu Daftarkan</strong> di bawah agar pendaftaran terisi otomatis tanpa perlu mengetik kode.
+            </p>
+          </div>
 
-            <div className="rounded-3xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">4 langkah dapat komisi</p>
-              {[
-                'Bagikan kode referral atau link ke audiens kamu.',
-                'Usaha mendaftar DANA Bisnis dan mengisi kode referralmu.',
-                `Usaha menyelesaikan minimal ${LEGACY.txCriteria} transaksi QRIS.`,
-                'Komisi masuk otomatis ke Saldo DANA setelah lolos audit.',
-              ].map((step, i) => (
-                <div key={i} className="mt-3 flex gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-bold text-slate-600">
+          <button
+            onClick={() => go('nominate')}
+            className="w-full rounded-3xl border-2 border-dana-500 bg-white p-4 text-left shadow-lg shadow-dana-500/10 active:bg-dana-50"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-dana-500 text-white">
+                <Icon name="store" />
+              </span>
+              <div className="flex-1">
+                <p className="text-sm font-extrabold text-slate-900">
+                  {biz ? 'Bantu Daftarkan Rekan Usaha' : 'Bantu Daftarkan Warung Langganan'}
+                </p>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">
+                  Isi 3 data singkat, DANA kirim undangan pra-isi ke WhatsApp pemilik usaha.
+                </p>
+              </div>
+              <Icon name="next" className="h-4 w-4 text-dana-500" />
+            </div>
+          </button>
+
+          {/* Updated Tiers */}
+          <div className="rounded-3xl bg-white p-4 shadow-sm">
+            <p className="text-xs font-bold text-slate-500">Skema reward referral</p>
+            <div className="mt-3 space-y-3">
+              {TIERS.map((t, i) => (
+                <div key={t.stage} className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-dana-50 text-[11px] font-bold text-dana-700">
                     {i + 1}
                   </span>
-                  <p className="flex-1 text-[11px] leading-snug text-slate-700">{step}</p>
+                  <div className="flex-1">
+                    <p className="text-xs font-bold text-slate-800">{t.label}</p>
+                    <p className="text-[10px] text-slate-500">{t.detail}</p>
+                    <p className="mt-0.5 text-[9px] font-medium text-emerald-600">Benefit Warung: {t.merchant}</p>
+                  </div>
+                  <span className="text-xs font-extrabold text-dana-700">
+                    {t.amount > 0 ? rupiah(t.amount) : 'Rp 0'}
+                  </span>
                 </div>
               ))}
             </div>
+            <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
+              * Reward Tahap 1 &amp; 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.
+            </p>
           </div>
-        )}
+
+          <div className="rounded-3xl bg-white p-4 shadow-sm">
+            <div className="flex items-center gap-2">
+              <Icon name="trophy" className="h-4 w-4 text-amber-500" />
+              <p className="flex-1 text-xs font-bold text-slate-700">Hadiah Pencapaian</p>
+              <Pill tone="amber">{rupiah(LEGACY.achievementBonus)}</Pill>
+            </div>
+            <p className="mt-2 text-[10px] text-slate-500">
+              Bonus {rupiah(LEGACY.achievementBonus)} setiap {LEGACY.achievementPer} usaha aktif memakai QRIS-nya.
+            </p>
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+              <div
+                className="h-full rounded-full bg-amber-500"
+                style={{ width: `${Math.min(100, (activeCount / LEGACY.achievementPer) * 100)}%` }}
+              />
+            </div>
+            <p className="mt-1 text-[10px] font-bold text-slate-600">
+              {activeCount} / {LEGACY.achievementPer} usaha aktif
+            </p>
+          </div>
+
+          <div className="rounded-3xl bg-white p-4 shadow-sm">
+            <p className="text-xs font-bold text-slate-500">Panduan Affiliate</p>
+            {[
+              ['Kelebihan QRIS DANA Bisnis', 'Potongan 0%, saldo langsung ditarik, Nada DANA, AI foto produk, Rekan DANA'],
+              ['Cara Daftar DANA Bisnis', 'Jalur cepat: 3 data lewat link undangan, e-KTP menyusul saat pencairan'],
+              ['FAQ Komisi & Saldo', 'Reward 2 tahap otomatis masuk saldo Pocket DANA tanpa perlu klaim manual'],
+            ].map(([title, desc]) => (
+              <button
+                key={title}
+                onClick={() => notify(`${title}: ${desc}`)}
+                className="mt-3 flex w-full items-center gap-3 border-t border-slate-100 pt-3 text-left first:border-0 first:pt-0"
+              >
+                <span className="flex-1">
+                  <span className="block text-xs font-bold text-slate-800">{title}</span>
+                  <span className="block text-[10px] leading-snug text-slate-500">{desc}</span>
+                </span>
+                <Icon name="next" className="h-3.5 w-3.5 text-slate-400" />
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </MiniShell>
   );
