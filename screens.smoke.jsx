@@ -6,7 +6,7 @@ const base = {
     role: 'consumer',
     screen: 'home',
     balances: { consumer: 152300, merchant: 96500, referred: 0 },
-    inviter: 'Dimas Prasetya',
+    inviter: 'Rian Prasetya',
     referrals: [
       { id: 1, name: 'Warung A', category: 'F&B / Warung Makan', phone: '0812', stage: 0, claimedStage: 0, tx: 0, day: 'x' },
       { id: 2, name: 'Warung B', category: 'F&B / Warung Makan', phone: '0812', stage: 1, claimedStage: 0, tx: 0, day: 'x' },
@@ -14,7 +14,7 @@ const base = {
       { id: 4, name: 'Warung D', category: 'Jasa / Bengkel', phone: '0812', stage: 3, claimedStage: 3, tx: 41, day: 'x' },
     ],
     merchant: {
-      name: 'Warung Nasi Bu Siti',
+      name: 'Warung Nasi Pak Joko',
       category: 'F&B / Warung Makan',
       location: '',
       issued: true,
@@ -38,7 +38,7 @@ const base = {
   nudge() {},
   claim() {},
   reset() {},
-  inviter: 'Dimas Prasetya',
+  inviter: 'Rian Prasetya',
   earned: 50000,
   activeCount: 2,
   claimable: {
@@ -55,21 +55,22 @@ const asRole = (id, name, initial, store, balance) => ({
   user: { id, name, initial, store, balance },
 });
 
-const dimas = asRole('consumer', 'Dimas Prasetya', 'D', null, 152300);
-const joko = asRole('merchant', 'Joko Santoso', 'J', 'Martabak Pak Joko', 96500);
+const rian = asRole('consumer', 'Rian Prasetya', 'R', null, 152300);
+const ratna = asRole('merchant', 'Ratna Dewi', 'R', 'Martabak Bu Ratna', 96500);
 
 for (const [name, Screen] of Object.entries(screens)) {
-  const html = renderToStaticMarkup(<Screen {...dimas} />);
+  const html = renderToStaticMarkup(<Screen {...rian} />);
   if (html.length < 500) throw new Error(`screen ${name} rendered suspiciously little markup`);
   console.log(`${name}: ok (${html.length} chars)`);
 }
 
 // Regression: host-app screens must never render another persona's identity.
-const jokoHome = renderToStaticMarkup(<screens.home {...joko} />);
-if (jokoHome.includes('Dimas')) throw new Error('Home leaks the consumer persona while viewing as Pak Joko');
-if (!jokoHome.includes('96.500')) throw new Error('Home does not show the active persona wallet');
-const jokoBiz = renderToStaticMarkup(<screens.bizdash {...joko} />);
-if (!jokoBiz.includes('Martabak Pak Joko')) throw new Error('Bisnis tab does not show the merchant store');
-const jokoHub = renderToStaticMarkup(<screens.hub {...joko} />);
-if (!jokoHub.includes('Bantu Daftarkan Rekan Usaha')) throw new Error('Hub does not adapt to merchant');
+const ratnaHome = renderToStaticMarkup(<screens.home {...ratna} />);
+if (ratnaHome.includes('Rian')) throw new Error('Home leaks the consumer persona while viewing as Bu Ratna');
+if (!ratnaHome.includes('96.500')) throw new Error('Home does not show the active persona wallet');
+const ratnaBiz = renderToStaticMarkup(<screens.bizdash {...ratna} />);
+if (!ratnaBiz.includes('Martabak Bu Ratna')) throw new Error('Bisnis tab does not show the merchant store');
+const ratnaHub = renderToStaticMarkup(<screens.hub {...ratna} />);
+if (!ratnaHub.includes('Bantu Daftarkan Rekan Usaha')) throw new Error('Hub does not adapt to merchant');
 console.log('persona isolation: ok');
+

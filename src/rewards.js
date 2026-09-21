@@ -15,20 +15,88 @@ export const TIERS = [
   {
     stage: 1,
     label: 'Tahap 1: Pendaftaran s/d QRIS terbit & transaksi min. Rp10.000',
-    detail: 'Saldo DANA Rp10.000 otomatis masuk ke Pocket DANA',
+    detail: 'Rian: Saldo Rp10.000 · Bu Ratna: Gratis transfer bank 10x · Pak Joko: Gratis tarik tunai 7x',
     amount: 10000,
     type: 'saldo',
-    merchant: 'Saldo Modal Usaha Rp15.000 + 0% MDR + Nada DANA suara transaksi',
+    merchant: 'Gratis Tarik Tunai 7x (exp. 1 bln) + Modal Usaha Rp15.000 + 0% MDR',
   },
   {
     stage: 2,
     label: 'Tahap 2: 5 transaksi unik & lolos validasi transaksi (1–14 hari)',
-    detail: 'Saldo DANA Rp30.000 otomatis masuk ke Pocket DANA (Total Rp40.000)',
+    detail: 'Rian: Saldo Rp30.000 (Total Rp40.000) · Bu Ratna: Gratis admin 10x · Pak Joko: Gratis admin 10x',
     amount: 30000,
     type: 'saldo',
-    merchant: 'Kupon Bebas MDR 30 Hari + Badge Merchant Juara & Prioritas DANA Sekitar',
+    merchant: 'Gratis Admin 10x (exp. 1 bln) + Kupon Bebas MDR 30 Hari & Badge Merchant Juara',
   },
 ];
+
+export const PERSONA_REWARDS = {
+  consumer: {
+    persona: 'Rian',
+    roleLabel: 'Konsumen DANA (Pengundang)',
+    track: 'Sahabat Warung',
+    tahap1: {
+      title: 'Saldo DANA Rp10.000',
+      type: 'saldo',
+      amount: 10000,
+      benefit: 'Saldo DANA Rp10.000 langsung masuk ke Pocket DANA',
+      terms: 'Cair otomatis saat transaksi QRIS pertama warung binaan minimal Rp10.000.',
+      expiry: 'Permanen di Saldo DANA',
+    },
+    tahap2: {
+      title: 'Saldo DANA Rp30.000',
+      type: 'saldo',
+      amount: 30000,
+      benefit: 'Saldo DANA Rp30.000 langsung masuk ke Pocket DANA (Total Rp40.000)',
+      terms: 'Cair otomatis setelah 5 transaksi unik dari pembeli berbeda & lolos audit validasi.',
+      expiry: 'Permanen di Saldo DANA',
+    },
+  },
+  merchant: {
+    persona: 'Bu Ratna',
+    roleLabel: 'Mitra Bisnis DANA (Pengundang)',
+    track: 'Mitra Bisnis',
+    tahap1: {
+      title: 'Gratis Transfer Antar Bank 10x',
+      type: 'voucher',
+      quota: 10,
+      benefit: '10x Bebas Biaya Transfer ke Seluruh Bank',
+      terms: 'Berlaku untuk transfer ke bank mana pun tanpa biaya admin Rp2.500/transaksi.',
+      expiry: 'Expired dalam 1 bulan (30 hari sejak diperoleh)',
+    },
+    tahap2: {
+      title: 'Gratis Biaya Admin 10x',
+      type: 'voucher',
+      quota: 10,
+      benefit: '10x Bebas Biaya Admin Transaksi',
+      terms: 'Termasuk bayar listrik PLN, isi pulsa & data, transfer antar bank, top up e-money, dll.',
+      expiry: 'Expired dalam 1 bulan (30 hari sejak diperoleh)',
+    },
+  },
+  referred: {
+    persona: 'Pak Joko',
+    roleLabel: 'Warung Diundang (Merchant Binaan)',
+    track: 'Warung Nasi Pak Joko',
+    tahap1: {
+      title: 'Gratis Tarik Tunai 7x',
+      type: 'voucher',
+      quota: 7,
+      benefit: '7x Bebas Biaya Tarik Tunai Saldo Penjualan',
+      terms: 'Bebas biaya tarik tunai di ATM BCA/BRI atau gerai Alfamart & Indomaret.',
+      expiry: 'Expired dalam 1 bulan (30 hari sejak diperoleh)',
+      extra: '0% MDR (bebas potongan) + Bonus Modal Usaha Rp15.000',
+    },
+    tahap2: {
+      title: 'Gratis Biaya Admin 10x',
+      type: 'voucher',
+      quota: 10,
+      benefit: '10x Bebas Biaya Admin Transaksi',
+      terms: 'Termasuk bayar listrik warung, isi pulsa & data, transfer antar bank, dll.',
+      expiry: 'Expired dalam 1 bulan (30 hari sejak diperoleh)',
+      extra: 'Perpanjangan bebas biaya MDR 30 hari + Badge Merchant Juara',
+    },
+  },
+};
 
 export const MAX_PER_REFERRAL = 40000;
 

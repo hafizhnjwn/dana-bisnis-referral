@@ -14,7 +14,7 @@ const HOME_SHORTCUTS = [
   { label: 'Skin Mission', icon: 'gift', tone: 'red' },
   { label: 'DANA CICIL', icon: 'wallet', tone: 'dana', badge: 'NEW' },
   { label: 'Apple Zone', icon: 'cart', tone: 'dark' },
-  { label: 'Pulsa & Data', icon: 'bolt', tone: 'rose' },
+  { label: 'Pulsa & Data', icon: 'bolt', tone: 'rose', nav: 'receipt_data' },
   { label: 'DANA Deals', icon: 'ticket', tone: 'orange' },
   { label: 'Travel', icon: 'plane', tone: 'violet' },
   { label: 'Affiliate DANA Bisnis', icon: 'users', tone: 'blue', nav: 'hub' },
@@ -108,7 +108,7 @@ export function Home({ s, user, go, notify }) {
               key={label}
               onClick={() => {
                 if (icon === 'inbox') go('inbox');
-                else if (icon === 'topup') notify('Fitur Top Up Saldo DANA.');
+                else if (icon === 'topup') go('receipt_emoney');
                 else if (icon === 'request') notify('Fitur Minta Saldo DANA.');
                 else if (icon === 'send') notify('Fitur Kirim Saldo DANA.');
                 else notify(`Fitur ${label} DANA.`);
@@ -228,14 +228,22 @@ export function Home({ s, user, go, notify }) {
               icon: 'users',
               tone: 'bg-dana-50 text-dana-600',
               title: 'Ajak Warung Langganan',
-              desc: 'Bantu daftarkan, dapat Saldo Rp10.000',
+              desc: 'Bantu daftarkan, dapat Saldo s/d Rp40.000',
               nav: 'hub',
             },
             {
-              icon: 'camera',
-              tone: 'bg-violet-50 text-violet-600',
-              title: 'Edit Foto Jualan',
-              desc: 'Rapikan foto menu pakai AI',
+              icon: 'bolt',
+              tone: 'bg-rose-50 text-rose-600',
+              title: 'Beli Paket Internet (Kena Admin)',
+              desc: 'Simulasi bukti transaksi & entrypoint promo',
+              nav: 'receipt_data',
+            },
+            {
+              icon: 'wallet',
+              tone: 'bg-amber-50 text-amber-600',
+              title: 'Top Up E-Money (Kena Admin)',
+              desc: 'Simulasi bukti transaksi & entrypoint promo',
+              nav: 'receipt_emoney',
             },
             {
               icon: 'ticket',
@@ -403,14 +411,212 @@ const BIZ_TOUR_STEPS = [
   },
 ];
 
+/** Guide untuk Merchant / Referee (Pak Joko) sesuai AIDA Stages */
+export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
+  const [step, setStep] = useState(0);
+  if (!isOpen) return null;
+
+  const slides = [
+    {
+      tag: '[A] ATTENTION · KESADARAN USAHA',
+      title: 'Pembeli Cari QRIS? Jangan Sampai Pelanggan Pindah!',
+      subtitle: 'Pelanggan masa kini lebih suka bayar non-tunai lewat HP. Jangan sampai pembeli batal jajan karena tokomu belum ada QRIS!',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-2xl">
+              🏪
+            </span>
+            <div className="flex-1 text-left text-xs">
+              <p className="font-bold text-amber-200">Warung Nasi Pak Joko</p>
+              <p className="text-[10px] text-white/80">
+                Sering kerepotan uang kembalian receh? Beralih ke QRIS DANA Bisnis, transaksi langsung beres!
+              </p>
+            </div>
+          </div>
+          <div className="mt-3 flex items-center justify-around rounded-xl bg-white/10 p-2 text-center text-[10px] font-semibold">
+            <span>🚀 Bebas Uang Palsu</span>
+            <span>•</span>
+            <span>📱 Kasir Lebih Cepat</span>
+            <span>•</span>
+            <span>👥 Pembeli Lebih Nyaman</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      tag: '[I] INTEREST · KETERTARIKAN FITUR',
+      title: '1 QRIS Semua Bank, 0% MDR & Suara Kasir Otomatis',
+      subtitle: 'Terima BCA, BRI, Mandiri, DANA, GoPay, OVO. Uang jualan masuk 100% utuh tanpa potongan MDR, plus HP bersuara dengan Nada DANA!',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="space-y-2 text-xs">
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2">
+              <span className="text-white/80">💳 Terima Semua Bank &amp; E-Wallet</span>
+              <span className="font-bold text-emerald-300">1 QRIS Nasional ✓</span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2">
+              <span className="text-white/80">💰 Potongan Komisi Penjualan</span>
+              <span className="font-bold text-amber-300">0% MDR (Gratis Rp0) ✓</span>
+            </div>
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2">
+              <span className="text-white/80">🔊 Suara Notifikasi Pembayaran</span>
+              <span className="font-bold text-emerald-300">Nada DANA Otomatis ✓</span>
+            </div>
+          </div>
+          <p className="mt-2 text-center text-[10px] text-white/80">
+            Uang langsung masuk ke Saldo Bisnis tanpa perlu dicek berulang-ulang di layar HP.
+          </p>
+        </div>
+      ),
+    },
+    {
+      tag: '[D] DESIRE · MANFAAT & BONUS KHUSUS',
+      title: 'Gratis Tarik Tunai 7x & Bebas Biaya Admin 10x',
+      subtitle: 'Tahap 1: Bebas biaya tarik tunai 7x + Bonus Modal Usaha Rp15.000. Tahap 2: Bebas biaya admin 10x sebulan untuk bayar listrik warung, pulsa, & transfer bank!',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="grid grid-cols-2 gap-2 text-center">
+            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
+              <p className="mt-0.5 text-base font-black text-white">Gratis Tarik 7x</p>
+              <p className="text-[9px] text-emerald-300 font-bold">+ Modal Rp15.000</p>
+            </div>
+            <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
+              <p className="mt-0.5 text-base font-black text-white">Bebas Admin 10x</p>
+              <p className="text-[9px] text-amber-300 font-bold">Listrik, Pulsa, Bank</p>
+            </div>
+          </div>
+          <p className="mt-2.5 text-center text-[10px] text-white/80">
+            ⏰ Seluruh kupon reward berlaku selama 1 bulan sejak diperoleh.
+          </p>
+        </div>
+      ),
+    },
+    {
+      tag: '[A] ACTION · LANGKAH NYATA PEMILIK TOKO',
+      title: 'Pajang Poster QRIS & Mulai Transaksi Pertamamu!',
+      subtitle: 'Cetak poster meja kasir (PDF A6), pajang di warung, dan terima transaksi pertama min. Rp10.000 dari pembeli!',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md space-y-2">
+          {[
+            ['1', 'Unduh poster meja kasir siap cetak (PDF A6) atau buka di layar HP.'],
+            ['2', 'Pajang poster di meja kasir warung agar mudah di-scan pembeli.'],
+            ['3', 'Terima transaksi pertama min. Rp10.000 untuk aktifkan semua reward!'],
+          ].map(([num, text]) => (
+            <div key={num} className="flex items-center gap-2.5 rounded-xl bg-white/15 p-2 text-xs">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-400 text-[10px] font-black text-slate-900">
+                {num}
+              </span>
+              <p className="text-[11px] font-semibold text-white/90 leading-tight">{text}</p>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+  ];
+
+  const curr = slides[step];
+
+  return (
+    <div className="relative h-full w-full flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#1B4E9B] via-[#0D7AD0] to-[#064E8A] text-white animate-in fade-in duration-200">
+      <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
+      <div className="pointer-events-none absolute top-1/3 -left-24 h-56 w-56 rounded-full bg-emerald-400/15 blur-3xl" />
+
+      {/* Tap zones for left/right navigation */}
+      <div
+        onClick={() => step > 0 && setStep(step - 1)}
+        className="absolute inset-y-16 left-0 w-1/2 z-10 cursor-pointer"
+        aria-label="Slide sebelumnya"
+      />
+      <div
+        onClick={() => step < slides.length - 1 && setStep(step + 1)}
+        className="absolute inset-y-16 right-0 w-1/2 z-10 cursor-pointer"
+        aria-label="Slide berikutnya"
+      />
+
+      <div className="relative z-20 pt-8 px-4 shrink-0">
+        <div className="flex items-center gap-1.5">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setStep(i)}
+              aria-label={`Slide ${i + 1}`}
+              className="h-1 flex-1 overflow-hidden rounded-full bg-white/25 transition-all"
+            >
+              <div
+                className={`h-full transition-all duration-300 ${
+                  step === i ? 'w-full bg-white shadow-sm' : step > i ? 'w-full bg-white/90' : 'w-0'
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-black text-[#1B4E9B]">
+              D
+            </span>
+            <span className="text-[10px] font-extrabold tracking-wider text-white/90">
+              PANDUAN USAHA PAK JOKO (AIDA)
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-extrabold tracking-wider text-white backdrop-blur-xs transition hover:bg-white/25 active:scale-95"
+          >
+            LEWATI <Icon name="close" className="h-3 w-3" />
+          </button>
+        </div>
+      </div>
+
+      <div className="pointer-events-none relative flex-1 px-5 py-2 flex flex-col justify-center">
+        <div>
+          <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase text-amber-200">
+            {curr.tag}
+          </div>
+          <h2 className="mt-2 text-xl font-black leading-tight text-white">{curr.title}</h2>
+          <p className="mt-1 text-xs text-white/85 leading-snug">{curr.subtitle}</p>
+
+          <div className="mt-3">{curr.visual}</div>
+        </div>
+      </div>
+
+      <div className="relative z-20 shrink-0 px-5 pb-8">
+        {step === slides.length - 1 ? (
+          <button
+            onClick={() => {
+              onClose();
+              if (onAction) onAction();
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-400 to-emerald-300 py-3.5 text-center text-sm font-black text-slate-950 shadow-xl shadow-emerald-500/30 transition active:scale-98"
+          >
+            Buka QRIS Toko Saya Sekarang! <Icon name="qr" className="h-4 w-4" />
+          </button>
+        ) : (
+          <button
+            onClick={() => setStep(step + 1)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-2xl bg-white/20 py-2.5 text-center text-xs font-bold text-white transition active:bg-white/30"
+          >
+            Lanjut ke Langkah Berikutnya →
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function BizDash({ s, user, go, notify, initialTour = false }) {
   const isReferred = user?.id === 'referred' || s?.role === 'referred';
   const isMerchant = user?.id === 'merchant' || s?.role === 'merchant';
   const m = s?.merchant || {};
 
   const [tourStep, setTourStep] = useState(isReferred || initialTour ? 0 : null);
+  const [showAidaGuide, setShowAidaGuide] = useState(false);
 
-  const storeName = isMerchant ? (user?.store || 'Martabak Pak Joko') : (m.name || user?.store || 'Warung Nasi Bu Siti');
+  const storeName = isMerchant ? (user?.store || 'Martabak Bu Ratna') : (m.name || user?.store || 'Warung Nasi Pak Joko');
   const storeCategory = isMerchant ? 'F&B / Martabak' : (m.category || 'F&B / Warung Makan');
   const storeStatus = isMerchant ? 'NMID ID1023288765432 · Merchant aktif' : 'NMID ID1023288765432 · QRIS Aktif (KYC Light)';
 
@@ -459,25 +665,39 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
       </div>
 
       <div className="-mt-4 space-y-3 px-3 pb-24">
-        {/* Banner Pemanggil Tur Fitur Toko untuk Bu Siti */}
+        {/* Banner Panduan AIDA & Tur Fitur Toko untuk Pak Joko */}
         {isReferred && (
-          <button
-            onClick={() => setTourStep(0)}
-            className="flex w-full items-center justify-between rounded-xl border border-amber-300/80 bg-gradient-to-r from-amber-50 to-orange-50 px-3.5 py-2 text-left text-xs font-bold text-amber-950 shadow-2xs active:scale-[0.99] transition"
-          >
-            <div className="flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-400 text-white text-xs shadow-2xs">
-                💡
-              </span>
-              <div>
-                <p className="text-[11px] font-black text-amber-950">Panduan Fitur Profil Bisnis</p>
-                <p className="text-[9px] font-medium text-amber-800">Kenali fitur kasir, QRIS, saldo, dan komisi tokomu</p>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => setShowAidaGuide(true)}
+              className="flex w-full items-center justify-between rounded-xl border border-amber-300/80 bg-gradient-to-r from-amber-50 to-orange-50 px-3.5 py-2.5 text-left text-xs font-bold text-amber-950 shadow-2xs active:scale-[0.99] transition"
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-400 text-white text-sm shadow-2xs">
+                  ⭐
+                </span>
+                <div>
+                  <p className="text-[11px] font-black text-amber-950">Panduan Usaha QRIS Pak Joko (AIDA)</p>
+                  <p className="text-[9px] font-medium text-amber-800">4 Langkah Sukses Kelola Kasir Digital &amp; Bebas Biaya</p>
+                </div>
               </div>
-            </div>
-            <span className="rounded-lg bg-white px-2 py-1 text-[10px] font-extrabold text-amber-900 shadow-2xs">
-              Buka Tur
-            </span>
-          </button>
+              <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-extrabold text-amber-900 shadow-2xs border border-amber-200">
+                Buka Panduan
+              </span>
+            </button>
+            <button
+              onClick={() => setTourStep(0)}
+              className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-left text-xs font-semibold text-slate-700 shadow-2xs active:scale-[0.99] transition"
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 text-[10px] shadow-2xs">
+                  💡
+                </span>
+                <p className="text-[10px] font-bold text-slate-800">Tur Interaktif Fitur Toko</p>
+              </div>
+              <span className="text-[10px] font-bold text-dana-600">Buka Tur →</span>
+            </button>
+          </div>
         )}
 
         {/* Card Profil Toko & Penjualan */}
@@ -533,7 +753,7 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
           </div>
         </div>
 
-        {/* Step-by-Step Guidance Checklist for Bu Siti */}
+        {/* Step-by-Step Guidance Checklist for Pak Joko */}
         {isReferred && (
           <div className="rounded-2xl bg-white p-4 shadow-sm">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-2.5">
@@ -581,13 +801,13 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
                   {isPaid ? '✓' : '2'}
                 </span>
                 <div className="flex-1">
-                  <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama Min. Rp 10.000</p>
+                  <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama Min. Rp 10.000 (Tahap 1)</p>
                   <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
-                    Ajak pelanggan membayar pesanan via QRIS. Penjualan masuk utuh tanpa potongan komisi MDR + bonus modal usaha Rp15.000.
+                    Ajak pelanggan membayar pesanan via QRIS. Penjualan masuk utuh tanpa potongan MDR (0%) + bonus modal usaha Rp15.000 &amp; bebas biaya tarik tunai 7x.
                   </p>
                   {isPaid && (
                     <div className="mt-1.5 rounded-lg bg-emerald-50 p-2 text-[10px] font-semibold text-emerald-700">
-                      🎉 Pembayaran {rupiah(m.firstPayment)} berhasil! Bonus Modal Usaha Rp15.000 telah masuk ke saldo tokomu.
+                      🎉 Pembayaran {rupiah(m.firstPayment)} berhasil! Bonus Modal Usaha Rp15.000 &amp; Kupon Tarik Tunai 7x aktif di tab Reward.
                     </div>
                   )}
                 </div>
@@ -602,6 +822,23 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
                   <p className="text-xs font-bold text-slate-800">3. Suara Transaksi Nada DANA Aktif</p>
                   <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
                     Aplikasi DANA otomatis bersuara menyebutkan nominal uang masuk tanpa perlu bolak-balik memeriksa layar HP.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 4 */}
+              <div className="flex gap-2.5">
+                <span
+                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                    m.testScan || isPaid ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
+                  4
+                </span>
+                <div className="flex-1">
+                  <p className="text-xs font-bold text-slate-800">4. Kumpulkan 5 Transaksi Berbeda (Tahap 2)</p>
+                  <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
+                    Rutin terima pembayaran QRIS dari 5 pelanggan berbeda untuk raih Bebas Biaya Admin 10x per bulan (bayar listrik warung, pulsa, &amp; transfer bank).
                   </p>
                 </div>
               </div>
@@ -781,6 +1018,20 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Modal Panduan Usaha QRIS Pak Joko (AIDA) */}
+      {showAidaGuide && (
+        <div className="absolute inset-0 z-50 overflow-hidden">
+          <MerchantAidaGuide
+            isOpen={showAidaGuide}
+            onClose={() => setShowAidaGuide(false)}
+            onAction={() => {
+              setShowAidaGuide(false);
+              go('qris');
+            }}
+          />
         </div>
       )}
 

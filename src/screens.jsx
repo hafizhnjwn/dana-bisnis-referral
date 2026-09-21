@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { LEGACY, STAGES, TIERS, pendingTiers, rupiah } from './rewards.js';
-import { BizDash, Grid, Home } from './hostApp.jsx';
+import { BizDash, Grid, Home, MerchantAidaGuide } from './hostApp.jsx';
 import { Btn, Field, Icon, Pill, Shell, StatusBar, TopBar } from './ui.jsx';
 
 const CATEGORIES = ['F&B / Warung Makan', 'Toko Kelontong', 'Jasa / Bengkel', 'Fashion / Retail'];
@@ -23,11 +23,125 @@ const qrisPayload = (name) =>
     .toUpperCase()
     .slice(0, 19)}6007JAKARTA61051294062070703A0163044C2A`;
 
-const MINI_TABS = [
+export const MINI_TABS = [
   { id: 'hub', label: 'Beranda', icon: 'store' },
   { id: 'tracker', label: 'Referal', icon: 'users' },
-  { id: 'peringkat', label: 'Peringkat', icon: 'trophy' },
+  { id: 'rewards', label: 'Reward', icon: 'gift' },
   { id: 'inbox', label: 'Inbox', icon: 'bell' },
+];
+
+export const WHATSAPP_NOTIFICATIONS = [
+  {
+    id: 'wa-h1-joko',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'DANA Bisnis Official',
+    phone: '0812-4409-xxxx',
+    time: '08:30 WIB (Jam Operasional Toko)',
+    tag: 'Jam Operasional H+1',
+    title: 'Download Poster QRIS Kasir Tokomu',
+    preview: 'Halo Pak Joko! Selamat, toko Warung Nasi Pak Joko resmi terdaftar. Yuk unduh & cetak poster QRIS kasir...',
+    message: `Halo Pak Joko! 🏪 Selamat, toko *Warung Nasi Pak Joko* kini resmi terdaftar di DANA Bisnis!
+
+Jam operasional toko sudah dimulai nih. Yuk download & cetak poster QRIS kasir tokomu sekarang agar siap terima pembayaran non-tunai dari semua bank & e-wallet (BCA, Mandiri, BRI, DANA, GoPay, OVO):
+
+📥 *Download Poster QRIS Toko (PDF A6 Siap Cetak):*
+https://dana.id/bisnis/qris/download?id=ID1023288765432
+
+Pajang di meja kasir warung, transaksi 100% masuk utuh tanpa potongan (0% MDR)!`,
+    actionText: 'Buka & Unduh QRIS Toko',
+    targetScreen: 'qris',
+  },
+  {
+    id: 'wa-payment-joko',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'DANA Bisnis Official',
+    phone: '0812-4409-xxxx',
+    time: '10:15 WIB (Jam Operasional Toko)',
+    tag: 'Pembayaran Diterima',
+    title: 'Pembayaran QRIS DANA Berhasil Diterima',
+    preview: '🎉 Pembayaran QRIS DANA Berhasil Diterima! Nominal: Rp12.000 (MDR 0%). Bonus Modal Usaha Rp15.000 masuk...',
+    message: `🎉 *Pembayaran QRIS DANA Berhasil Diterima!*
+
+Halo Pak Joko, ada pembayaran masuk ke *Warung Nasi Pak Joko*:
+💰 *Nominal:* Rp 12.000
+👤 *Dari:* Pelanggan DANA (0812••••9940)
+🕒 *Waktu:* 10:15 WIB
+✅ *MDR:* 0% (Gratis tanpa potongan)
+🎁 *Bonus Spesial:* Bonus Modal Usaha Rp 15.000 otomatis ditambahkan ke saldo tokomu!
+
+Saldo penjualan langsung masuk ke DANA Bisnis dan siap ditarik kapan saja.`,
+    actionText: 'Lihat Saldo DANA Bisnis',
+    targetScreen: 'bizprofile',
+  },
+  {
+    id: 'wa-routine-joko',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'DANA Bisnis Official',
+    phone: '0812-4409-xxxx',
+    time: '11:00 WIB (Jam Operasional Toko)',
+    tag: 'Performa Rutin',
+    title: 'Penerimaan Rutin Pembayaran QRIS DANA',
+    preview: '🌟 Luar Biasa, Pak Joko! Warung Anda Makin Aktif Menerima QRIS DANA. Ringkasan transaksi mingguan...',
+    message: `🌟 *Luar Biasa, Pak Joko! Warung Anda Makin Aktif Menerima QRIS DANA!*
+
+Terima kasih telah rutin menerima pembayaran non-tunai di *Warung Nasi Pak Joko*.
+
+📊 *Ringkasan Transaksi Mingguan:*
+• Total Transaksi: 8 transaksi minggu ini
+• Bebas Biaya Tarik Tunai: 7x Aktif
+• Status Toko: Menuju *Merchant Juara DANA*
+
+💡 *Tips Usaha:* Pastikan poster QRIS selalu terlihat jelas di meja kasir agar pembeli semakin nyaman belanja tanpa ribet cari uang receh kembalian!`,
+    actionText: 'Cek Performa Warung',
+    targetScreen: 'bizprofile',
+  },
+  {
+    id: 'wa-h3-ratna',
+    recipient: 'Bu Ratna',
+    roleTarget: 'merchant',
+    sender: 'DANA Bisnis Official',
+    phone: '0812-9901-xxxx',
+    time: '09:00 WIB (Jam Operasional Toko H+3)',
+    tag: 'Jam Operasional H+3',
+    title: 'Pak Joko Belum Menerima Pembayaran QRIS',
+    preview: 'Halo Bu Ratna! Warung rekanan Pak Joko sudah terdaftar 3 hari lalu tapi belum menerima pembayaran QRIS...',
+    message: `Halo Bu Ratna! 👋
+
+Warung rekanan yang Anda bantu daftarkan, *Warung Nasi Pak Joko*, sudah terdaftar sejak 3 hari lalu tapi *belum menerima transaksi QRIS pertamanya*.
+
+Yuk bantu dan ingatkan Pak Joko untuk mulai menerima transaksi QRIS pertamanya (min. Rp10.000)!
+
+🎁 Begitu Pak Joko menerima transaksi pertamanya:
+• Anda langsung mendapatkan *Gratis Transfer Antar Bank 10x*!
+• Pak Joko mendapatkan *Gratis Tarik Tunai 7x* + *Bonus Modal Usaha Rp15.000*!
+
+Dampingi Pak Joko sekarang agar reward Tahap 1 Anda aktif!`,
+    actionText: 'Dampingi Pak Joko via WhatsApp',
+    targetScreen: 'tracker',
+  },
+  {
+    id: 'wa-h7-inactive',
+    recipient: 'Bu Ratna & Pak Joko',
+    roleTarget: 'merchant',
+    sender: 'DANA Bisnis Official',
+    phone: '0812-9901-xxxx',
+    time: '14:00 WIB (Hari ke-7)',
+    tag: 'Inaktivitas 7 Hari',
+    title: 'Pak Joko Tidak Ada Aktivitas QRIS dalam 7 Hari',
+    preview: '⚠️ Pemberitahuan: Sudah 7 hari tidak ada aktivitas transaksi QRIS di Warung Nasi Pak Joko...',
+    message: `⚠️ *Pemberitahuan Aktivitas QRIS Warung Binaan*
+
+Halo Bu Ratna, sudah *7 hari tidak ada aktivitas transaksi QRIS* di *Warung Nasi Pak Joko*.
+
+Jangan biarkan peluang terlewat! Dampingi Pak Joko agar usahanya tetap aktif bertransaksi digital dan Anda bisa menyelesaikan target *Tahap 2 (Gratis Biaya Admin 10x)*:
+
+👉 Hubungi Pak Joko untuk memastikan kasir QRIS tetap dipajang di meja warung!`,
+    actionText: 'Lihat Status Warung Binaan',
+    targetScreen: 'tracker',
+  },
 ];
 
 /**
@@ -83,31 +197,55 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
 
 /* -------------------------------- Mini Program Beranda (hub) */
 
-function AffiliateCarouselGuide({ isOpen, onClose }) {
+function AffiliateCarouselGuide({ isOpen, onClose, onAction }) {
   const [step, setStep] = useState(0);
   if (!isOpen) return null;
 
   const slides = [
     {
-      tag: 'LANGKAH 1 DARI 3',
-      title: 'Bantu Daftarkan Warung',
-      subtitle: 'Cukup 3 data singkat, QRIS langsung terbit < 5 detik.',
+      tag: '[A] ATTENTION · PERHATIAN',
+      title: 'Warung Langganan Masih Repot Uang Tunai?',
+      subtitle: 'Sering kekurangan kembalian atau pembeli batal jajan karena tidak bawa uang pas. Saatnya bantu mereka beralih ke QRIS DANA!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-xs">
+          <div className="grid grid-cols-2 gap-2 text-center text-xs">
+            <div className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2.5">
+              <span className="text-xl">❌</span>
+              <p className="mt-1 font-bold text-rose-200">Uang Tunai</p>
+              <p className="mt-0.5 text-[9px] text-white/70">Ribet cari kembalian &amp; resiko uang palsu</p>
+            </div>
+            <div className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 p-2.5">
+              <span className="text-xl">✅</span>
+              <p className="mt-1 font-bold text-emerald-200">QRIS DANA Bisnis</p>
+              <p className="mt-0.5 text-[9px] text-white/70">Terima semua bank/e-wallet &amp; 0% MDR</p>
+            </div>
+          </div>
+          <p className="mt-3 text-center text-[10px] text-white/80 font-medium">
+            💡 7 dari 10 pelanggan lebih suka bayar non-tunai. Jadilah pahlawan warung sekitarmu!
+          </p>
+        </div>
+      ),
+    },
+    {
+      tag: '[I] INTEREST · KETERTARIKAN',
+      title: 'Daftar Kilat 30 Detik Tanpa e-KTP di Awal',
+      subtitle: 'Cukup 3 data singkat, QRIS langsung terbit seketika (< 5 detik) secara gratis Rp0.',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
               <span className="text-white/80">🏪 Nama Warung</span>
               <span className="flex items-center gap-1 font-bold text-white">
-                Warung Bu Siti <span className="font-black text-emerald-300 animate-pop-check">✓</span>
+                Warung Nasi Pak Joko <span className="font-black text-emerald-300 animate-pop-check">✓</span>
               </span>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-xs">
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
               <span className="text-white/80">🏷️ Kategori</span>
               <span className="flex items-center gap-1 font-bold text-white">
-                F&B / Warung <span className="font-black text-emerald-300 animate-pop-check">✓</span>
+                F&amp;B / Warung Makan <span className="font-black text-emerald-300 animate-pop-check">✓</span>
               </span>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-xs">
+            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
               <span className="text-white/80">📱 No. WhatsApp</span>
               <span className="flex items-center gap-1 font-bold text-white">
                 0812-xxxx-4409 <span className="font-black text-emerald-300 animate-pop-check">✓</span>
@@ -115,91 +253,66 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
             </div>
           </div>
 
-          <div className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/20 py-2 text-xs font-black text-emerald-200 animate-float-slow">
+          <div className="mt-2.5 flex items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/20 py-1.5 text-xs font-black text-emerald-200 animate-float-slow">
             <Icon name="bolt" className="h-4 w-4 text-amber-300 animate-pulse" />
             <span>QRIS Terbit Instan &lt; 5 Detik</span>
           </div>
 
-          <div className="mt-2.5 flex items-center justify-around text-[10px] font-semibold text-white/80">
+          <div className="mt-2 flex items-center justify-around text-[10px] font-semibold text-white/80">
             <span>🛡️ Tanpa e-KTP di Awal</span>
             <span>•</span>
-            <span>Rp0 Biaya Daftar</span>
+            <span>Rp0 Biaya</span>
             <span>•</span>
-            <span>Kode Referral Otomatis</span>
+            <span>Kode Terpasang Otomatis</span>
           </div>
         </div>
       ),
     },
     {
-      tag: 'LANGKAH 2 DARI 3',
-      title: 'Transaksi Pertama: Reward Rp10.000',
-      subtitle: 'Dampingi transaksi min. Rp10.000, saldo langsung cair.',
+      tag: '[D] DESIRE · NILAI & REWARD',
+      title: 'Raih Reward Saldo Bertahap s/d Rp40.000',
+      subtitle: 'Tahap 1: Rp10.000 di transaksi pertama ≥Rp10k · Tahap 2: Rp30.000 saat 5 transaksi unik lolos verifikasi.',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="relative mx-auto flex h-28 w-28 items-center justify-center rounded-2xl bg-white p-2 shadow-lg">
-            <div className="pointer-events-none absolute inset-x-2 top-2 h-0.5 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-laser" />
-            <QRCodeSVG value="https://dana.id" size={88} />
-          </div>
-
-          <div className="mt-2.5 flex items-center justify-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-400 text-[11px] font-black text-slate-900 animate-bounce">
-              ✓
-            </span>
-            <span className="text-xs font-extrabold text-emerald-200">
-              Transaksi ≥ Rp10.000 Berhasil
-            </span>
-          </div>
-
-          <div className="mt-3 grid grid-cols-2 gap-2 text-center">
-            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5 animate-float-slow">
-              <p className="text-[10px] font-bold text-amber-200">KAMU DAPAT</p>
-              <p className="mt-0.5 text-base font-black text-white">+Rp10.000</p>
-              <p className="text-[9px] text-white/80">Saldo DANA Otomatis</p>
+          <div className="grid grid-cols-2 gap-2 text-center">
+            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
+              <p className="mt-0.5 text-lg font-black text-white">+Rp10.000</p>
+              <p className="text-[9px] text-white/80">Transaksi min. Rp10k</p>
             </div>
-            <div className="rounded-xl border border-white/20 bg-white/15 p-2.5">
-              <p className="text-[10px] font-bold text-emerald-200">WARUNG DAPAT</p>
-              <p className="mt-0.5 text-base font-black text-white">0% MDR</p>
-              <p className="text-[9px] text-white/80">Uang Utuh + Suara Kasir</p>
+            <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
+              <p className="mt-0.5 text-lg font-black text-white">+Rp30.000</p>
+              <p className="text-[9px] text-white/80">5 transaksi unik pembeli</p>
             </div>
+          </div>
+          <div className="mt-2.5 rounded-xl border border-amber-300/40 bg-amber-400/20 p-2 text-center">
+            <p className="text-[11px] font-black text-amber-200">
+              Total Rp40.000 Saldo DANA per Warung Binaan
+            </p>
+            <p className="text-[9px] text-white/80">⭐ Ditambah Bonus Rp1.000.000 tiap 50 warung aktif!</p>
           </div>
         </div>
       ),
     },
     {
-      tag: 'LANGKAH 3 DARI 3',
-      title: '5 Transaksi Unik: Total Rp40.000',
-      subtitle: 'Verifikasi validitas 1–14 hari, bonus ekstra Rp1 Juta.',
+      tag: '[A] ACTION · LANGKAH NYATA',
+      title: 'Ajak Warung Langgananmu Hari Ini!',
+      subtitle: 'Tiga langkah mudah: tanya nomor WA warung, masukkan di Bantu Daftarkan, dan dampingi transaksi pertamanya!',
       visual: (
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <p className="text-center text-[11px] font-bold text-white/90">
-            5 Pembeli Berbeda dalam 1–14 Hari
-          </p>
-
-          <div className="mt-2.5 flex items-center justify-center gap-2">
-            {[1, 2, 3, 4, 5].map((num) => (
-              <div key={num} className="flex flex-col items-center gap-1">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-400 text-xs font-black text-slate-900 shadow-md shadow-emerald-400/30 animate-pulse">
-                  ✓
-                </div>
-                <span className="text-[9px] font-bold text-white/80">Tx #{num}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3.5 rounded-xl border border-amber-300/40 bg-gradient-to-r from-amber-400/25 to-emerald-400/25 p-3 text-center animate-float-slow">
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-base">🏆</span>
-              <span className="text-xs font-black text-amber-200">
-                Tahap 2 Cair: +Rp30.000
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md space-y-2">
+          {[
+            ['1', 'Tanya nama & No. WhatsApp pemilik warung saat jajan.'],
+            ['2', 'Ketik di fitur "Bantu Daftarkan" (kode referral otomatis terisi).'],
+            ['3', 'Dampingi transaksi pertama ≥Rp10k pakai DANA untuk cairkan reward!'],
+          ].map(([num, text]) => (
+            <div key={num} className="flex items-center gap-2.5 rounded-xl bg-white/15 p-2 text-xs">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-400 text-[10px] font-black text-amber-950">
+                {num}
               </span>
+              <p className="text-[11px] font-semibold text-white/90 leading-tight">{text}</p>
             </div>
-            <p className="mt-1 text-sm font-black text-white">
-              Total Reward: <span className="text-emerald-300">Rp40.000 / Warung</span>
-            </p>
-            <p className="mt-1 text-[10px] font-medium text-white/80">
-              ⭐ Bonus Rp1.000.000 per 50 warung aktif
-            </p>
-          </div>
+          ))}
         </div>
       ),
     },
@@ -212,7 +325,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
       <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-2xl" />
       <div className="pointer-events-none absolute top-1/3 -left-24 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" />
 
-      {/* Tap zones for left/right phone navigation */}
+      {/* Tap zones for left/right navigation */}
       <div
         onClick={() => step > 0 && setStep(step - 1)}
         className="absolute inset-y-16 left-0 w-1/2 z-10 cursor-pointer"
@@ -248,7 +361,7 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              CARA KERJA AFFILIATE
+              PANDUAN REFERER (AIDA MODEL)
             </span>
           </div>
           <button
@@ -272,21 +385,32 @@ function AffiliateCarouselGuide({ isOpen, onClose }) {
         </div>
       </div>
 
-      {step === slides.length - 1 ? (
-        <div className="relative z-20 shrink-0 px-5 pb-8">
+      <div className="relative z-20 shrink-0 px-5 pb-8">
+        {step === slides.length - 1 ? (
           <button
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              if (onAction) onAction();
+            }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98"
           >
-            Mulai Sekarang! <Icon name="check" className="h-4 w-4" />
+            Bantu Daftarkan Warung Sekarang! <Icon name="next" className="h-4 w-4" />
           </button>
-        </div>
-      ) : (
-        <div className="shrink-0 h-6" />
-      )}
+        ) : (
+          <button
+            onClick={() => setStep(step + 1)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-2xl bg-white/20 py-2.5 text-center text-xs font-bold text-white transition active:bg-white/30"
+          >
+            Lanjut ke Langkah Berikutnya →
+          </button>
+        )}
+      </div>
     </div>
   );
 }
+
+export { MerchantAidaGuide };
+
 
 function Hub(p) {
   const { s, patch, go, notify, earned, activeCount } = p;
@@ -480,7 +604,7 @@ function Nominate(p) {
           <strong>{REFERRAL_CODE}</strong> sudah tertanam di link — tidak perlu diketik manual.
         </p>
 
-        <Field step="1" label="Nama usaha / warung" hint="Contoh: Warung Nasi Bu Siti">
+        <Field step="1" label="Nama usaha / warung" hint="Contoh: Warung Nasi Pak Joko">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -669,183 +793,517 @@ function Tracker(p) {
   );
 }
 
-/* ------------------------------------------- reward claim center */
+/* ------------------------------------------- Management Reward */
 
 function Rewards(p) {
-  const { go, earned, activeCount, user, s } = p;
-  const activeReferrals = s.referrals.filter((r) => r.stage >= 1);
+  const { s, patch, user, go, notify, earned, activeCount } = p;
+  const [selectedRole, setSelectedRole] = useState(s.role || 'consumer');
+
+  const quotas = s.rewardQuotas || {
+    merchant: { transfer: 10, admin: 10 },
+    referred: { withdraw: 7, admin: 10 },
+  };
+
+  const handleUseVoucher = (roleKey, voucherKey, label) => {
+    const current = quotas[roleKey]?.[voucherKey] ?? 0;
+    if (current <= 0) {
+      notify(`Kuota kupon ${label} sudah habis.`);
+      return;
+    }
+    patch((prev) => ({
+      rewardQuotas: {
+        ...prev.rewardQuotas,
+        [roleKey]: {
+          ...prev.rewardQuotas?.[roleKey],
+          [voucherKey]: current - 1,
+        },
+      },
+    }));
+    notify(`🎉 1x Kupon ${label} berhasil digunakan! Sisa kupon: ${current - 1}x.`);
+  };
+
+  const handleResetQuotas = () => {
+    patch({
+      rewardQuotas: {
+        merchant: { transfer: 10, admin: 10 },
+        referred: { withdraw: 7, admin: 10 },
+      },
+    });
+    notify('Kupon reward berhasil direset ke kuota awal.');
+  };
 
   return (
-    <MiniShell title="Riwayat Saldo Hadiah" onBack={() => go('tracker')} {...p}>
+    <MiniShell title="Management Reward" tab="rewards" {...p}>
       <div className="space-y-4 px-4 pt-3 pb-8">
-        <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-5 text-white shadow-lg shadow-dana-700/25">
-          <p className="text-[11px] text-white/80">Total Saldo Reward Diterima</p>
-          <p className="text-4xl font-extrabold">{rupiah(earned)}</p>
-          <div className="mt-3 flex items-center gap-2 rounded-2xl bg-white/15 px-3 py-2 text-[11px] font-semibold text-emerald-200">
-            <span>✓</span>
-            <span>Semua reward otomatis masuk langsung ke Saldo DANA tanpa perlu klaim manual.</span>
-          </div>
-        </div>
-
-        <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <p className="text-xs font-bold text-slate-500">Rincian Saldo Masuk per Merchant</p>
-          {activeReferrals.length === 0 && (
-            <p className="mt-3 text-[11px] text-slate-400">
-              Belum ada reward masuk. Reward Tahap 1 (Rp10.000) akan otomatis masuk saat warung binaan menyelesaikan transaksi pertama ≥ Rp10.000.
-            </p>
-          )}
-          {activeReferrals.map((r) => (
-            <div key={r.id} className="mt-3 flex items-start gap-3 border-t border-slate-100 pt-3 first:border-0 first:pt-0">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                <Icon name="check" className="h-4 w-4" />
-              </span>
-              <div className="flex-1">
-                <p className="text-xs font-bold text-slate-800">{r.name}</p>
-                <p className="text-[10px] text-slate-500">
-                  {r.stage >= 2 ? 'Tahap 1 & 2 selesai (5 transaksi unik lolos audit)' : 'Tahap 1 selesai (Transaksi pertama ≥ Rp10k)'}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs font-extrabold text-emerald-600">
-                  {r.stage >= 2 ? '+Rp40.000' : '+Rp10.000'}
-                </p>
-                <p className="text-[9px] font-bold text-emerald-600 uppercase">SUDAH MASUK</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="rounded-2xl bg-white p-4 shadow-sm">
+        {/* Role Selector Tabs */}
+        <div className="flex rounded-xl bg-slate-200 p-1 text-[11px] font-bold">
           {[
-            ['Total reward sudah masuk', rupiah(earned)],
-            [`Saldo DANA ${user.name.split(' ')[0]}`, rupiah(user.balance)],
-            ['Usaha aktif (menuju bonus Rp1jt)', `${activeCount} / ${LEGACY.achievementPer}`],
-          ].map(([k, v]) => (
-            <div key={k} className="mt-2 flex justify-between text-xs first:mt-0">
-              <span className="text-slate-500">{k}</span>
-              <span className="font-bold text-slate-800">{v}</span>
-            </div>
-          ))}
-        </div>
-
-        <p className="text-center text-[10px] text-slate-400">
-          Seluruh saldo reward referral otomatis masuk ke akun Saldo DANA Anda.
-        </p>
-      </div>
-    </MiniShell>
-  );
-}
-
-/* ---------------------------------------- leaderboard & inspiration */
-
-function Peringkat(p) {
-  const { notify, activeCount } = p;
-  const [sub, setSub] = useState('board');
-  const [range, setRange] = useState('30');
-  const board = [
-    ['MIC***', 912, 40100000],
-    ['LIA***', 874, 38400000],
-    ['FRI***', 803, 36200000],
-    ['AGU***', 512, 23000000],
-    ['SIT***', 401, 18000000],
-  ];
-  const videos = [
-    ['@andri.irv', 'Cara ajak warung langganan tanpa maksa'],
-    ['@sudutbgrbarat', 'Script WhatsApp yang bikin warung mau daftar'],
-    ['@mitra.dana.bisnis', 'Tips agar QRIS warung dipakai di hari pertama'],
-  ];
-
-  return (
-    <MiniShell title="Peringkat & Inspirasi" tab="peringkat" {...p} unread={2}>
-      <div className="px-4 pt-3 pb-8">
-        <div className="flex rounded-full bg-slate-100 p-1 text-[11px] font-bold">
-          {[
-            ['board', 'Papan Peringkat'],
-            ['content', 'Inspirasi Konten'],
+            ['consumer', 'Rian (Konsumen)'],
+            ['merchant', 'Bu Ratna (Mitra)'],
+            ['referred', 'Pak Joko (Warung)'],
           ].map(([id, label]) => (
             <button
               key={id}
-              onClick={() => setSub(id)}
-              className={`flex-1 rounded-full py-2 ${sub === id ? 'bg-dana-500 text-white' : 'text-slate-500'}`}
+              onClick={() => setSelectedRole(id)}
+              className={`flex-1 rounded-lg py-1.5 transition ${
+                selectedRole === id ? 'bg-dana-500 text-white shadow-xs' : 'text-slate-600'
+              }`}
             >
               {label}
             </button>
           ))}
         </div>
 
-        {sub === 'board' ? (
-          <>
-            <div className="mt-4 flex gap-2">
-              {['7', '30'].map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setRange(r)}
-                  className={`rounded-full px-3 py-1.5 text-[11px] font-bold ${range === r ? 'bg-dana-50 text-dana-700' : 'bg-white text-slate-500 shadow-sm'
-                    }`}
-                >
-                  {r} hari
-                </button>
-              ))}
+        {/* ROLE 1: RIAN (KONSUMEN) */}
+        {selectedRole === 'consumer' && (
+          <div className="space-y-3">
+            <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-4 text-white shadow-lg shadow-dana-700/25">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Rian · Sahabat Warung</p>
+              <p className="mt-1 text-xs text-white/80">Total Saldo Reward Masuk ke Akun Anda</p>
+              <p className="text-3xl font-extrabold">{rupiah(earned)}</p>
+              <div className="mt-2 flex items-center gap-1.5 text-[10px] text-emerald-200">
+                <span>✓</span>
+                <span>Reward cair otomatis langsung ke Saldo DANA tanpa perlu klaim manual.</span>
+              </div>
             </div>
-            <div className="mt-3 rounded-2xl bg-white p-4 shadow-sm">
-              <p className="text-xs font-bold text-slate-500">Top 20 Affiliate · {range} hari</p>
-              {board.map(([name, merchants, income], i) => (
-                <div key={name} className="mt-3 flex items-center gap-3 border-t border-slate-100 pt-3 first:border-0 first:pt-0">
-                  <span
-                    className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold ${i === 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
-                      }`}
-                  >
-                    {i + 1}
+
+            {/* Tahap 1 Card */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
+                    TAHAP 1
                   </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-800">{name}</p>
-                    <p className="text-[10px] text-slate-400">
-                      {Math.round(merchants * (range === '7' ? 0.28 : 1))} usaha aktif
-                    </p>
-                  </div>
-                  <span className="text-[11px] font-bold text-slate-600">
-                    {rupiah(Math.round(income * (range === '7' ? 0.28 : 1)))}
-                  </span>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Saldo DANA Rp10.000</h4>
+                  <p className="mt-0.5 text-[10px] text-slate-500">
+                    Cair otomatis di transaksi pertama warung binaan ≥ Rp10.000
+                  </p>
                 </div>
-              ))}
+                <span className="text-sm font-black text-emerald-600">+Rp10.000</span>
+              </div>
+              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-800">Syarat &amp; Ketentuan:</p>
+                <p>• Warung binaan (Pak Joko) terbit QRIS &amp; menerima pembayaran pertama min. Rp10k.</p>
+                <p>• Uang Rp10.000 seketika masuk ke Pocket Saldo DANA pengundang.</p>
+              </div>
             </div>
-            <div className="mt-3 rounded-2xl border-2 border-dana-500 bg-dana-50 p-4">
-              <p className="text-[11px] font-bold text-dana-700">Peringkat kamu: #42</p>
-              <p className="mt-1 text-[10px] leading-relaxed text-dana-700/80">
-                Kamu memiliki {activeCount} usaha aktif binaan. Terus dampingi warung di sekitarmu untuk naik peringkat!
+
+            {/* Tahap 2 Card */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700">
+                    TAHAP 2
+                  </span>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Saldo DANA Rp30.000</h4>
+                  <p className="mt-0.5 text-[10px] text-slate-500">
+                    Total reward: Rp40.000 per warung aktif binaan
+                  </p>
+                </div>
+                <span className="text-sm font-black text-emerald-600">+Rp30.000</span>
+              </div>
+              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-800">Syarat &amp; Ketentuan:</p>
+                <p>• 5 transaksi unik dari pembeli berbeda dalam 1–14 hari.</p>
+                <p>• Lolos audit validitas transaksi DANA untuk mencegah fraud.</p>
+              </div>
+            </div>
+
+            {/* Hadiah Pencapaian */}
+            <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 shadow-sm">
+              <div className="flex items-center gap-2">
+                <Icon name="trophy" className="h-4 w-4 text-amber-600" />
+                <p className="flex-1 text-xs font-bold text-amber-950">Hadiah Pencapaian Rp1.000.000</p>
+                <Pill tone="amber">Rp1 Juta</Pill>
+              </div>
+              <p className="mt-1 text-[10px] text-amber-800">
+                Ekstra bonus Rp1.000.000 setiap kelipatan 50 warung aktif binaan!
+              </p>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-amber-200">
+                <div
+                  className="h-full rounded-full bg-amber-500"
+                  style={{ width: `${Math.min(100, (activeCount / 50) * 100)}%` }}
+                />
+              </div>
+              <p className="mt-1 text-[9px] font-bold text-amber-900">
+                {activeCount} / 50 warung aktif memakai QRIS
               </p>
             </div>
-          </>
-        ) : (
-          <div className="mt-4 space-y-3">
-            {videos.map(([handle, title]) => (
-              <button
-                key={handle}
-                onClick={() => notify(`Memutar video inspirasi ${handle}...`)}
-                className="flex w-full items-center gap-3 rounded-2xl bg-white p-3 text-left shadow-sm"
-              >
-                <span className="flex h-16 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white">
-                  <Icon name="play" />
-                </span>
-                <span className="flex-1">
-                  <span className="block text-xs font-bold text-slate-800">{title}</span>
-                  <span className="block text-[10px] text-slate-400">{handle}</span>
-                </span>
-              </button>
-            ))}
           </div>
         )}
+
+        {/* ROLE 2: BU RATNA (MITRA BISNIS) */}
+        {selectedRole === 'merchant' && (
+          <div className="space-y-3">
+            <div className="rounded-3xl bg-gradient-to-br from-[#1B4E9B] to-slate-900 p-4 text-white shadow-lg">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Bu Ratna · Mitra Bisnis</p>
+              <p className="mt-1 text-sm font-black text-white">Martabak Bu Ratna</p>
+              <p className="mt-1 text-[11px] text-white/80">
+                Kelola kupon gratis transfer &amp; bebas biaya admin hasil mereferensikan warung rekanan.
+              </p>
+              <div className="mt-3 flex gap-2 text-center text-xs">
+                <div className="flex-1 rounded-xl bg-white/15 p-2">
+                  <span className="block text-base font-black text-amber-300">{quotas.merchant?.transfer ?? 10}x</span>
+                  <span className="text-[9px] text-white/80">Sisa Gratis Transfer</span>
+                </div>
+                <div className="flex-1 rounded-xl bg-white/15 p-2">
+                  <span className="block text-base font-black text-emerald-300">{quotas.merchant?.admin ?? 10}x</span>
+                  <span className="text-[9px] text-white/80">Sisa Bebas Admin</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tahap 1 Card */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
+                    TAHAP 1
+                  </span>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Transfer Antar Bank 10x</h4>
+                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
+                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
+                  </p>
+                </div>
+                <span className="rounded-lg bg-dana-50 px-2.5 py-1 text-xs font-black text-dana-700">
+                  {quotas.merchant?.transfer ?? 10}/10
+                </span>
+              </div>
+              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
+                <p>• Bebas biaya transfer antar bank Rp2.500 ke rekening mana saja di Indonesia.</p>
+                <p>• Aktif saat warung binaan (Pak Joko) selesai daftar QRIS &amp; transaksi pertama ≥Rp10k.</p>
+              </div>
+              <button
+                onClick={() => handleUseVoucher('merchant', 'transfer', 'Gratis Transfer Antar Bank')}
+                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-dana-500 py-2.5 text-xs font-bold text-white active:bg-dana-600 shadow-xs"
+              >
+                Gunakan Kupon (Kirim Saldo / Transfer)
+              </button>
+            </div>
+
+            {/* Tahap 2 Card */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700">
+                    TAHAP 2
+                  </span>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Admin 10x</h4>
+                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
+                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
+                  </p>
+                </div>
+                <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">
+                  {quotas.merchant?.admin ?? 10}/10
+                </span>
+              </div>
+              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-800">Cakupan Layanan Bebas Biaya Admin:</p>
+                <p className="text-emerald-700 font-semibold">
+                  • Termasuk bayar listrik PLN, isi pulsa &amp; data, transfer antar bank, top up e-money, dll.
+                </p>
+                <p>• Aktif setelah 5 transaksi unik warung binaan lolos validasi DANA.</p>
+              </div>
+              <button
+                onClick={() => handleUseVoucher('merchant', 'admin', 'Gratis Admin 10x')}
+                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white active:bg-emerald-700 shadow-xs"
+              >
+                Gunakan Kupon (Bebas Biaya Admin)
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ROLE 3: PAK JOKO (WARUNG TERDAFTAR) */}
+        {selectedRole === 'referred' && (
+          <div className="space-y-3">
+            <div className="rounded-3xl bg-gradient-to-br from-emerald-600 to-slate-900 p-4 text-white shadow-lg">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Pak Joko · Merchant Binaan</p>
+              <p className="mt-1 text-sm font-black text-white">Warung Nasi Pak Joko</p>
+              <p className="mt-1 text-[11px] text-white/80">
+                Benefit eksklusif merchant baru: Tarik tunai gratis, bebas admin, 0% MDR, dan modal usaha.
+              </p>
+              <div className="mt-3 flex gap-2 text-center text-xs">
+                <div className="flex-1 rounded-xl bg-white/15 p-2">
+                  <span className="block text-base font-black text-amber-300">{quotas.referred?.withdraw ?? 7}x</span>
+                  <span className="text-[9px] text-white/80">Gratis Tarik Tunai</span>
+                </div>
+                <div className="flex-1 rounded-xl bg-white/15 p-2">
+                  <span className="block text-base font-black text-emerald-300">{quotas.referred?.admin ?? 10}x</span>
+                  <span className="text-[9px] text-white/80">Gratis Bebas Admin</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tahap 1 Card */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
+                    TAHAP 1
+                  </span>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Tarik Tunai 7x</h4>
+                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
+                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
+                  </p>
+                </div>
+                <span className="rounded-lg bg-dana-50 px-2.5 py-1 text-xs font-black text-dana-700">
+                  {quotas.referred?.withdraw ?? 7}/7
+                </span>
+              </div>
+              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
+                <p>• Bebas biaya tarik tunai saldo penjualan di ATM BCA/BRI atau gerai Alfamart/Indomaret.</p>
+                <p>• Aktif setelah QRIS terbit &amp; transaksi pertama min. Rp10.000 diterima.</p>
+                <p className="text-emerald-700 font-bold">• Ekstra: Bonus Modal Usaha Rp15.000 + 0% MDR!</p>
+              </div>
+              <button
+                onClick={() => handleUseVoucher('referred', 'withdraw', 'Gratis Tarik Tunai')}
+                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-dana-500 py-2.5 text-xs font-bold text-white active:bg-dana-600 shadow-xs"
+              >
+                Gunakan Kupon (Tarik Tunai Kasir/ATM)
+              </button>
+            </div>
+
+            {/* Tahap 2 Card */}
+            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700">
+                    TAHAP 2
+                  </span>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Admin 10x</h4>
+                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
+                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
+                  </p>
+                </div>
+                <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">
+                  {quotas.referred?.admin ?? 10}/10
+                </span>
+              </div>
+              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
+                <p className="text-emerald-700 font-semibold">
+                  • Bebas biaya admin transaksi bayar tagihan listrik warung, isi pulsa &amp; data, transfer bank, dll.
+                </p>
+                <p>• Aktif setelah 5 transaksi unik dari pembeli berbeda tercapai.</p>
+              </div>
+              <button
+                onClick={() => handleUseVoucher('referred', 'admin', 'Gratis Admin 10x')}
+                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white active:bg-emerald-700 shadow-xs"
+              >
+                Gunakan Kupon (Bebas Biaya Admin)
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          onClick={handleResetQuotas}
+          className="w-full text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 py-2"
+        >
+          Reset Kuota Kupon Simulasi
+        </button>
       </div>
     </MiniShell>
+  );
+}
+
+/* --------------------------------- Entrypoint 1: Habis Transaksi Paket Internet (Kena Admin) */
+
+export function ReceiptData({ go }) {
+  return (
+    <Shell className="bg-slate-50">
+      <StatusBar />
+      <div className="flex items-center gap-2 border-b border-slate-100 bg-white px-3 pb-3">
+        <button onClick={() => go('home')} aria-label="Kembali" className="rounded-full p-1 active:bg-slate-100">
+          <Icon name="back" className="h-5 w-5 text-slate-700" />
+        </button>
+        <p className="flex-1 text-center text-sm font-bold text-slate-900">Bukti Transaksi</p>
+        <span className="w-6" />
+      </div>
+
+      <div className="space-y-3 px-4 py-4">
+        {/* Status Card */}
+        <div className="rounded-2xl bg-white p-4 text-center shadow-xs">
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+            <Icon name="check" className="h-6 w-6" />
+          </span>
+          <p className="mt-2 text-xs font-bold text-emerald-600">Pembayaran Berhasil</p>
+          <p className="mt-1 text-2xl font-black text-slate-900">Rp56.500</p>
+          <p className="mt-0.5 text-[10px] text-slate-400">21 Sep 2026 · 17:15 WIB · Saldo DANA</p>
+        </div>
+
+        {/* Detail Transaksi */}
+        <div className="rounded-2xl bg-white p-4 shadow-xs">
+          <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Rincian Pembelian</p>
+          <div className="mt-2.5 space-y-2 text-xs">
+            <div className="flex justify-between">
+              <span className="text-slate-500">Layanan</span>
+              <span className="font-semibold text-slate-800">Paket Data Telkomsel</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Paket</span>
+              <span className="font-semibold text-slate-800">MAXstream 14 GB / 30 Hari</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Nomor HP</span>
+              <span className="font-semibold text-slate-800">0812-8821-9940</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Harga Paket</span>
+              <span className="font-semibold text-slate-800">Rp55.000</span>
+            </div>
+            <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2">
+              <span className="flex items-center gap-1 font-bold text-amber-700">
+                Biaya Admin <span className="rounded bg-amber-100 px-1.5 py-0.2 text-[9px] font-extrabold text-amber-800">TERKENA ADMIN</span>
+              </span>
+              <span className="font-bold text-amber-700">Rp1.500</span>
+            </div>
+            <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-extrabold text-slate-900">
+              <span>Total Bayar</span>
+              <span className="text-dana-700">Rp56.500</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Contextual Affiliate Entrypoint Card */}
+        <div className="overflow-hidden rounded-2xl border-2 border-dana-500 bg-gradient-to-br from-dana-600 to-dana-900 p-4 text-white shadow-md">
+          <div className="flex items-center gap-1.5">
+            <span className="rounded-md bg-amber-400 px-2 py-0.5 text-[9px] font-black text-amber-950 uppercase tracking-wider">
+              BEBAS BIAYA ADMIN
+            </span>
+            <span className="text-[10px] text-white/80">Affiliate DANA Bisnis</span>
+          </div>
+          <h3 className="mt-2 text-sm font-black leading-tight text-white">
+            Capek Kena Biaya Admin Rp1.500? 💡
+          </h3>
+          <p className="mt-1 text-[11px] leading-relaxed text-white/90">
+            Dapatkan voucher <strong>Gratis Biaya Admin 10x</strong> sebulan + Saldo DANA s/d <strong>Rp40.000</strong> per warung dengan mengajak warung langgananmu pakai QRIS DANA Bisnis!
+          </p>
+          <div className="mt-3 flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-[10px]">
+            <span>✓ Cukup isi 3 data warung</span>
+            <span>✓ Tanpa e-KTP di awal (Rp0)</span>
+          </div>
+          <button
+            onClick={() => go('nominate')}
+            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2.5 text-xs font-black text-amber-950 shadow-md active:bg-amber-300 transition"
+          >
+            Bantu Daftarkan Warung Sekarang →
+          </button>
+        </div>
+
+        <button
+          onClick={() => go('home')}
+          className="w-full rounded-xl border border-slate-300 bg-white py-2.5 text-xs font-bold text-slate-700 active:bg-slate-50"
+        >
+          Kembali ke Beranda
+        </button>
+      </div>
+    </Shell>
+  );
+}
+
+/* --------------------------------- Entrypoint 2: Habis Top Up E-Money (Kena Admin) */
+
+export function ReceiptEmoney({ go }) {
+  return (
+    <Shell className="bg-slate-50">
+      <StatusBar />
+      <div className="flex items-center gap-2 border-b border-slate-100 bg-white px-3 pb-3">
+        <button onClick={() => go('home')} aria-label="Kembali" className="rounded-full p-1 active:bg-slate-100">
+          <Icon name="back" className="h-5 w-5 text-slate-700" />
+        </button>
+        <p className="flex-1 text-center text-sm font-bold text-slate-900">Bukti Transaksi</p>
+        <span className="w-6" />
+      </div>
+
+      <div className="space-y-3 px-4 py-4">
+        {/* Status Card */}
+        <div className="rounded-2xl bg-white p-4 text-center shadow-xs">
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+            <Icon name="check" className="h-6 w-6" />
+          </span>
+          <p className="mt-2 text-xs font-bold text-emerald-600">Top Up E-Money Berhasil</p>
+          <p className="mt-1 text-2xl font-black text-slate-900">Rp101.500</p>
+          <p className="mt-0.5 text-[10px] text-slate-400">21 Sep 2026 · 17:18 WIB · Saldo DANA</p>
+        </div>
+
+        {/* Detail Transaksi */}
+        <div className="rounded-2xl bg-white p-4 shadow-xs">
+          <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Rincian Top Up</p>
+          <div className="mt-2.5 space-y-2 text-xs">
+            <div className="flex justify-between">
+              <span className="text-slate-500">Jenis Kartu</span>
+              <span className="font-semibold text-slate-800">Mandiri e-Money</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Nomor Kartu</span>
+              <span className="font-semibold text-slate-800">6032-9102-3847-1190</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Nominal Isi Ulang</span>
+              <span className="font-semibold text-slate-800">Rp100.000</span>
+            </div>
+            <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2">
+              <span className="flex items-center gap-1 font-bold text-amber-700">
+                Biaya Admin <span className="rounded bg-amber-100 px-1.5 py-0.2 text-[9px] font-extrabold text-amber-800">TERKENA ADMIN</span>
+              </span>
+              <span className="font-bold text-amber-700">Rp1.500</span>
+            </div>
+            <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-extrabold text-slate-900">
+              <span>Total Bayar</span>
+              <span className="text-dana-700">Rp101.500</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Contextual Affiliate Entrypoint Card */}
+        <div className="overflow-hidden rounded-2xl border-2 border-dana-500 bg-gradient-to-br from-[#1B4E9B] to-dana-800 p-4 text-white shadow-md">
+          <div className="flex items-center gap-1.5">
+            <span className="rounded-md bg-emerald-400 px-2 py-0.5 text-[9px] font-black text-slate-950 uppercase tracking-wider">
+              HEMAT BIAYA ADMIN
+            </span>
+            <span className="text-[10px] text-white/80">Affiliate DANA Bisnis</span>
+          </div>
+          <h3 className="mt-2 text-sm font-black leading-tight text-white">
+            Hemat Biaya Admin Tiap Top Up &amp; Tagihan! ✨
+          </h3>
+          <p className="mt-1 text-[11px] leading-relaxed text-white/90">
+            Ajak warung sekitar pakai QRIS DANA Bisnis, nikmati kupon <strong>Bebas Biaya Admin 10x</strong> sebulan (untuk top up, transfer bank, bayar listrik) &amp; Saldo s/d <strong>Rp40.000</strong>!
+          </p>
+          <div className="mt-3 flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-[10px]">
+            <span>✓ Kode referral otomatis</span>
+            <span>✓ QRIS warung langsung aktif</span>
+          </div>
+          <button
+            onClick={() => go('nominate')}
+            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2.5 text-xs font-black text-amber-950 shadow-md active:bg-amber-300 transition"
+          >
+            Bantu Daftarkan Warung Sekarang →
+          </button>
+        </div>
+
+        <button
+          onClick={() => go('home')}
+          className="w-full rounded-xl border border-slate-300 bg-white py-2.5 text-xs font-bold text-slate-700 active:bg-slate-50"
+        >
+          Kembali ke Beranda
+        </button>
+      </div>
+    </Shell>
   );
 }
 
 /* ------------------------------------------------------ inbox */
 
 function Inbox(p) {
-  const { s, inviter } = p;
+  const { s, inviter, openWhatsApp } = p;
+  const [tab, setTab] = useState('app'); // 'app' | 'wa'
   const m = s.merchant;
-  const items = [
+
+  const appItems = [
     m.firstPayment >= 10000 && {
       tone: 'emerald',
       icon: 'bolt',
@@ -892,27 +1350,79 @@ function Inbox(p) {
   };
 
   return (
-    <MiniShell title="Inbox" tab="inbox" {...p}>
-      <div className="space-y-3 px-4 pt-3 pb-8">
-        {items.map((it, i) => (
-          <div key={i} className="flex gap-3 rounded-2xl bg-white p-4 shadow-sm">
-            <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${tones[it.tone]}`}>
-              <Icon name={it.icon} className="h-4 w-4" />
-            </span>
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <p className="text-xs font-bold text-slate-800">{it.title}</p>
-                {i === 0 && <span className="h-1.5 w-1.5 rounded-full bg-dana-500" />}
-              </div>
-              <p className="mt-0.5 text-[10px] leading-snug text-slate-500">{it.body}</p>
-              <p className="mt-1 text-[9px] text-slate-400">{it.time}</p>
-            </div>
-          </div>
-        ))}
+    <MiniShell title="Inbox Notifikasi" tab="inbox" {...p}>
+      <div className="px-4 pt-3 pb-8 space-y-3">
+        {/* Switcher: DANA vs WhatsApp */}
+        <div className="flex rounded-xl bg-slate-200 p-1 text-[11px] font-bold">
+          <button
+            onClick={() => setTab('app')}
+            className={`flex-1 rounded-lg py-1.5 transition ${
+              tab === 'app' ? 'bg-dana-500 text-white shadow-xs' : 'text-slate-600'
+            }`}
+          >
+            Notifikasi DANA ({appItems.length})
+          </button>
+          <button
+            onClick={() => setTab('wa')}
+            className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-1.5 transition ${
+              tab === 'wa' ? 'bg-[#25D366] text-white shadow-xs' : 'text-slate-600'
+            }`}
+          >
+            <Icon name="whatsapp" className="h-3.5 w-3.5" />
+            WhatsApp ({WHATSAPP_NOTIFICATIONS.length})
+          </button>
+        </div>
 
-        {items.length === 0 && (
-          <div className="py-12 text-center text-xs text-slate-400">
-            Belum ada notifikasi
+        {tab === 'app' ? (
+          <div className="space-y-3">
+            {appItems.map((it, i) => (
+              <div key={i} className="flex gap-3 rounded-2xl bg-white p-4 shadow-sm">
+                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${tones[it.tone]}`}>
+                  <Icon name={it.icon} className="h-4 w-4" />
+                </span>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-slate-800">{it.title}</p>
+                    {i === 0 && <span className="h-1.5 w-1.5 rounded-full bg-dana-500" />}
+                  </div>
+                  <p className="mt-0.5 text-[10px] leading-snug text-slate-500">{it.body}</p>
+                  <p className="mt-1 text-[9px] text-slate-400">{it.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-2.5 text-[10px] text-emerald-800">
+              💬 <strong>Notifikasi WhatsApp Resmi:</strong> Dikirim otomatis di jam operasional toko untuk mendampingi warung dan pengundang.
+            </div>
+            {WHATSAPP_NOTIFICATIONS.map((wa) => (
+              <div key={wa.id} className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1 text-[10px] font-black text-[#075E54]">
+                    <Icon name="whatsapp" className="h-3.5 w-3.5 text-[#25D366]" />
+                    {wa.sender} <span className="text-emerald-600 font-bold">✓</span>
+                  </span>
+                  <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-800">
+                    {wa.tag}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-slate-500">
+                  <span className="font-bold text-slate-700">Kepada: {wa.recipient}</span>
+                  <span>{wa.time}</span>
+                </div>
+                <p className="text-xs font-bold text-slate-900">{wa.title}</p>
+                <p className="text-[11px] leading-relaxed text-slate-600 line-clamp-2">
+                  {wa.preview}
+                </p>
+                <button
+                  onClick={() => openWhatsApp && openWhatsApp(wa)}
+                  className="mt-1 flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#25D366]/15 py-2 text-xs font-bold text-[#075E54] active:bg-[#25D366]/25 transition"
+                >
+                  <Icon name="whatsapp" className="h-3.5 w-3.5" /> Lihat Chat WhatsApp Lengkap →
+                </button>
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -1201,6 +1711,96 @@ function BizProfile(props) {
   return <BizDash {...props} initialTour={true} />;
 }
 
+/* -------------------------- Full WhatsApp Chat View Modal */
+
+export function WhatsAppChatModal({ chat, onClose, go }) {
+  if (!chat) return null;
+
+  return (
+    <div className="absolute inset-0 z-50 flex flex-col bg-[#ECE5DD] text-slate-900 animate-in fade-in duration-150">
+      {/* WhatsApp Header */}
+      <div className="flex items-center gap-2 bg-[#075E54] px-3 py-2.5 text-white shadow-md">
+        <button onClick={onClose} aria-label="Kembali" className="p-1 active:bg-white/10 rounded-full">
+          <Icon name="back" className="h-5 w-5 text-white" />
+        </button>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#075E54] font-black text-sm">
+          D
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1">
+            <p className="truncate text-xs font-bold text-white leading-none">{chat.sender}</p>
+            <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-400 text-[8px] font-black text-[#075E54]">
+              ✓
+            </span>
+          </div>
+          <p className="text-[10px] text-emerald-200">Akun Bisnis Resmi · {chat.time}</p>
+        </div>
+        <button onClick={onClose} aria-label="Tutup" className="text-white/80 hover:text-white p-1">
+          <Icon name="close" className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* WhatsApp Chat Body */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="mx-auto w-fit rounded-lg bg-white/80 px-2.5 py-1 text-[10px] font-bold text-slate-600 shadow-2xs">
+          HARI INI
+        </div>
+
+        <div className="mx-auto max-w-[280px] rounded-lg bg-[#FCF4CB] px-3 py-1.5 text-center text-[10px] text-slate-700 shadow-2xs">
+          🔒 Pesan resmi terverifikasi dari DANA Bisnis untuk {chat.recipient}.
+        </div>
+
+        {/* Chat Bubble */}
+        <div className="mr-6 rounded-2xl rounded-tl-xs bg-white p-3.5 shadow-sm text-slate-900 border border-slate-200/60">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-1.5 mb-2">
+            <span className="text-[10px] font-black text-[#075E54] flex items-center gap-1">
+              DANA Bisnis Official
+              <span className="text-emerald-600 font-bold">✓</span>
+            </span>
+            <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-extrabold text-emerald-800">
+              {chat.tag}
+            </span>
+          </div>
+
+          <div className="text-xs leading-relaxed whitespace-pre-line text-slate-800 font-normal">
+            {chat.message}
+          </div>
+
+          <div className="mt-2.5 flex items-center justify-between pt-2 border-t border-slate-100">
+            <span className="text-[9px] text-slate-400 font-medium">{chat.time}</span>
+            <span className="text-[10px] font-bold text-sky-600">✓✓</span>
+          </div>
+
+          {chat.actionText && (
+            <button
+              onClick={() => {
+                onClose();
+                if (chat.targetScreen && go) go(chat.targetScreen);
+              }}
+              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#25D366] py-2.5 text-xs font-bold text-white shadow-sm active:bg-[#1EBE5D] transition"
+            >
+              {chat.actionText} →
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* WhatsApp Input Bar */}
+      <div className="flex items-center gap-2 bg-[#F0F2F5] px-3 py-2 border-t border-slate-200">
+        <div className="flex-1 rounded-full bg-white px-3 py-2 text-xs text-slate-400 border border-slate-200">
+          Pesan resmi DANA Bisnis
+        </div>
+        <button
+          onClick={onClose}
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-[#075E54] text-white active:scale-95"
+        >
+          <Icon name="check" className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default {
   home: Home,
   grid: Grid,
@@ -1209,11 +1809,14 @@ export default {
   nominate: Nominate,
   tracker: Tracker,
   rewards: Rewards,
-  peringkat: Peringkat,
+  reward: Rewards,
+  peringkat: Rewards,
   inbox: Inbox,
   landing: Landing,
   register: Register,
   qris: Qris,
   bizprofile: BizProfile,
+  receipt_data: ReceiptData,
+  receipt_emoney: ReceiptEmoney,
 };
 

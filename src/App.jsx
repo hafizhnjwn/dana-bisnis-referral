@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { activeMerchants, claimAll, claimBreakdown, paidTotal, rupiah } from './rewards.js';
-import screens from './screens.jsx';
+import screens, { WHATSAPP_NOTIFICATIONS, WhatsAppChatModal } from './screens.jsx';
+import { Icon } from './ui.jsx';
 
 /**
  * One identity per role. Every screen reads the active persona from here, so the
@@ -9,32 +10,32 @@ import screens from './screens.jsx';
 const ROLES = [
   {
     id: 'consumer',
-    label: 'Dimas — Konsumen DANA',
+    label: 'Rian — Konsumen DANA',
     hint: 'Track A · Sahabat Warung (C2B)',
     entry: 'home',
-    name: 'Dimas Prasetya',
-    initial: 'D',
+    name: 'Rian Prasetya',
+    initial: 'R',
     store: null,
     balance: 152300,
   },
   {
     id: 'merchant',
-    label: 'Pak Joko — DANA Bisnis',
+    label: 'Bu Ratna — DANA Bisnis',
     hint: 'Track B · Mitra Bisnis (B2B)',
     entry: 'bizdash',
-    name: 'Joko Santoso',
-    initial: 'J',
-    store: 'Martabak Pak Joko',
+    name: 'Ratna Dewi',
+    initial: 'R',
+    store: 'Martabak Bu Ratna',
     balance: 96500,
   },
   {
     id: 'referred',
-    label: 'Bu Siti — Warung Diundang',
+    label: 'Pak Joko — Warung Diundang',
     hint: 'Prospek: KYC Light, QRIS instan & Profil Bisnis',
     entry: 'landing',
-    name: 'Siti Aminah',
-    initial: 'S',
-    store: 'Warung Nasi Bu Siti',
+    name: 'Joko Santoso',
+    initial: 'J',
+    store: 'Warung Nasi Pak Joko',
     balance: 0,
   },
 ];
@@ -45,7 +46,7 @@ const SEED_REFERRALS = [
   // Pre-linked to the "referred" role so the cross-role demo works without nominating first.
   {
     id: 0,
-    name: 'Warung Nasi Bu Siti',
+    name: 'Warung Nasi Pak Joko',
     category: 'F&B / Warung Makan',
     phone: '0812••••4409',
     stage: 0,
@@ -117,7 +118,7 @@ const initialState = () => ({
   nominatedId: 0,
   // The warung on the receiving end of the invitation.
   merchant: {
-    name: 'Warung Nasi Bu Siti',
+    name: 'Warung Nasi Pak Joko',
     category: 'F&B / Warung Makan',
     location: '',
     issued: false,
@@ -127,6 +128,8 @@ const initialState = () => ({
   },
   soundbox: null,
   toast: null,
+  whatsappPush: null,
+  activeWhatsAppChat: null,
 });
 
 /** Simulasi "Nada DANA": dua nada pendek lewat Web Audio, tanpa aset suara. */
@@ -187,6 +190,23 @@ export default function App() {
     patch,
     announce,
 
+    triggerWhatsApp: (id) => {
+      const notif = WHATSAPP_NOTIFICATIONS.find((n) => n.id === id) || WHATSAPP_NOTIFICATIONS[0];
+      patch({ whatsappPush: notif });
+    },
+
+    openWhatsApp: (notif) => {
+      patch({ activeWhatsAppChat: notif, whatsappPush: null });
+    },
+
+    closeWhatsApp: () => {
+      patch({ activeWhatsAppChat: null });
+    },
+
+    dismissWhatsAppPush: () => {
+      patch({ whatsappPush: null });
+    },
+
     /** "Bantu Daftarkan": referrer pre-fills 3 fields -> referral at stage 0. */
     nominate: ({ name, category, phone }) => {
       const id = Date.now();
@@ -229,7 +249,7 @@ export default function App() {
       notify('Transaksi uji Rp1.000 masuk. Nada DANA berbunyi, notifikasi aktif.');
     },
 
-    /** Transaksi pelanggan pertama (Tahap 1): jika >= Rp10.000, reward Rp10.000 langsung masuk otomatis ke saldo referrer */
+    /** Transaksi pelanggan pertama (Tahap 1): jika >= Rp10.000, reward Tahap 1 otomatis masuk */
     receivePayment: (amount = 12000) => {
       const qualifies = amount >= 10000;
 
@@ -241,7 +261,7 @@ export default function App() {
           merchant: { ...prev.merchant, firstPayment: amount, modalBonus: 15000 },
           balances: {
             ...prev.balances,
-            // Reward Tahap 1: Rp10.000 otomatis masuk ke saldo DANA pengundang (consumer / inviter)
+            // Reward Tahap 1: Rp10.000 otomatis masuk ke saldo DANA pengundang
             consumer: prev.balances.consumer + (willPromote ? 10000 : 0),
             // Uang pembayaran + bonus modal usaha Rp15.000 masuk ke saldo DANA Bisnis merchant
             referred: prev.balances.referred + amount + (willPromote ? 15000 : 0),
@@ -340,19 +360,21 @@ export default function App() {
             Merchant Referral Program
           </h1>
           <p className="mt-3 text-sm text-slate-600">
-            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah, dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), skema 2 tahap reward (Tahap 1: Rp10.000 cair di transaksi pertama ≥Rp10k; Tahap 2: Rp30.000 cair setelah 5 transaksi unik &amp; audit lolos, total Rp40.000), Carousel Onboarding Guide layar penuh, dan benefit khusus pengundang di profil bisnis.
+            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah (Beranda, Referal, Reward, Inbox), dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), skema 2 tahap reward (Rian: Rp10k + Rp30k; Bu Ratna: Bebas transfer 10x + Bebas admin 10x; Pak Joko: Bebas tarik tunai 7x + Bebas admin 10x), Carousel Onboarding Guide layar penuh model AIDA, dan WhatsApp official engagement.
           </p>
 
+          {/* Section 1: Persona Picker */}
           <div className="mt-6 space-y-2">
             <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">Pilih peran pengguna</p>
             {ROLES.map((r) => (
               <button
                 key={r.id}
                 onClick={() => setRole(r.id)}
-                className={`w-full rounded-2xl border p-3 text-left transition ${s.role === r.id
-                  ? 'border-dana-500 bg-white shadow-lg shadow-dana-500/10'
-                  : 'border-slate-200 bg-white/60 hover:border-slate-300'
-                  }`}
+                className={`w-full rounded-2xl border p-3 text-left transition ${
+                  s.role === r.id
+                    ? 'border-dana-500 bg-white shadow-lg shadow-dana-500/10'
+                    : 'border-slate-200 bg-white/60 hover:border-slate-300'
+                }`}
               >
                 <span className="block text-sm font-bold text-slate-900">{r.label}</span>
                 <span className="block text-xs text-slate-500">{r.hint}</span>
@@ -360,6 +382,120 @@ export default function App() {
             ))}
           </div>
 
+          {/* Section 2: Simulasi Entrypoint Transaksi (Kena Admin) */}
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+            <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+              Entrypoint Transaksi (Kena Biaya Admin)
+            </p>
+            <p className="mt-1 text-xs text-slate-500">
+              Bukti transaksi pasca-bayar yang memicu penawaran promo ajak warung:
+            </p>
+            <div className="mt-3 flex flex-col gap-2">
+              <button
+                onClick={() => go('receipt_data')}
+                className="flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50/70 px-3 py-2 text-left text-xs font-bold text-rose-900 transition hover:bg-rose-100"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-rose-500 text-white text-[10px]">
+                    📶
+                  </span>
+                  <div>
+                    <p className="font-bold">Habis Beli Paket Internet</p>
+                    <p className="text-[10px] text-rose-700">Rp55.000 + Biaya Admin Rp1.500</p>
+                  </div>
+                </div>
+                <span className="rounded bg-rose-200 px-1.5 py-0.5 text-[9px] font-extrabold text-rose-800">
+                  Lihat Bukti →
+                </span>
+              </button>
+
+              <button
+                onClick={() => go('receipt_emoney')}
+                className="flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50/70 px-3 py-2 text-left text-xs font-bold text-amber-900 transition hover:bg-amber-100"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-500 text-white text-[10px]">
+                    💳
+                  </span>
+                  <div>
+                    <p className="font-bold">Habis Top Up E-Money</p>
+                    <p className="text-[10px] text-amber-700">Rp100.000 + Biaya Admin Rp1.500</p>
+                  </div>
+                </div>
+                <span className="rounded bg-amber-200 px-1.5 py-0.5 text-[9px] font-extrabold text-amber-800">
+                  Lihat Bukti →
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Section 3: Simulasi Notifikasi WhatsApp Resmi */}
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-bold tracking-wider text-[#075E54] uppercase">
+                Simulasi Notifikasi WhatsApp
+              </p>
+              <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-black text-emerald-800">
+                <Icon name="whatsapp" className="h-2.5 w-2.5" /> 5 Skenario
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-slate-500">
+              Notifikasi resmi DANA Bisnis via WhatsApp di jam operasional toko:
+            </p>
+            <div className="mt-3 space-y-1.5">
+              {[
+                {
+                  id: 'wa-h1-joko',
+                  label: '[H+1] Unduh QRIS Kasir Toko',
+                  sub: 'Ke Pak Joko di jam operasional toko',
+                  roleSwitch: 'referred',
+                },
+                {
+                  id: 'wa-payment-joko',
+                  label: 'Terima Pembayaran QRIS DANA',
+                  sub: 'Ke Pak Joko: Rp12.000, 0% MDR + Bonus Rp15k',
+                  roleSwitch: 'referred',
+                },
+                {
+                  id: 'wa-routine-joko',
+                  label: 'Rutin Menerima Transaksi QRIS',
+                  sub: 'Ke Pak Joko: Ringkasan mingguan & tips usaha',
+                  roleSwitch: 'referred',
+                },
+                {
+                  id: 'wa-h3-ratna',
+                  label: '[H+3] Belum Ada Transaksi QRIS',
+                  sub: 'Ke Bu Ratna (pengundang) di jam operasional',
+                  roleSwitch: 'merchant',
+                },
+                {
+                  id: 'wa-h7-inactive',
+                  label: '[H+7] 7 Hari Tanpa Aktivitas QRIS',
+                  sub: 'Ke Bu Ratna & Pak Joko untuk reaktivasi',
+                  roleSwitch: 'merchant',
+                },
+              ].map((w) => (
+                <button
+                  key={w.id}
+                  onClick={() => {
+                    if (w.roleSwitch && s.role !== w.roleSwitch) {
+                      setRole(w.roleSwitch);
+                    }
+                    actions.triggerWhatsApp(w.id);
+                  }}
+                  className="flex w-full items-center justify-between rounded-xl border border-emerald-100 bg-emerald-50/50 p-2 text-left text-xs transition hover:bg-emerald-100 active:scale-[0.99]"
+                >
+                  <div>
+                    <p className="font-bold text-emerald-950 text-[11px]">{w.label}</p>
+                    <p className="text-[9px] text-emerald-700">{w.sub}</p>
+                  </div>
+                  <span className="shrink-0 text-[10px] font-bold text-emerald-600">Kirim 💬</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 4: Simulasi Event Backend */}
           <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
             <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">Simulasi event backend</p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -376,20 +512,29 @@ export default function App() {
                 5 tx &amp; audit lolos (Tahap 2)
               </SimButton>
               <SimButton onClick={() => go('bizprofile')} disabled={!s.merchant.issued}>
-                Profil Bisnis Bu Siti
+                Profil Bisnis Pak Joko
               </SimButton>
               <SimButton onClick={actions.reset}>Reset prototipe</SimButton>
             </div>
             <p className="mt-3 text-xs text-slate-500">
               {s.merchant.issued
-                ? 'Sistem 2 Tahap: Transaksi pertama ≥ Rp10.000 mencairkan Rp10.000 (Tahap 1). Kemudian 5 transaksi unik & audit mencairkan Rp30.000 (Tahap 2, Total Rp40.000).'
-                : 'Terbitkan QRIS dulu di peran Bu Siti agar simulasi transaksi & profil bisnis aktif.'}
+                ? 'Sistem 2 Tahap: Transaksi pertama ≥ Rp10.000 mencairkan reward Tahap 1. Kemudian 5 transaksi unik & audit mencairkan reward Tahap 2.'
+                : 'Terbitkan QRIS dulu di peran Pak Joko agar simulasi transaksi & profil bisnis aktif.'}
             </p>
           </div>
         </div>
 
         <div className="flex flex-col items-center gap-3">
-          <Phone toast={s.toast} soundbox={s.soundbox}>
+          <Phone
+            toast={s.toast}
+            soundbox={s.soundbox}
+            whatsappPush={s.whatsappPush}
+            onOpenWhatsApp={actions.openWhatsApp}
+            onDismissWhatsApp={actions.dismissWhatsAppPush}
+            activeWhatsAppChat={s.activeWhatsAppChat}
+            onCloseWhatsApp={actions.closeWhatsApp}
+            go={go}
+          >
             <Screen key={s.screen} {...ctx} />
           </Phone>
           <p className="max-w-[22rem] text-center text-xs text-slate-500">
@@ -414,11 +559,60 @@ function SimButton({ children, ...props }) {
 }
 
 /** iPhone-style frame. The screen itself scrolls, the frame does not. */
-function Phone({ children, toast, soundbox }) {
+function Phone({
+  children,
+  toast,
+  soundbox,
+  whatsappPush,
+  onOpenWhatsApp,
+  onDismissWhatsApp,
+  activeWhatsAppChat,
+  onCloseWhatsApp,
+  go,
+}) {
   return (
     <div className="relative h-[820px] w-[394px] shrink-0 rounded-[3.2rem] border-[3px] border-slate-700 bg-slate-900 p-[10px] shadow-2xl shadow-slate-500/40">
       <div className="relative h-full w-full overflow-hidden rounded-[2.6rem] bg-white">
         <div className="absolute top-2 left-1/2 z-30 h-6 w-28 -translate-x-1/2 rounded-full bg-slate-900" />
+        
+        {/* WhatsApp Push Notification Banner */}
+        {whatsappPush && (
+          <div className="absolute inset-x-3 top-10 z-50 animate-in slide-in-from-top-4 duration-200">
+            <div
+              onClick={() => onOpenWhatsApp(whatsappPush)}
+              className="flex items-start gap-2.5 rounded-2xl bg-white/95 p-3 shadow-2xl backdrop-blur-md border border-slate-200/90 cursor-pointer active:scale-98 transition"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#25D366] text-white shadow-xs">
+                <Icon name="whatsapp" className="h-5 w-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black tracking-wide text-[#075E54] uppercase">
+                    WhatsApp · {whatsappPush.sender}
+                  </span>
+                  <span className="text-[9px] text-slate-400">Baru saja</span>
+                </div>
+                <p className="truncate text-xs font-extrabold text-slate-900 mt-0.5">
+                  {whatsappPush.title}
+                </p>
+                <p className="text-[11px] text-slate-600 line-clamp-2 leading-snug mt-0.5">
+                  {whatsappPush.preview}
+                </p>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDismissWhatsApp();
+                }}
+                className="text-slate-400 hover:text-slate-600 p-1 text-xs"
+                aria-label="Tutup notifikasi"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
+
         {soundbox && (
           <div className="absolute inset-x-3 top-12 z-40 flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-3 text-white shadow-xl">
             <span className="text-lg">🔊</span>
@@ -429,13 +623,24 @@ function Phone({ children, toast, soundbox }) {
         )}
         {toast && (
           <div
-            className={`absolute inset-x-3 z-40 rounded-2xl bg-slate-900/92 px-4 py-3 text-[11px] leading-snug font-semibold text-white shadow-xl ${soundbox ? 'top-30' : 'top-12'
-              }`}
+            className={`absolute inset-x-3 z-40 rounded-2xl bg-slate-900/92 px-4 py-3 text-[11px] leading-snug font-semibold text-white shadow-xl ${
+              soundbox || whatsappPush ? 'top-32' : 'top-12'
+            }`}
           >
             {toast}
           </div>
         )}
         <div className="no-scrollbar h-full overflow-y-auto overscroll-contain">{children}</div>
+
+        {/* Full WhatsApp Chat View Modal */}
+        {activeWhatsAppChat && (
+          <WhatsAppChatModal
+            chat={activeWhatsAppChat}
+            onClose={onCloseWhatsApp}
+            go={go}
+          />
+        )}
+
         <div className="pointer-events-none absolute bottom-1.5 left-1/2 z-30 h-1.5 w-32 -translate-x-1/2 rounded-full bg-slate-900/25" />
       </div>
     </div>
