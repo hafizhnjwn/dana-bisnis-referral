@@ -32,6 +32,27 @@ export const MINI_TABS = [
 
 export const WHATSAPP_NOTIFICATIONS = [
   {
+    id: 'wa-invite-joko',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'Rian Prasetya / Bu Ratna',
+    phone: '0812-4409-xxxx',
+    time: 'Baru saja',
+    tag: 'Undangan Warung',
+    title: 'Undangan Bergabung DANA Bisnis',
+    preview: 'Halo Pak Joko! Saya sudah daftarkan Warung Nasi Pak Joko ke DANA Bisnis. QRIS langsung aktif Rp0...',
+    message: `Halo Pak Joko! 🏪
+
+Saya sudah bantu daftarkan *Warung Nasi Pak Joko* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa biaya potongan (0% MDR).
+
+Data sudah disiapkan, tinggal 1 langkah konfirmasi (tanpa perlu e-KTP di awal):
+👉 https://dana.id/bisnis/gabung?ref=HAF58W
+
+Pajang QRIS di meja kasir, jualan makin laris & praktis!`,
+    actionText: 'Buka Undangan Pendaftaran',
+    targetScreen: 'landing',
+  },
+  {
     id: 'wa-h1-joko',
     recipient: 'Pak Joko',
     roleTarget: 'referred',
@@ -149,38 +170,41 @@ Jangan biarkan peluang terlewat! Dampingi Pak Joko agar usahanya tetap aktif ber
  * close buttons, plus the 4 bottom tabs used by the production affiliate program.
  */
 function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) {
-  const exit = () => go(s.role === 'merchant' ? 'bizdash' : 'home');
+  const exit = () => go(s?.role === 'merchant' ? 'bizdash' : 'home');
   return (
-    <Shell className="bg-slate-50">
-      <StatusBar />
-      <div className="flex items-center gap-2 border-b border-slate-100 bg-white px-3 pb-2">
-        {onBack ? (
-          <button onClick={onBack} aria-label="Kembali" className="rounded-full p-1 active:bg-slate-100">
-            <Icon name="back" className="h-5 w-5 text-slate-700" />
-          </button>
-        ) : (
-          <span className="w-1" />
-        )}
-        <p className="flex-1 truncate text-sm font-bold text-slate-900">{title}</p>
-        <div className="flex items-center gap-1 rounded-full border border-slate-200 px-1.5 py-1">
-          <button onClick={() => notify('Menu Mini Program: Bagikan · Laporkan · Tentang Program.')} aria-label="Opsi" className="p-0.5">
-            <Icon name="more" className="h-4 w-4 text-slate-600" />
-          </button>
-          <span className="h-3 w-px bg-slate-200" />
-          <button onClick={exit} aria-label="Tutup Mini Program" className="p-0.5">
-            <Icon name="close" className="h-4 w-4 text-slate-600" />
-          </button>
+    <Shell className="bg-slate-50 overflow-hidden">
+      <div className="shrink-0 bg-white">
+        <StatusBar />
+        <div className="flex items-center gap-2 border-b border-slate-100 px-3 pb-2">
+          {onBack ? (
+            <button onClick={onBack} aria-label="Kembali" className="rounded-full p-1 active:bg-slate-100">
+              <Icon name="back" className="h-5 w-5 text-slate-700" />
+            </button>
+          ) : (
+            <span className="w-1" />
+          )}
+          <p className="flex-1 truncate text-sm font-bold text-slate-900">{title}</p>
+          <div className="flex items-center gap-1 rounded-full border border-slate-200 px-1.5 py-1">
+            <button onClick={() => notify('Menu Mini Program: Bagikan · Laporkan · Tentang Program.')} aria-label="Opsi" className="p-0.5">
+              <Icon name="more" className="h-4 w-4 text-slate-600" />
+            </button>
+            <span className="h-3 w-px bg-slate-200" />
+            <button onClick={exit} aria-label="Tutup Mini Program" className="p-0.5">
+              <Icon name="close" className="h-4 w-4 text-slate-600" />
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 overflow-y-auto no-scrollbar overscroll-contain">{children}</div>
       {tab && (
-        <div className="sticky bottom-0 flex border-t border-slate-100 bg-white/95 px-2 pt-2 pb-5 backdrop-blur">
+        <div className="shrink-0 z-30 flex border-t border-slate-200 bg-white/95 px-2 pt-2 pb-5 backdrop-blur shadow-lg">
           {MINI_TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => go(t.id)}
-              className={`relative flex flex-1 flex-col items-center gap-1 text-[10px] font-bold ${tab === t.id ? 'text-dana-600' : 'text-slate-400'
-                }`}
+              className={`relative flex flex-1 flex-col items-center gap-1 text-[10px] font-bold ${
+                tab === t.id ? 'text-dana-600' : 'text-slate-400'
+              }`}
             >
               <Icon name={t.icon} className="h-5 w-5" />
               {t.label}
@@ -797,7 +821,7 @@ function Tracker(p) {
 
 function Rewards(p) {
   const { s, patch, user, go, notify, earned, activeCount } = p;
-  const [selectedRole, setSelectedRole] = useState(s.role || 'consumer');
+  const currentRole = user?.id || s?.role || 'consumer';
 
   const quotas = s.rewardQuotas || {
     merchant: { transfer: 10, admin: 10 },
@@ -835,27 +859,8 @@ function Rewards(p) {
   return (
     <MiniShell title="Management Reward" tab="rewards" {...p}>
       <div className="space-y-4 px-4 pt-3 pb-8">
-        {/* Role Selector Tabs */}
-        <div className="flex rounded-xl bg-slate-200 p-1 text-[11px] font-bold">
-          {[
-            ['consumer', 'Rian (Konsumen)'],
-            ['merchant', 'Bu Ratna (Mitra)'],
-            ['referred', 'Pak Joko (Warung)'],
-          ].map(([id, label]) => (
-            <button
-              key={id}
-              onClick={() => setSelectedRole(id)}
-              className={`flex-1 rounded-lg py-1.5 transition ${
-                selectedRole === id ? 'bg-dana-500 text-white shadow-xs' : 'text-slate-600'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
         {/* ROLE 1: RIAN (KONSUMEN) */}
-        {selectedRole === 'consumer' && (
+        {currentRole === 'consumer' && (
           <div className="space-y-3">
             <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-4 text-white shadow-lg shadow-dana-700/25">
               <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Rian · Sahabat Warung</p>
@@ -933,7 +938,7 @@ function Rewards(p) {
         )}
 
         {/* ROLE 2: BU RATNA (MITRA BISNIS) */}
-        {selectedRole === 'merchant' && (
+        {currentRole === 'merchant' && (
           <div className="space-y-3">
             <div className="rounded-3xl bg-gradient-to-br from-[#1B4E9B] to-slate-900 p-4 text-white shadow-lg">
               <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Bu Ratna · Mitra Bisnis</p>
@@ -1016,7 +1021,7 @@ function Rewards(p) {
         )}
 
         {/* ROLE 3: PAK JOKO (WARUNG TERDAFTAR) */}
-        {selectedRole === 'referred' && (
+        {currentRole === 'referred' && (
           <div className="space-y-3">
             <div className="rounded-3xl bg-gradient-to-br from-emerald-600 to-slate-900 p-4 text-white shadow-lg">
               <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Pak Joko · Merchant Binaan</p>

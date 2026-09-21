@@ -115,7 +115,7 @@ export function Pill({ children, tone = 'dana' }) {
 }
 
 export const Shell = ({ children, className = '' }) => (
-  <div className={`screen-in relative flex min-h-full flex-col overflow-hidden bg-slate-100 ${className}`}>{children}</div>
+  <div className={`screen-in relative flex h-full w-full flex-col ${className.includes('overflow-') ? '' : 'overflow-y-auto no-scrollbar overscroll-contain'} bg-slate-100 ${className}`}>{children}</div>
 );
 
 export const Field = ({ step, label, hint, children }) => (
@@ -149,7 +149,7 @@ export function HostNav({ active, go, notify }) {
     </button>
   );
   return (
-    <div className="sticky bottom-0 mt-auto border-t border-slate-200 bg-white/95 backdrop-blur">
+    <div className="shrink-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur shadow-lg">
       <div className="relative flex items-end px-2 pt-2 pb-5">
         {item('home', 'Home', () => go('home'))}
         {item('activity', 'Activity', () => notify('Riwayat aktivitas akun DANA Anda.'))}
