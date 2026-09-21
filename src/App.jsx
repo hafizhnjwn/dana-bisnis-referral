@@ -388,13 +388,13 @@ export default function App() {
             ))}
           </div>
 
-          {/* Section 2: Simulasi Entrypoint Transaksi (Kena Admin) */}
+          {/* Section 2: Titik Akhir Bayar (Kena Biaya Admin) */}
           <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
             <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
-              Entrypoint Transaksi (Kena Biaya Admin)
+              Titik Akhir Bayar (Kena Biaya Admin)
             </p>
             <p className="mt-1 text-xs text-slate-500">
-              Bukti transaksi pasca-bayar yang memicu penawaran promo ajak warung:
+              Layar konfirmasi sebelum bayar dengan button kecil ajak warung:
             </p>
             <div className="mt-3 flex flex-col gap-2">
               <button
@@ -406,12 +406,12 @@ export default function App() {
                     📶
                   </span>
                   <div>
-                    <p className="font-bold">Habis Beli Paket Internet</p>
+                    <p className="font-bold">Kasir Bayar Paket Data</p>
                     <p className="text-[10px] text-rose-700">Rp55.000 + Biaya Admin Rp1.500</p>
                   </div>
                 </div>
                 <span className="rounded bg-rose-200 px-1.5 py-0.5 text-[9px] font-extrabold text-rose-800">
-                  Lihat Bukti →
+                  Buka Kasir →
                 </span>
               </button>
 
@@ -424,12 +424,12 @@ export default function App() {
                     💳
                   </span>
                   <div>
-                    <p className="font-bold">Habis Top Up E-Money</p>
+                    <p className="font-bold">Kasir Bayar Top Up E-Money</p>
                     <p className="text-[10px] text-amber-700">Rp100.000 + Biaya Admin Rp1.500</p>
                   </div>
                 </div>
                 <span className="rounded bg-amber-200 px-1.5 py-0.5 text-[9px] font-extrabold text-amber-800">
-                  Lihat Bukti →
+                  Buka Kasir →
                 </span>
               </button>
             </div>

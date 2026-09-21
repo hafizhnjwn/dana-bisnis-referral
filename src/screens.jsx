@@ -1112,184 +1112,262 @@ function Rewards(p) {
 
 /* --------------------------------- Entrypoint 1: Habis Transaksi Paket Internet (Kena Admin) */
 
-export function ReceiptData({ go }) {
+/* --------------------------------- Entrypoint 1: Kasir Bayar Paket Data (Kena Admin) */
+
+export function ReceiptData({ go, notify }) {
   return (
-    <Shell className="bg-slate-50">
-      <StatusBar />
-      <div className="flex items-center gap-2 border-b border-slate-100 bg-white px-3 pb-3">
-        <button onClick={() => go('home')} aria-label="Kembali" className="rounded-full p-1 active:bg-slate-100">
-          <Icon name="back" className="h-5 w-5 text-slate-700" />
-        </button>
-        <p className="flex-1 text-center text-sm font-bold text-slate-900">Bukti Transaksi</p>
-        <span className="w-6" />
+    <Shell className="bg-slate-100 flex flex-col justify-between">
+      <div>
+        <StatusBar />
+        {/* Header Bar */}
+        <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
+          <button onClick={() => go('home')} aria-label="Kembali" className="rounded-full p-1 -ml-1 text-slate-700 active:bg-slate-100">
+            <Icon name="back" className="h-5 w-5" />
+          </button>
+          <p className="text-sm font-extrabold text-slate-900">Konfirmasi Pembayaran</p>
+          <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
+            <Icon name="shield" className="h-3 w-3 text-emerald-600" /> 100% Aman
+          </span>
+        </div>
+
+        <div className="space-y-3 p-4">
+          {/* Card Produk */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs">
+            <div className="flex items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-red-600 text-xl font-bold">
+                📶
+              </span>
+              <div className="flex-1 min-w-0">
+                <span className="text-[10px] font-black uppercase tracking-wider text-red-600">Telkomsel Data</span>
+                <p className="truncate text-xs font-black text-slate-900">MAXstream 14 GB / 30 Hari</p>
+                <p className="text-[11px] text-slate-500">0812-8821-9940</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Rincian Pembayaran */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs">
+            <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Rincian Pembayaran</p>
+            <div className="mt-2.5 space-y-2 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>Harga Paket</span>
+                <span className="font-semibold text-slate-900">Rp55.000</span>
+              </div>
+              <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2 text-slate-600">
+                <span className="flex items-center gap-1.5 font-bold text-amber-800">
+                  Biaya Admin
+                  <span className="rounded bg-amber-100 px-1.5 py-0.2 text-[9px] font-extrabold text-amber-800">
+                    +Rp1.500
+                  </span>
+                </span>
+                <span className="font-bold text-amber-800">Rp1.500</span>
+              </div>
+
+              {/* Button kecil-kecilan sebelum penyelesaian transaksi */}
+              <button
+                onClick={() => go('hub')}
+                className="mt-1 flex w-full items-center justify-between rounded-xl border border-amber-300/80 bg-gradient-to-r from-amber-50 to-orange-50 px-2.5 py-1.5 text-left text-xs text-amber-950 shadow-2xs hover:bg-amber-100 active:scale-[0.99] transition"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-amber-400 text-white text-[10px] shadow-2xs">
+                    💡
+                  </span>
+                  <p className="text-[11px] leading-tight font-medium text-amber-900">
+                    Ingin gratis biaya admin? <span className="font-extrabold text-amber-950 underline decoration-amber-400">Ajak warung langganan</span>
+                  </p>
+                </div>
+                <span className="shrink-0 rounded bg-white px-2 py-0.5 text-[10px] font-black text-amber-900 shadow-2xs border border-amber-200">
+                  Coba →
+                </span>
+              </button>
+
+              <div className="flex justify-between border-t border-slate-200 pt-2.5 text-sm font-extrabold text-slate-900">
+                <span>Total Tagihan</span>
+                <span className="text-dana-700 text-base">Rp56.500</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Metode Pembayaran */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs">
+            <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Metode Pembayaran</p>
+            <div className="mt-2.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-dana-50 text-dana-600">
+                  <Icon name="wallet" className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-xs font-bold text-slate-900">Saldo DANA</p>
+                  <p className="text-[10px] text-emerald-600 font-semibold">Tersedia Rp152.300 (Cukup)</p>
+                </div>
+              </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-dana-500 text-white text-xs font-bold">
+                ✓
+              </span>
+            </div>
+          </div>
+
+          {/* Info Jaminan Perlindungan */}
+          <div className="flex items-center gap-2 rounded-xl bg-dana-50/60 border border-dana-200/60 p-2.5 text-[10px] text-dana-800">
+            <Icon name="shield" className="h-4 w-4 shrink-0 text-dana-600" />
+            <p className="leading-tight">
+              Dilindungi <strong>DANA Protection</strong>: garansi 100% uang kembali jika transaksi gagal.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-3 px-4 py-4">
-        {/* Status Card */}
-        <div className="rounded-2xl bg-white p-4 text-center shadow-xs">
-          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-            <Icon name="check" className="h-6 w-6" />
-          </span>
-          <p className="mt-2 text-xs font-bold text-emerald-600">Pembayaran Berhasil</p>
-          <p className="mt-1 text-2xl font-black text-slate-900">Rp56.500</p>
-          <p className="mt-0.5 text-[10px] text-slate-400">21 Sep 2026 · 17:15 WIB · Saldo DANA</p>
+      {/* Sticky Bottom Bar Kasir Bayar */}
+      <div className="border-t border-slate-200 bg-white p-4 shadow-lg">
+        <div className="flex items-center justify-between mb-2 text-xs">
+          <span className="text-slate-500">Total Pembayaran</span>
+          <span className="text-base font-black text-slate-900">Rp56.500</span>
         </div>
-
-        {/* Detail Transaksi */}
-        <div className="rounded-2xl bg-white p-4 shadow-xs">
-          <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Rincian Pembelian</p>
-          <div className="mt-2.5 space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-slate-500">Layanan</span>
-              <span className="font-semibold text-slate-800">Paket Data Telkomsel</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Paket</span>
-              <span className="font-semibold text-slate-800">MAXstream 14 GB / 30 Hari</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Nomor HP</span>
-              <span className="font-semibold text-slate-800">0812-8821-9940</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Harga Paket</span>
-              <span className="font-semibold text-slate-800">Rp55.000</span>
-            </div>
-            <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2">
-              <span className="flex items-center gap-1 font-bold text-amber-700">
-                Biaya Admin <span className="rounded bg-amber-100 px-1.5 py-0.2 text-[9px] font-extrabold text-amber-800">TERKENA ADMIN</span>
-              </span>
-              <span className="font-bold text-amber-700">Rp1.500</span>
-            </div>
-            <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-extrabold text-slate-900">
-              <span>Total Bayar</span>
-              <span className="text-dana-700">Rp56.500</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Contextual Affiliate Entrypoint Card */}
-        <div className="overflow-hidden rounded-2xl border-2 border-dana-500 bg-gradient-to-br from-dana-600 to-dana-900 p-4 text-white shadow-md">
-          <div className="flex items-center gap-1.5">
-            <span className="rounded-md bg-amber-400 px-2 py-0.5 text-[9px] font-black text-amber-950 uppercase tracking-wider">
-              BEBAS BIAYA ADMIN
-            </span>
-            <span className="text-[10px] text-white/80">Affiliate DANA Bisnis</span>
-          </div>
-          <h3 className="mt-2 text-sm font-black leading-tight text-white">
-            Capek Kena Biaya Admin Rp1.500? 💡
-          </h3>
-          <p className="mt-1 text-[11px] leading-relaxed text-white/90">
-            Dapatkan voucher <strong>Gratis Biaya Admin 10x</strong> sebulan + Saldo DANA s/d <strong>Rp40.000</strong> per warung dengan mengajak warung langgananmu pakai QRIS DANA Bisnis!
-          </p>
-          <div className="mt-3 flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-[10px]">
-            <span>✓ Cukup isi 3 data warung</span>
-            <span>✓ Tanpa e-KTP di awal (Rp0)</span>
-          </div>
-          <button
-            onClick={() => go('nominate')}
-            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2.5 text-xs font-black text-amber-950 shadow-md active:bg-amber-300 transition"
-          >
-            Bantu Daftarkan Warung Sekarang →
-          </button>
-        </div>
-
+        <button
+          onClick={() => {
+            if (notify) notify('🎉 Pembayaran paket data Rp56.500 berhasil diselesaikan!');
+            go('home');
+          }}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-dana-500 py-3.5 text-center text-sm font-extrabold text-white shadow-md shadow-dana-500/25 active:bg-dana-600 transition"
+        >
+          BAYAR RP56.500
+        </button>
         <button
           onClick={() => go('home')}
-          className="w-full rounded-xl border border-slate-300 bg-white py-2.5 text-xs font-bold text-slate-700 active:bg-slate-50"
+          className="mt-2 w-full text-center text-[11px] font-bold text-slate-400 hover:text-slate-600"
         >
-          Kembali ke Beranda
+          Batalkan Transaksi
         </button>
       </div>
     </Shell>
   );
 }
 
-/* --------------------------------- Entrypoint 2: Habis Top Up E-Money (Kena Admin) */
+/* --------------------------------- Entrypoint 2: Kasir Bayar Top Up E-Money (Kena Admin) */
 
-export function ReceiptEmoney({ go }) {
+export function ReceiptEmoney({ go, notify }) {
   return (
-    <Shell className="bg-slate-50">
-      <StatusBar />
-      <div className="flex items-center gap-2 border-b border-slate-100 bg-white px-3 pb-3">
-        <button onClick={() => go('home')} aria-label="Kembali" className="rounded-full p-1 active:bg-slate-100">
-          <Icon name="back" className="h-5 w-5 text-slate-700" />
-        </button>
-        <p className="flex-1 text-center text-sm font-bold text-slate-900">Bukti Transaksi</p>
-        <span className="w-6" />
+    <Shell className="bg-slate-100 flex flex-col justify-between">
+      <div>
+        <StatusBar />
+        {/* Header Bar */}
+        <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
+          <button onClick={() => go('home')} aria-label="Kembali" className="rounded-full p-1 -ml-1 text-slate-700 active:bg-slate-100">
+            <Icon name="back" className="h-5 w-5" />
+          </button>
+          <p className="text-sm font-extrabold text-slate-900">Konfirmasi Pembayaran</p>
+          <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
+            <Icon name="shield" className="h-3 w-3 text-emerald-600" /> 100% Aman
+          </span>
+        </div>
+
+        <div className="space-y-3 p-4">
+          {/* Card Produk */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs">
+            <div className="flex items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 text-xl font-bold">
+                💳
+              </span>
+              <div className="flex-1 min-w-0">
+                <span className="text-[10px] font-black uppercase tracking-wider text-amber-600">E-Money Mandiri</span>
+                <p className="truncate text-xs font-black text-slate-900">Top Up Saldo Rp100.000</p>
+                <p className="text-[11px] text-slate-500">6032-9102-3847-1190</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Rincian Pembayaran */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs">
+            <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Rincian Pembayaran</p>
+            <div className="mt-2.5 space-y-2 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>Nominal Top Up</span>
+                <span className="font-semibold text-slate-900">Rp100.000</span>
+              </div>
+              <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2 text-slate-600">
+                <span className="flex items-center gap-1.5 font-bold text-amber-800">
+                  Biaya Admin
+                  <span className="rounded bg-amber-100 px-1.5 py-0.2 text-[9px] font-extrabold text-amber-800">
+                    +Rp1.500
+                  </span>
+                </span>
+                <span className="font-bold text-amber-800">Rp1.500</span>
+              </div>
+
+              {/* Button kecil-kecilan sebelum penyelesaian transaksi */}
+              <button
+                onClick={() => go('hub')}
+                className="mt-1 flex w-full items-center justify-between rounded-xl border border-amber-300/80 bg-gradient-to-r from-amber-50 to-orange-50 px-2.5 py-1.5 text-left text-xs text-amber-950 shadow-2xs hover:bg-amber-100 active:scale-[0.99] transition"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-amber-400 text-white text-[10px] shadow-2xs">
+                    💡
+                  </span>
+                  <p className="text-[11px] leading-tight font-medium text-amber-900">
+                    Ingin gratis biaya admin? <span className="font-extrabold text-amber-950 underline decoration-amber-400">Ajak warung sekitarmu</span>
+                  </p>
+                </div>
+                <span className="shrink-0 rounded bg-white px-2 py-0.5 text-[10px] font-black text-amber-900 shadow-2xs border border-amber-200">
+                  Coba →
+                </span>
+              </button>
+
+              <div className="flex justify-between border-t border-slate-200 pt-2.5 text-sm font-extrabold text-slate-900">
+                <span>Total Tagihan</span>
+                <span className="text-dana-700 text-base">Rp101.500</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Metode Pembayaran */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs">
+            <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Metode Pembayaran</p>
+            <div className="mt-2.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-dana-50 text-dana-600">
+                  <Icon name="wallet" className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-xs font-bold text-slate-900">Saldo DANA</p>
+                  <p className="text-[10px] text-emerald-600 font-semibold">Tersedia Rp152.300 (Cukup)</p>
+                </div>
+              </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-dana-500 text-white text-xs font-bold">
+                ✓
+              </span>
+            </div>
+          </div>
+
+          {/* Info Jaminan Perlindungan */}
+          <div className="flex items-center gap-2 rounded-xl bg-dana-50/60 border border-dana-200/60 p-2.5 text-[10px] text-dana-800">
+            <Icon name="shield" className="h-4 w-4 shrink-0 text-dana-600" />
+            <p className="leading-tight">
+              Dilindungi <strong>DANA Protection</strong>: garansi 100% uang kembali jika transaksi gagal.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-3 px-4 py-4">
-        {/* Status Card */}
-        <div className="rounded-2xl bg-white p-4 text-center shadow-xs">
-          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-            <Icon name="check" className="h-6 w-6" />
-          </span>
-          <p className="mt-2 text-xs font-bold text-emerald-600">Top Up E-Money Berhasil</p>
-          <p className="mt-1 text-2xl font-black text-slate-900">Rp101.500</p>
-          <p className="mt-0.5 text-[10px] text-slate-400">21 Sep 2026 · 17:18 WIB · Saldo DANA</p>
+      {/* Sticky Bottom Bar Kasir Bayar */}
+      <div className="border-t border-slate-200 bg-white p-4 shadow-lg">
+        <div className="flex items-center justify-between mb-2 text-xs">
+          <span className="text-slate-500">Total Pembayaran</span>
+          <span className="text-base font-black text-slate-900">Rp101.500</span>
         </div>
-
-        {/* Detail Transaksi */}
-        <div className="rounded-2xl bg-white p-4 shadow-xs">
-          <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">Rincian Top Up</p>
-          <div className="mt-2.5 space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-slate-500">Jenis Kartu</span>
-              <span className="font-semibold text-slate-800">Mandiri e-Money</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Nomor Kartu</span>
-              <span className="font-semibold text-slate-800">6032-9102-3847-1190</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">Nominal Isi Ulang</span>
-              <span className="font-semibold text-slate-800">Rp100.000</span>
-            </div>
-            <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2">
-              <span className="flex items-center gap-1 font-bold text-amber-700">
-                Biaya Admin <span className="rounded bg-amber-100 px-1.5 py-0.2 text-[9px] font-extrabold text-amber-800">TERKENA ADMIN</span>
-              </span>
-              <span className="font-bold text-amber-700">Rp1.500</span>
-            </div>
-            <div className="flex justify-between border-t border-slate-200 pt-2 text-sm font-extrabold text-slate-900">
-              <span>Total Bayar</span>
-              <span className="text-dana-700">Rp101.500</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Contextual Affiliate Entrypoint Card */}
-        <div className="overflow-hidden rounded-2xl border-2 border-dana-500 bg-gradient-to-br from-[#1B4E9B] to-dana-800 p-4 text-white shadow-md">
-          <div className="flex items-center gap-1.5">
-            <span className="rounded-md bg-emerald-400 px-2 py-0.5 text-[9px] font-black text-slate-950 uppercase tracking-wider">
-              HEMAT BIAYA ADMIN
-            </span>
-            <span className="text-[10px] text-white/80">Affiliate DANA Bisnis</span>
-          </div>
-          <h3 className="mt-2 text-sm font-black leading-tight text-white">
-            Hemat Biaya Admin Tiap Top Up &amp; Tagihan! ✨
-          </h3>
-          <p className="mt-1 text-[11px] leading-relaxed text-white/90">
-            Ajak warung sekitar pakai QRIS DANA Bisnis, nikmati kupon <strong>Bebas Biaya Admin 10x</strong> sebulan (untuk top up, transfer bank, bayar listrik) &amp; Saldo s/d <strong>Rp40.000</strong>!
-          </p>
-          <div className="mt-3 flex items-center justify-between rounded-xl bg-white/15 px-3 py-2 text-[10px]">
-            <span>✓ Kode referral otomatis</span>
-            <span>✓ QRIS warung langsung aktif</span>
-          </div>
-          <button
-            onClick={() => go('nominate')}
-            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-amber-400 py-2.5 text-xs font-black text-amber-950 shadow-md active:bg-amber-300 transition"
-          >
-            Bantu Daftarkan Warung Sekarang →
-          </button>
-        </div>
-
+        <button
+          onClick={() => {
+            if (notify) notify('🎉 Top up e-money Rp101.500 berhasil diselesaikan!');
+            go('home');
+          }}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-dana-500 py-3.5 text-center text-sm font-extrabold text-white shadow-md shadow-dana-500/25 active:bg-dana-600 transition"
+        >
+          BAYAR RP101.500
+        </button>
         <button
           onClick={() => go('home')}
-          className="w-full rounded-xl border border-slate-300 bg-white py-2.5 text-xs font-bold text-slate-700 active:bg-slate-50"
+          className="mt-2 w-full text-center text-[11px] font-bold text-slate-400 hover:text-slate-600"
         >
-          Kembali ke Beranda
+          Batalkan Transaksi
         </button>
       </div>
     </Shell>

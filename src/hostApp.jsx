@@ -235,14 +235,14 @@ export function Home({ s, user, go, notify }) {
               icon: 'bolt',
               tone: 'bg-rose-50 text-rose-600',
               title: 'Beli Paket Internet (Kena Admin)',
-              desc: 'Simulasi bukti transaksi & entrypoint promo',
+              desc: 'Konfirmasi bayar & tombol coba bebas admin',
               nav: 'receipt_data',
             },
             {
               icon: 'wallet',
               tone: 'bg-amber-50 text-amber-600',
               title: 'Top Up E-Money (Kena Admin)',
-              desc: 'Simulasi bukti transaksi & entrypoint promo',
+              desc: 'Konfirmasi bayar & tombol coba bebas admin',
               nav: 'receipt_emoney',
             },
             {
