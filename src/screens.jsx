@@ -1172,8 +1172,8 @@ export function ReceiptData({ go, notify }) {
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-amber-400 text-white text-[10px] shadow-2xs">
                     💡
                   </span>
-                  <p className="text-[11px] leading-tight font-medium text-amber-900">
-                    Ingin gratis biaya admin? <span className="font-extrabold text-amber-950 underline decoration-amber-400">Ajak warung langganan</span>
+                  <p className="text-[11px] leading-tight font-bold text-amber-950">
+                    Ingin gratis biaya admin?
                   </p>
                 </div>
                 <span className="shrink-0 rounded bg-white px-2 py-0.5 text-[10px] font-black text-amber-900 shadow-2xs border border-amber-200">
@@ -1303,8 +1303,8 @@ export function ReceiptEmoney({ go, notify }) {
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-amber-400 text-white text-[10px] shadow-2xs">
                     💡
                   </span>
-                  <p className="text-[11px] leading-tight font-medium text-amber-900">
-                    Ingin gratis biaya admin? <span className="font-extrabold text-amber-950 underline decoration-amber-400">Ajak warung sekitarmu</span>
+                  <p className="text-[11px] leading-tight font-bold text-amber-950">
+                    Ingin gratis biaya admin?
                   </p>
                 </div>
                 <span className="shrink-0 rounded bg-white px-2 py-0.5 text-[10px] font-black text-amber-900 shadow-2xs border border-amber-200">
