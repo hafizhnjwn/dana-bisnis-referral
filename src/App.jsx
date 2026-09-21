@@ -355,13 +355,19 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 px-4 py-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-start lg:justify-center">
         <div className="flex-1 lg:max-w-sm">
-          <p className="text-xs font-bold tracking-widest text-dana-700">AFFILIATE DANA BISNIS · V2.1</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold tracking-widest text-dana-700">AFFILIATE DANA BISNIS · V2.1</p>
+            <button
+              onClick={actions.reset}
+              className="text-[10px] font-bold text-slate-400 hover:text-slate-600 transition"
+              title="Reset data prototipe"
+            >
+              Reset ↺
+            </button>
+          </div>
           <h1 className="mt-2 text-3xl leading-tight font-extrabold text-slate-900">
             Merchant Referral Program
           </h1>
-          <p className="mt-3 text-sm text-slate-600">
-            Prototipe interaktif yang mengembangkan fitur <strong>Affiliate DANA Bisnis</strong>: tetap memakai runtime Mini Program dan 4 tab bawah (Beranda, Referal, Reward, Inbox), dengan fitur <em>Bantu Daftarkan</em>, KYC Light tanpa syarat e-KTP di awal (Rp0), skema 2 tahap reward (Rian: Rp10k + Rp30k; Bu Ratna: Bebas transfer 10x + Bebas admin 10x; Pak Joko: Bebas tarik tunai 7x + Bebas admin 10x), Carousel Onboarding Guide layar penuh model AIDA, dan WhatsApp official engagement.
-          </p>
 
           {/* Section 1: Persona Picker */}
           <div className="mt-6 space-y-2">
@@ -494,34 +500,6 @@ export default function App() {
               ))}
             </div>
           </div>
-
-          {/* Section 4: Simulasi Event Backend */}
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
-            <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">Simulasi event backend</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <SimButton onClick={() => actions.testScan()} disabled={!s.merchant.issued}>
-                Scan uji Rp1.000
-              </SimButton>
-              <SimButton onClick={() => actions.receivePayment(12000)} disabled={!s.merchant.issued}>
-                Pelanggan bayar Rp12.000 (Tahap 1)
-              </SimButton>
-              <SimButton
-                onClick={() => actions.completeStage2()}
-                disabled={!s.merchant.issued || !s.referrals.find((r) => r.id === s.nominatedId && r.stage === 1)}
-              >
-                5 tx &amp; audit lolos (Tahap 2)
-              </SimButton>
-              <SimButton onClick={() => go('bizprofile')} disabled={!s.merchant.issued}>
-                Profil Bisnis Pak Joko
-              </SimButton>
-              <SimButton onClick={actions.reset}>Reset prototipe</SimButton>
-            </div>
-            <p className="mt-3 text-xs text-slate-500">
-              {s.merchant.issued
-                ? 'Sistem 2 Tahap: Transaksi pertama ≥ Rp10.000 mencairkan reward Tahap 1. Kemudian 5 transaksi unik & audit mencairkan reward Tahap 2.'
-                : 'Terbitkan QRIS dulu di peran Pak Joko agar simulasi transaksi & profil bisnis aktif.'}
-            </p>
-          </div>
         </div>
 
         <div className="flex flex-col items-center gap-3">
@@ -547,16 +525,6 @@ export default function App() {
   );
 }
 
-function SimButton({ children, ...props }) {
-  return (
-    <button
-      {...props}
-      className="rounded-full border border-dana-200 bg-dana-50 px-3 py-1.5 text-xs font-bold text-dana-700 transition hover:bg-dana-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
-    >
-      {children}
-    </button>
-  );
-}
 
 /** iPhone-style frame. The screen itself scrolls, the frame does not. */
 function Phone({
