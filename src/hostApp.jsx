@@ -708,7 +708,6 @@ export function BizDash({
   // Interactive Bubble Chat state (Step 9)
   const [showBubbleGuide, setShowBubbleGuide] = useState(Boolean(initialTour || isReferred));
   const [bubbleStep, setBubbleStep] = useState(0);
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   const storeName = isMerchant
     ? (user?.store || 'Martabak Bu Ratna')
@@ -1030,14 +1029,6 @@ export function BizDash({
                     ? '🎉 Pembayaran pertama Rp15.000 masuk! Kupon Gratis Tarik Tunai 2x aktif di tab Reward untuk ditarik ke rekening bank kapan saja.'
                     : 'Terima pembayaran QRIS pertama minimal Rp10.000 untuk mengaktifkan kupon bebas tarik tunai.'}
                 </p>
-                {!isPaid && receivePayment && (
-                  <button
-                    onClick={() => receivePayment(15000)}
-                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
-                  >
-                    + Tambah Transaksi Rp15.000
-                  </button>
-                )}
               </div>
 
               {/* Card Hadiah Tahap 2 */}
@@ -1073,15 +1064,6 @@ export function BizDash({
                     ? '🎉 Target 5 transaksi unik tercapai & stiker QRIS terverifikasi! Kupon 10x Bebas Biaya Admin aktif 30 hari.'
                     : 'Kumpulkan 5 transaksi unik dari pembeli berbeda & verifikasi foto QRIS terpajang di kasir warung.'}
                 </p>
-
-                {!stage2Done && completeStage2 && (
-                  <button
-                    onClick={() => completeStage2()}
-                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
-                  >
-                    + Tambah 5 Transaksi
-                  </button>
-                )}
               </div>
 
               {/* Buka Tab Reward Button */}
@@ -1195,21 +1177,6 @@ export function BizDash({
           </div>
         </div>
       </div>
-
-      {/* Modal Verifikasi Foto QRIS Kasir (Tahap 2) */}
-      <QrisCashierVerificationModal
-        isOpen={showVerifyModal}
-        onClose={() => setShowVerifyModal(false)}
-        onConfirm={() => {
-          if (completeStage2) completeStage2();
-          if (mark) {
-            mark('stage2_verify');
-            mark('stage2');
-          }
-          notify('🎉 Verifikasi meja kasir berhasil! Status tokomu resmi naik menjadi Merchant Juara.');
-        }}
-        merchant={{ name: storeName }}
-      />
 
       <HostNav active="Me" go={go} notify={notify} />
     </Shell>

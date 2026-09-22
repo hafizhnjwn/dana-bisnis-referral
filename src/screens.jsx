@@ -1748,10 +1748,9 @@ function Register({ s, go, issueQris, notify, inviter }) {
 /* -------------------------- instant QRIS + first-day checklist */
 
 function Qris(props) {
-  const { s, go, notify, testScan, receivePayment, completeStage2, inviter, mark } = props;
+  const { s, go, notify, inviter, mark } = props;
   const m = s.merchant;
   const isPaid = m.firstPayment >= 10000;
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   // Warung ini di daftar referal pengundang: dipakai untuk status Tahap 2.
   const myReferral = s.referrals?.find((r) => r.name === m.name || r.id === 0);
@@ -1763,21 +1762,16 @@ function Qris(props) {
       done: m.testScan,
       title: 'Uji coba scan QRIS toko',
       desc: 'Scan QRIS untuk mencoba pembayaran dan mendengarkan Nada DANA.',
-      action: { label: '🔊 Coba Scan Rp1.000 Sekarang', onClick: testScan },
     },
     {
       done: isPaid,
       title: 'Terima pembayaran pertama min. Rp10.000',
       desc: 'Terima pembayaran QRIS pertama dan aktifkan kupon Gratis Tarik Tunai 2x (Tahap 1).',
-      action: { label: '💳 Pelanggan Bayar Rp15.000', onClick: () => receivePayment(15000) },
     },
     {
       done: stage2Done,
       title: '5 transaksi unik & foto verifikasi kasir (Tahap 2)',
       desc: 'Setelah lolos audit validitas transaksi (1–14 hari), kupon Gratis Biaya Admin 10x aktif (Tahap 2).',
-      action: isPaid
-        ? { label: '🏆 Selesaikan 5 Transaksi & Foto Kasir', onClick: () => setShowVerifyModal(true) }
-        : { label: '🔒 Selesaikan pembayaran pertama dulu', onClick: () => notify('Terima pembayaran pertama minimal Rp10.000 dulu untuk lanjut ke Tahap 2.') },
     },
   ];
 
@@ -1807,54 +1801,6 @@ function Qris(props) {
           </div>
         </div>
 
-        {/* Step 7: Tambah Transaksi Pertama */}
-        {!isPaid && (
-          <div className="rounded-2xl border-2 border-emerald-500 bg-emerald-50 p-3.5 shadow-md text-slate-900">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-900">
-                Langkah 7: Transaksi Pertama
-              </span>
-              <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[9px] font-extrabold text-white">
-                Rp15.000
-              </span>
-            </div>
-            <p className="mt-1 text-[11px] leading-snug text-emerald-800">
-              Simulasikan transaksi pertama dari Rian untuk menambah Saldo DANA Bisnis Pak Joko &amp; mengaktifkan Reward Tahap 1.
-            </p>
-            <button
-              onClick={() => receivePayment(15000)}
-              className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-3 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
-            >
-              + Tambah Transaksi Rp15.000
-            </button>
-          </div>
-        )}
-
-        {/* Step 10: Tambah 5 Transaksi */}
-        {isPaid && !stage2Done && (
-          <div className="rounded-2xl border-2 border-emerald-500 bg-emerald-50 p-3.5 shadow-md text-slate-900">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-900">
-                Langkah 10: Target Transaksi
-              </span>
-              <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[9px] font-extrabold text-white">
-                5 Transaksi
-              </span>
-            </div>
-            <p className="mt-1 text-[11px] leading-snug text-emerald-800">
-              Simulasikan 5 transaksi pembeli unik untuk memenuhi syarat pencairan penuh Reward Tahap 2.
-            </p>
-            <button
-              onClick={() => {
-                if (completeStage2) completeStage2();
-              }}
-              className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-3 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
-            >
-              + Tambah 5 Transaksi
-            </button>
-          </div>
-        )}
-
         {/* Primary CTA to open complete business profile with step-by-step guidance */}
         <Btn
           variant="green"
@@ -1878,12 +1824,7 @@ function Qris(props) {
         )}
 
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-500">Checklist Hari Pertama</p>
-            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-bold text-amber-700">
-              MODE DEMO · aksi pelanggan disimulasikan
-            </span>
-          </div>
+          <p className="text-xs font-bold text-slate-500">Checklist Hari Pertama</p>
           <div className="mt-3 space-y-3">
             {steps.map((st, i) => (
               <div key={i} className="flex gap-3">
@@ -1899,14 +1840,6 @@ function Qris(props) {
                     {st.title}
                   </p>
                   <p className="text-[10px] leading-snug text-slate-500">{st.desc}</p>
-                  {!st.done && st.action && (
-                    <button
-                      onClick={st.action.onClick}
-                      className="mt-2 rounded-full bg-dana-50 px-3 py-1.5 text-[10px] font-bold text-dana-700 active:bg-dana-100"
-                    >
-                      {st.action.label}
-                    </button>
-                  )}
                 </div>
               </div>
             ))}
@@ -1923,20 +1856,6 @@ function Qris(props) {
           </p>
         </div>
       </div>
-
-      <QrisCashierVerificationModal
-        isOpen={showVerifyModal}
-        onClose={() => setShowVerifyModal(false)}
-        onConfirm={() => {
-          if (completeStage2) completeStage2();
-          if (mark) {
-            mark('stage2_verify');
-            mark('stage2');
-          }
-          notify('🎉 Verifikasi kasir berhasil! Kupon Bebas Biaya Admin 10x aktif.');
-        }}
-        merchant={{ name: m.name }}
-      />
     </Shell>
   );
 }

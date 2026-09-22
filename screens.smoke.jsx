@@ -92,16 +92,15 @@ if (!hubAfterGuide.includes('Bantu Daftarkan Warung Langganan')) {
   throw new Error('Hub content missing after the guide is dismissed');
 }
 
-// Regression: checklist QRIS harus punya tombol aksinya sendiri, karena tombol
-// simulasi global sudah dihapus dari luar handphone.
+// Regression: checklist QRIS menampilkan milestone status tanpa tombol trigger demo
 const jokoQris = {
   ...base,
   s: { ...base.s, role: 'referred', merchant: { ...base.s.merchant, testScan: false, firstPayment: 0 } },
   user: { id: 'referred', name: 'Joko Santoso', initial: 'J', store: 'Warung Nasi Pak Joko', balance: 0 },
 };
 const qrisHtml = renderToStaticMarkup(<screens.qris {...jokoQris} />);
-for (const label of ['Coba Scan Rp1.000', 'Pelanggan Bayar Rp15.000']) {
-  if (!qrisHtml.includes(label)) throw new Error(`QRIS checklist is missing its own action: ${label}`);
+for (const label of ['QRIS toko aktif', 'Terima pembayaran pertama min. Rp10.000']) {
+  if (!qrisHtml.includes(label)) throw new Error(`QRIS checklist is missing milestone: ${label}`);
 }
 console.log('guide dismissal & in-phone actions: ok');
 
