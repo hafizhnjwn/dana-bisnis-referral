@@ -1,14 +1,26 @@
-# DANA Bisnis Merchant Referral Program — Master Planning & Product Specification (v2.0)
+# DANA Bisnis Merchant Referral Program — Master Planning & Product Specification (v2.3)
 
 > **Role & Submission Context**: DANA Take-Home Challenge — **Product Developer Intern**  
 > **Topic**: Evolving the Existing "Affiliate DANA Bisnis" into an Adaptive Grassroots Referral Engine  
 > **Target Reviewer**: Fritz Nathaniel (`fritz.nathaniel@dana.id`) & Product / Design Review Panel at DANA Indonesia  
 > **Candidate**: Hafizh Najwan (`hafizhnjwn`)  
 > **Date**: September 2026  
+> **Document Status**: v2.3 — synced line-by-line with the shipped interactive prototype (reward values, screens, personas, and flows below are exactly what the prototype executes).  
 > **Deliverables**: 
 > 1. Comprehensive Master Planning & Strategy Specification (`planning.md`)
 > 2. 18-Slide Presentation Deck Blueprint in Polished English (`deck_content.md`)
-> 3. Interactive Web-Based Clickable Prototype with Smartphone Simulator (Root project `index.html`)
+> 3. Interactive Dual-Phone Web Prototype (root project, `npm run dev` → `index.html`)
+
+### Quick Reference: The Reward Scheme as Implemented
+
+| Stage & Trigger | Rian (Konsumen / C2B) | Bu Ratna (Mitra Bisnis / B2B) | Pak Joko (Warung Binaan) |
+| :--- | :--- | :--- | :--- |
+| **Stage 0** — Undangan terkirim, pendaftaran selesai, QRIS terbit | **Rp 0** | **Rp 0** | QRIS aktif (nilai utilitas, bukan reward) |
+| **Tahap 1** — Transaksi QRIS pertama ≥ Rp 10.000 | **Saldo DANA Rp 5.000** (auto-credit) | **Gratis Transfer Antar Bank 2x** | **Gratis Tarik Tunai 2x** + Nada DANA aktif |
+| **Tahap 2** — 5 transaksi unik + audit validitas (1–14 hari) | **Saldo DANA Rp 30.000** (total **Rp 35.000**) | **Gratis Biaya Admin 10x** | **Gratis Biaya Admin 10x** |
+| **Volume** — per 50 usaha aktif | **Rp 1.000.000** (Hadiah Pencapaian, dipertahankan) | — | — |
+
+Kupon kedaluwarsa 30 hari sejak diperoleh; saldo bersifat permanen. Tidak ada reward untuk pendaftaran saja — inilah pengunci anti-*ghost signup*.
 
 ---
 
@@ -70,13 +82,14 @@ Audited from the in-app onboarding guide (`IMG_8068.PNG`, `IMG_8069.PNG`):
 
 While the existing "Affiliate DANA Bisnis" is a strong program for online influencers, it faces severe structural barriers when applied to **organic, offline community referrals** (everyday consumers referring their neighborhood warung, or warung owners referring adjacent merchants):
 
-| Operational Friction in Existing DANA | Root Cause in Production | Strategic Breakthrough in v2.2 |
+| Operational Friction in Existing DANA | Root Cause in Production | Strategic Breakthrough in v2.3 (as implemented) |
 | :--- | :--- | :--- |
-| **1. The Cognitive Registration Wall** | Hesitant warung owners must upgrade to DANA Premium (KTP selfie), toggle to Bisnis, fill extensive forms, and **manually type the referral code**. | **"Bantu Daftarkan" (Assisted Pre-Registration) + KYC Light**: Referrer pre-fills 3 fields (Nama, Kategori, WhatsApp). Merchant verifies in 30s without KTP at start. QRIS issues in <5s. |
-| **2. The 5-Transaction "Cliff" & 14-Day Delay** | Referrers get **Rp 0** unless the warung hits 5 txs AND waits 1–14 days for audit. Stopping at 2 txs yields zero, causing massive drop-off. | **2-Stage Gated Reward Structure (Total Rp45.000)**:<br>• **Tahap 1**: Pendaftaran beres s/d QRIS terbit & transaksi pertama ≥ Rp10.000 = **Rp20.000 Saldo DANA**.<br>• **Tahap 2**: 5 transaksi unik & audit validitas DANA (1–14 hari) = **Rp25.000 Saldo DANA**. |
-| **3. Complex Manual Claim Friction** | Users often miss rewards hidden behind separate claim centers or expiring vouchers. | **Zero-Friction Auto-Credit**: No manual "Pusat Hadiah" claim button. Funds deposit automatically into DANA balance with high-visibility push & inbox notifications. |
-| **4. Lack of Guidance for Referred Merchants** | Once registered, micro-merchants often don't know what to do next, leading to dormant QRIS. | **Full-Screen Carousel Guide & Profil Bisnis Checklist**: Immersive full-screen carousel before entering affiliate hub, plus 5-step operational guidance inside merchant's profile. |
-| **5. Referral Code Confusion** | Multiple redundant sharing buttons (green WA button, QR invitation) clutter the interface. | **Clean 1-Tap Experience**: Clean referral code card with instant copy, prominent "Bantu Daftarkan" button, and B2B referrer benefits clearly listed on business profile. |
+| **1. The Cognitive Registration Wall** | Hesitant warung owners must upgrade to DANA Premium (KTP selfie), toggle to Bisnis, fill extensive forms, and **manually type the referral code**. | **"Bantu Daftarkan" (Assisted Pre-Registration) + KYC Light**: Referrer pre-fills 3 fields (Nama Usaha, Kategori, No. WhatsApp). Kode referral `HAF58W` tertanam di deep link, tidak pernah diketik ulang. Warung konfirmasi dalam 30 detik tanpa e-KTP di awal; QRIS terbit < 5 detik. |
+| **2. The 5-Transaction "Cliff" & 14-Day Delay** | Referrers get **Rp 0** unless the warung hits 5 txs AND waits 1–14 days for audit. Stopping at 2 txs yields zero, causing massive drop-off. | **2-Stage Gated Reward Structure**:<br>• **Tahap 1** (transaksi pertama ≥ Rp10.000) = **Rp5.000 Saldo DANA** untuk konsumen, atau **Gratis Transfer Antar Bank 2x** untuk mitra bisnis.<br>• **Tahap 2** (5 transaksi unik + audit 1–14 hari) = **Rp30.000 Saldo DANA** (total Rp35.000), atau **Gratis Biaya Admin 10x**.<br>Hadiah pertama kini cair di hari pertama warung berjualan, bukan di minggu ketiga. |
+| **3. Complex Manual Claim Friction** | Users often miss rewards hidden behind separate claim centers or expiring vouchers. | **Zero-Friction Auto-Credit**: Tidak ada tombol klaim. Saldo langsung masuk ke Pocket DANA dan kupon langsung aktif di tab **Reward**, disertai push notification + inbox receipt. Tab `Peringkat` produksi diganti tab **Reward** (Management Reward) tempat kupon bisa langsung dipakai beserta sisa kuotanya. |
+| **4. Lack of Guidance for Referred Merchants** | Once registered, micro-merchants often don't know what to do next, leading to dormant QRIS. | **Dua Panduan AIDA Layar Penuh + Checklist Operasional**: 4 slide untuk pengundang sebelum masuk hub, dan 4 slide khusus pemilik warung di Profil Bisnis, ditutup checklist operasional 4 langkah (pajang QRIS → transaksi pertama → Nada DANA → 5 transaksi). |
+| **5. Referral Code Confusion** | Multiple redundant sharing buttons (green WA button, QR invitation) clutter the interface. | **Clean 1-Tap Experience**: Kartu kode referral hanya menyisakan tombol salin; tombol WA/QR yang tumpang tindih dihapus. Aksi utama tunggal: "Bantu Daftarkan Warung Langganan". |
+| **6. Reward Terasa Abstrak bagi Pengguna Harian** | Komisi tunai Rp45.000 relevan untuk kreator, tapi tidak menjawab keluhan harian pengguna: biaya admin Rp1.500–Rp2.500 tiap bayar tagihan. | **Entry Point Kontekstual di Layar Bayar**: Pada layar *Konfirmasi Pembayaran* (beli paket data & top up e-money), tepat di baris **Biaya Admin**, muncul tombol halus **"Ingin gratis biaya admin? Coba →"** yang membuka program. Reward-nya pun sejenis: kupon bebas biaya admin. |
 
 ---
 

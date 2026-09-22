@@ -5,7 +5,7 @@
  * campaign material.
  */
 import { useState } from 'react';
-import { rupiah } from './rewards.js';
+import { MAX_PER_REFERRAL, PERSONA_REWARDS, rupiah, TIERS } from './rewards.js';
 import { HostNav, Icon, ServiceTile, Shell, StatusBar } from './ui.jsx';
 
 /* ------------------------------------------------------------ Home */
@@ -17,7 +17,7 @@ const HOME_SHORTCUTS = [
   { label: 'Pulsa & Data', icon: 'bolt', tone: 'rose', nav: 'receipt_data' },
   { label: 'DANA Deals', icon: 'ticket', tone: 'orange' },
   { label: 'Travel', icon: 'plane', tone: 'violet' },
-  { label: 'Affiliate DANA Bisnis', icon: 'users', tone: 'blue', nav: 'hub' },
+  { label: 'Referral Merchant', icon: 'users', tone: 'blue', nav: 'hub' },
   { label: 'View All', icon: 'more', tone: 'slate', nav: 'grid' },
 ];
 
@@ -36,12 +36,14 @@ function ProgramHeroBanner({ onClick }) {
       <p className="text-2xl leading-tight font-extrabold text-white">
         Ajak <span className="text-amber-300">Warung Langganan</span>
       </p>
-      <p className="text-2xl leading-tight font-extrabold text-amber-300">Dapat Saldo s/d Rp40.000</p>
+      <p className="text-2xl leading-tight font-extrabold text-amber-300">
+        Dapat Saldo s/d {rupiah(MAX_PER_REFERRAL)}
+      </p>
       <span className="mt-2 inline-block rounded-full border-2 border-amber-200 bg-amber-400 px-4 py-1.5 text-xs font-extrabold text-amber-900">
         AJAK SEKARANG
       </span>
       <p className="mt-2 text-[9px] text-white/70">
-        Tahap 1: Rp10.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp30.000 (5 tx &amp; validasi). S&amp;K berlaku.
+        Tahap 1: Rp5.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp30.000 (5 tx &amp; validasi). S&amp;K berlaku.
       </p>
       <span className="absolute right-4 bottom-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/15">
         <Icon name="store" className="h-10 w-10 text-white" />
@@ -64,7 +66,8 @@ function ProgramWideBanner({ onClick }) {
         Bantu daftarkan, 3 data saja.
       </p>
       <p className="mt-1 text-[10px] text-white/80">
-        Raih Saldo DANA hingga Rp40.000 per warung (Rp10.000 cair otomatis di transaksi pertama).
+        Raih Saldo DANA hingga {rupiah(MAX_PER_REFERRAL)} per warung ({rupiah(TIERS[0].amount)} cair otomatis di
+        transaksi pertama).
       </p>
       <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
         Bantu Daftarkan <Icon name="next" className="h-3 w-3" />
@@ -229,7 +232,7 @@ export function Home({ s, user, go, notify }) {
                 icon: 'users',
                 tone: 'bg-dana-50 text-dana-600',
                 title: 'Ajak Warung Langganan',
-                desc: 'Bantu daftarkan, dapat Saldo s/d Rp40.000',
+                desc: `Bantu daftarkan, dapat Saldo s/d ${rupiah(MAX_PER_REFERRAL)}`,
                 nav: 'hub',
               },
               {
@@ -308,7 +311,7 @@ const SERVICE_GROUPS = [
       { label: 'Tempo', icon: 'doc', tone: 'red' },
       { label: 'Patungan', icon: 'users', tone: 'dana' },
       { label: 'Jobseeker Partners', icon: 'person', tone: 'violet' },
-      { label: 'Affiliate DANA Bisnis', icon: 'users', tone: 'blue', nav: 'hub' },
+      { label: 'Referral Merchant', icon: 'users', tone: 'blue', nav: 'hub' },
       { label: 'iBlooming', icon: 'heart', tone: 'dana' },
       { label: 'Kirim Barang by VELO', icon: 'send', tone: 'amber' },
       { label: 'Edit Foto Jualan', icon: 'camera', tone: 'violet' },
@@ -430,19 +433,19 @@ export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
     },
     {
       tag: '[D] DESIRE · MANFAAT & BONUS KHUSUS',
-      title: 'Gratis Tarik Tunai 7x & Bebas Admin 10x',
-      subtitle: 'Tahap 1: Bebas tarik 7x + Bonus Modal Rp15.000. Tahap 2: Bebas biaya admin 10x sebulan!',
+      title: `${PERSONA_REWARDS.referred.tahap1.title} & ${PERSONA_REWARDS.referred.tahap2.title}`,
+      subtitle: `Tahap 1: ${PERSONA_REWARDS.referred.tahap1.benefit}. Tahap 2: ${PERSONA_REWARDS.referred.tahap2.benefit} sebulan!`,
       visual: (
         <div className="rounded-xl border border-white/20 bg-white/10 p-2.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center">
             <div className="rounded-lg border border-amber-300/40 bg-white/15 p-2">
               <p className="text-[9px] font-bold text-amber-200">TAHAP 1</p>
-              <p className="mt-0.5 text-sm font-black text-white">Gratis Tarik 7x</p>
-              <p className="text-[9px] text-emerald-300 font-bold">+ Modal Rp15.000</p>
+              <p className="mt-0.5 text-sm font-black text-white">{PERSONA_REWARDS.referred.tahap1.title}</p>
+              <p className="text-[9px] text-emerald-300 font-bold">{PERSONA_REWARDS.referred.tahap1.extra}</p>
             </div>
             <div className="rounded-lg border border-emerald-300/40 bg-white/15 p-2">
               <p className="text-[9px] font-bold text-emerald-200">TAHAP 2</p>
-              <p className="mt-0.5 text-sm font-black text-white">Bebas Admin 10x</p>
+              <p className="mt-0.5 text-sm font-black text-white">{PERSONA_REWARDS.referred.tahap2.title}</p>
               <p className="text-[9px] text-amber-300 font-bold">Listrik, Pulsa, Bank</p>
             </div>
           </div>
@@ -504,9 +507,8 @@ export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
               className="h-1 flex-1 overflow-hidden rounded-full bg-white/25 transition-all"
             >
               <div
-                className={`h-full transition-all duration-300 ${
-                  step === i ? 'w-full bg-white shadow-sm' : step > i ? 'w-full bg-white/90' : 'w-0'
-                }`}
+                className={`h-full transition-all duration-300 ${step === i ? 'w-full bg-white shadow-sm' : step > i ? 'w-full bg-white/90' : 'w-0'
+                  }`}
               />
             </button>
           ))}
@@ -566,23 +568,168 @@ export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
   );
 }
 
-export function BizDash({ s, user, go, notify, initialTour = false }) {
+/* -------------------------- Modal Verifikasi Foto QRIS Kasir (Tahap 2) */
+
+export function QrisCashierVerificationModal({ isOpen, onClose, onConfirm, merchant }) {
+  if (!isOpen) return null;
+  const storeName = merchant?.name || 'Warung Sembako Pak Joko';
+
+  return (
+    <div className="absolute inset-0 z-50 flex flex-col bg-slate-900/80 backdrop-blur-xs text-slate-900 animate-in fade-in duration-200 justify-end">
+      <div className="w-full rounded-t-[2.5rem] bg-white p-5 shadow-2xl max-h-[92%] overflow-y-auto no-scrollbar">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500 text-white text-base shadow-sm">
+              📸
+            </span>
+            <div>
+              <p className="text-xs font-extrabold text-slate-900">Verifikasi Meja Kasir (Tahap 2)</p>
+              <p className="text-[10px] text-slate-400">Bukti Fisik QRIS Terpasang di Meja Warung</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="rounded-full p-1 text-slate-400 hover:text-slate-600">
+            ✕
+          </button>
+        </div>
+
+        {/* Store badge */}
+        <div className="mt-3 flex items-center justify-between rounded-xl bg-slate-50 p-2.5">
+          <div>
+            <p className="text-xs font-bold text-slate-900">{storeName}</p>
+            <p className="text-[10px] text-slate-500">Jl. Tebet Barat Dalam VIII No.12, Jakarta Selatan</p>
+          </div>
+          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-black text-emerald-700">
+            GPS MATCH ✓
+          </span>
+        </div>
+
+        {/* Visual Photo Card of Warung Cashier */}
+        <div className="relative mt-3 overflow-hidden rounded-2xl border-2 border-slate-200 bg-slate-950 text-white shadow-md">
+          {/* Simulated Photo of Cashier Desk */}
+          <div className="relative h-44 w-full bg-gradient-to-t from-slate-900 via-amber-950/40 to-slate-800 p-3 flex flex-col justify-between">
+            <div className="flex items-center justify-between opacity-80">
+              <span className="text-[9px] font-mono tracking-widest text-slate-300">
+                AUDIT-MEJA-KASIR · 1080P HDR
+              </span>
+              <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" /> VALID
+              </span>
+            </div>
+
+            {/* Standee in foreground */}
+            <div className="mx-auto flex flex-col items-center">
+              <div className="relative rounded-xl border-2 border-white/80 bg-white p-2 text-slate-900 shadow-2xl">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-200 pb-0.5">
+                  <span className="text-[8px] font-black tracking-wider text-dana-600">QRIS DANA BISNIS</span>
+                  <span className="text-[7px] font-bold text-slate-400">ASPI</span>
+                </div>
+                <div className="my-1 flex h-12 w-12 items-center justify-center bg-slate-900 text-white font-mono text-[7px] rounded">
+                  [ QRIS ]
+                </div>
+                <p className="text-center text-[7px] font-extrabold text-slate-800 truncate max-w-[65px]">
+                  {storeName}
+                </p>
+                {/* Acrylic Stand Base */}
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-1.5 w-16 rounded-md bg-slate-300/90 border border-slate-400 shadow-xs" />
+              </div>
+            </div>
+
+            {/* Counter Desk Simulation */}
+            <div className="rounded-lg bg-amber-900/60 p-1.5 backdrop-blur-xs border border-white/15">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-black text-amber-200 uppercase">
+                  ✓ QRIS Terpajang di Meja Kasir
+                </span>
+                <span className="text-[8px] text-slate-300">Stempel Audit DANA Bisnis</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Verification Checklist */}
+        <div className="mt-3 space-y-1.5 rounded-xl bg-slate-50 p-2.5 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-600">1. Transaksi Pembeli Berbeda:</span>
+            <span className="font-extrabold text-emerald-600">5 / 5 Unik ✓</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-600">2. Standee QRIS Meja Kasir:</span>
+            <span className="font-extrabold text-emerald-600">Terpasang Rapi ✓</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-slate-600">3. Audit Anti-Fraud:</span>
+            <span className="font-extrabold text-emerald-600">Lolos Verifikasi ✓</span>
+          </div>
+        </div>
+
+        {/* Unlocked rewards summary */}
+        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 text-xs text-emerald-900">
+          <p className="font-bold">🎁 Reward Terbuka Pasca Konfirmasi:</p>
+          <p className="mt-0.5 text-[10px] text-emerald-800 leading-snug">
+            • <b>Pak Joko</b>: Kupon 10x Bebas Biaya Admin (Listrik PLN, Pulsa, TF Bank)<br />
+            • <b>Pengundang</b>: Saldo DANA Rp30.000 (Rian) / 10x Bebas Admin (Bu Ratna)
+          </p>
+        </div>
+
+        {/* Confirm Button */}
+        <div className="mt-4">
+          <button
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 py-3 text-sm font-extrabold text-white shadow-xl shadow-emerald-600/30 active:scale-98 transition"
+          >
+            Konfirmasi &amp; Klaim Reward Tahap 2 ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function BizDash({
+  s,
+  user,
+  go,
+  notify,
+  initialTour = false,
+  completeBizGuide,
+  completeStage2,
+  mark,
+  progress,
+}) {
   const isReferred = user?.id === 'referred' || s?.role === 'referred';
   const isMerchant = user?.id === 'merchant' || s?.role === 'merchant';
   const m = s?.merchant || {};
 
-  const [showAidaGuide, setShowAidaGuide] = useState(Boolean(initialTour));
+  // Interactive Bubble Chat state (Step 9)
+  const [showBubbleGuide, setShowBubbleGuide] = useState(Boolean(initialTour || isReferred));
+  const [bubbleStep, setBubbleStep] = useState(0);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
-  const storeName = isMerchant ? (user?.store || 'Martabak Bu Ratna') : (m.name || user?.store || 'Warung Nasi Pak Joko');
-  const storeCategory = isMerchant ? 'F&B / Martabak' : (m.category || 'F&B / Warung Makan');
-  const storeStatus = isMerchant ? 'NMID ID1023288765432 · Merchant aktif' : 'NMID ID1023288765432 · QRIS Aktif (KYC Light)';
+  const storeName = isMerchant
+    ? (user?.store || 'Martabak Bu Ratna')
+    : (m.name || user?.store || 'Warung Sembako Pak Joko');
+  const storeCategory = isMerchant ? 'F&B / Martabak' : (m.category || 'Toko Kelontong');
+
+  const myReferral = s?.referrals?.find(
+    (r) => r.name === storeName || r.name?.toLowerCase().includes('joko') || r.id === 0
+  );
+  const stage2Done = (myReferral?.stage ?? 0) >= 2 || Boolean(progress?.stage2_verify || progress?.stage2);
+  const storeStatus = isMerchant
+    ? 'NMID ID1023288765432 · Merchant aktif'
+    : (stage2Done
+      ? 'NMID ID1023288765432 · Merchant Juara'
+      : 'NMID ID1023288765432 · QRIS Aktif (KYC Light)');
 
   const isPaid = (m.firstPayment || 0) >= 10000;
   const salesAmount = isReferred
     ? (m.firstPayment || 0) + (m.testScan ? 1000 : 0)
     : 486000;
   const txCount = isReferred
-    ? (m.firstPayment > 0 ? (m.testScan ? 2 : 1) : (m.testScan ? 1 : 0))
+    ? (stage2Done ? 5 : (m.firstPayment > 0 ? (m.testScan ? 2 : 1) : (m.testScan ? 1 : 0)))
     : 12;
 
   const salesLabel = isReferred
@@ -590,10 +737,66 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
     : 'Penjualan hari ini · 12 transaksi';
 
   const mdrSubtext = isReferred
-    ? (m.firstPayment > 0
-        ? 'Potongan 0% · Saldo masuk utuh + bonus modal usaha Rp15.000'
-        : 'Potongan 0% · Menunggu transaksi pertama ≥Rp10k')
-    : 'Potongan 0% · saldo bisa langsung ditarik';
+    ? (isPaid
+      ? 'Kupon Tarik Tunai 2x aktif · Siap ditarik ke bank'
+      : 'Kupon Tarik Tunai 2x menanti transaksi pertama ≥Rp10k')
+    : 'Bebas biaya tarik tunai · saldo bisa langsung ditarik';
+
+  // 4 Quick Actions as requested by user
+  const BIZ_ACTIONS = [
+    {
+      id: 'qris',
+      label: 'Buka QRIS',
+      icon: 'qr',
+      tag: 'PEMBAYARAN DIGITAL',
+      title: '1. Buka & Tampilkan QRIS Toko',
+      desc: 'Tampilkan QRIS Nasional di layar HP atau unduh poster kasir (PDF A6) untuk dipajang. Pelanggan bisa scan dari semua bank & e-wallet tanpa biaya (0% MDR).',
+      action: () => (m.issued || isMerchant ? go('qris') : notify('QRIS toko siap menerima pembayaran digital.')),
+    },
+    {
+      id: 'wallet',
+      label: 'Tarik Saldo',
+      icon: 'wallet',
+      tag: 'PENCAIRAN DANA',
+      title: '2. Tarik Hasil Jualan ke Rekening Bank',
+      desc: 'Uang penjualan tersimpan aman di DANA Bisnis dan siap ditarik ke rekening bank (BCA, BRI, Mandiri) kapan saja. Gunakan kupon Bebas Biaya Tarik Tunai 2x (Tahap 1)!',
+      action: () => notify('Fitur penarikan saldo: gunakan kupon Bebas Biaya Tarik Tunai 2x ke rekening bank.'),
+    },
+    {
+      id: 'send',
+      label: 'Transfer',
+      icon: 'send',
+      tag: 'KULAKAN & SUPPLIER',
+      title: '3. Transfer ke Mitra / Supplier Sembako',
+      desc: 'Kirim dana belanja stok warung atau transfer ke sesama pengguna DANA & rekening bank supplier langsung dari saldo bisnis tanpa repot ke ATM.',
+      action: () => notify('Fitur transfer saldo usaha ke supplier grosir atau rekening lain.'),
+    },
+    {
+      id: 'bolt',
+      label: 'Pembayaran',
+      sublabel: 'Listrik, Pulsa',
+      icon: 'bolt',
+      tag: 'TAGIHAN OPERASIONAL',
+      title: '4. Pembayaran Listrik PLN, Pulsa & Air',
+      desc: 'Bayar kebutuhan operasional warung (token listrik PLN, pulsa kasir, PDAM). Gunakan kupon Bebas Biaya Admin 10x per bulan (Tahap 2)!',
+      action: () => notify('Fitur pembayaran: gunakan kupon Bebas Biaya Admin 10x untuk listrik warung & pulsa.'),
+    },
+  ];
+
+  const handleNextBubble = () => {
+    if (bubbleStep < BIZ_ACTIONS.length - 1) {
+      setBubbleStep(bubbleStep + 1);
+    } else {
+      handleFinishBubble();
+    }
+  };
+
+  const handleFinishBubble = () => {
+    setShowBubbleGuide(false);
+    if (mark) mark('biz_guide');
+    if (completeBizGuide) completeBizGuide();
+    notify('🎉 Panduan 4 aksi toko selesai! Fitur siap digunakan.');
+  };
 
   return (
     <Shell className="overflow-hidden">
@@ -621,37 +824,36 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
         </div>
 
         <div className="-mt-4 space-y-3 px-3 pb-6">
-          {/* Banner Panduan AIDA untuk Pak Joko */}
-          {isReferred && (
-            <button
-              onClick={() => setShowAidaGuide(true)}
-              className="flex w-full items-center justify-between rounded-xl border border-amber-300/80 bg-gradient-to-r from-amber-50 to-orange-50 px-3.5 py-2.5 text-left text-xs font-bold text-amber-950 shadow-xs active:scale-[0.99] transition"
-            >
-              <div className="flex items-center gap-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-400 text-white text-sm shadow-xs">
-                  ⭐
+          {/* Card Profil Toko & Penjualan (Highlighted Section) */}
+          <div className="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#1B4E9B] text-white shadow-sm">
+                  <Icon name="store" className="h-6 w-6" />
                 </span>
                 <div>
-                  <p className="text-[11px] font-black text-amber-950">Panduan Usaha QRIS Pak Joko (AIDA)</p>
-                  <p className="text-[9px] font-medium text-amber-800">4 Langkah Sukses Kelola Kasir Digital &amp; Bebas Biaya</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black text-slate-900">{storeName}</p>
+                    {stage2Done && (
+                      <span className="rounded-md bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-black text-amber-800 border border-amber-400">
+                        JUARA ⭐
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-slate-400">{storeStatus}</p>
                 </div>
               </div>
-              <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-extrabold text-amber-900 shadow-xs border border-amber-200">
-                Buka Panduan
-              </span>
-            </button>
-          )}
-
-          {/* Card Profil Toko & Penjualan */}
-          <div className="rounded-2xl bg-white p-4 shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1B4E9B] text-white">
-                <Icon name="store" />
-              </span>
-              <div className="flex-1">
-                <p className="text-sm font-bold text-slate-900">{storeName}</p>
-                <p className="text-[10px] text-slate-400">{storeStatus}</p>
-              </div>
+              {isReferred && (
+                <button
+                  onClick={() => {
+                    setShowBubbleGuide(!showBubbleGuide);
+                    if (!showBubbleGuide) setBubbleStep(0);
+                  }}
+                  className="rounded-full bg-dana-50 px-2.5 py-1 text-[10px] font-bold text-dana-700 active:bg-dana-100 border border-dana-200"
+                >
+                  {showBubbleGuide ? 'Tutup Guide' : '💬 Panduan Toko'}
+                </button>
+              )}
             </div>
 
             <div className="mt-3 rounded-xl bg-slate-50 p-3">
@@ -660,117 +862,229 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
               <p className="text-[10px] font-semibold text-emerald-600">{mdrSubtext}</p>
             </div>
 
-            <div className="mt-3 grid grid-cols-4 gap-2">
-              {[
-                ['qr', 'QRIS Saya', () => (m.issued || isMerchant ? go('qris') : notify('QRIS toko siap menerima pembayaran digital.'))],
-                ['wallet', 'Tarik Saldo', () => notify('Fitur penarikan saldo DANA Bisnis ke rekening bank.')],
-                ['camera', 'Edit Foto', () => notify('Fitur foto katalog & profil toko DANA Bisnis.')],
-                ['users', 'Rekan DANA', () => notify('Layanan komunitas Rekan DANA & tips UMKM.')],
-              ].map(([icon, label, act]) => (
-                <button
-                  key={label}
-                  onClick={act}
-                  className="flex flex-col items-center gap-1.5 transition-all"
-                >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-dana-50 text-dana-600">
-                    <Icon name={icon} className="h-4 w-4" />
-                  </span>
-                  <span className="text-center text-[9px] leading-tight font-semibold text-slate-600">{label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Step-by-Step Guidance Checklist for Pak Joko */}
-          {isReferred && (
-            <div className="rounded-2xl bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 border-b border-slate-100 pb-2.5">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-dana-50 text-dana-600">
-                  <Icon name="store" className="h-3.5 w-3.5" />
-                </span>
-                <p className="text-xs font-extrabold text-slate-900">Arahan Step-by-Step Langkah Awal Usaha</p>
-              </div>
-
-              <div className="mt-3 space-y-3">
-                {/* Step 1 */}
-                <div className="flex gap-2.5">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
-                    ✓
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-800">1. Cetak &amp; Pajang QRIS di Meja / Kasir</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
-                      QRIS Nasional Anda sudah terbit seketika. Pajang poster di meja kasir warung agar pembeli bisa scan dari bank atau e-wallet mana saja.
-                    </p>
-                    <div className="mt-1.5 flex gap-2">
-                      <button
-                        onClick={() => notify('Poster QRIS A6 siap cetak telah diunduh (PDF).')}
-                        className="rounded-lg bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 active:bg-slate-200"
-                      >
-                        Unduh Poster PDF
-                      </button>
-                      <button
-                        onClick={() => go('qris')}
-                        className="rounded-lg bg-dana-50 px-2 py-0.5 text-[10px] font-bold text-dana-700 active:bg-dana-100"
-                      >
-                        Buka QR Penuh
-                      </button>
-                    </div>
+            {/* Bubble Chat Guide - In-Profile Walkthrough for the 4 Actions */}
+            {showBubbleGuide && isReferred && (
+              <div className="relative mt-3 rounded-2xl border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 p-3.5 text-slate-900 shadow-lg shadow-amber-500/10 animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex items-center justify-between border-b border-amber-200/80 pb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-400 text-white text-[10px] shadow-xs">
+                      💬
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-950">
+                      Panduan Aksi · {storeName}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="rounded-full bg-amber-200 px-2 py-0.5 text-[9px] font-extrabold text-amber-950">
+                      {bubbleStep + 1} / {BIZ_ACTIONS.length}
+                    </span>
+                    <button
+                      onClick={handleFinishBubble}
+                      className="text-amber-800 hover:text-amber-950 text-xs font-bold p-0.5"
+                      aria-label="Tutup panduan"
+                    >
+                      ✕
+                    </button>
                   </div>
                 </div>
 
-                {/* Step 2 */}
-                <div className="flex gap-2.5">
-                  <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                      isPaid ? 'bg-emerald-500 text-white' : 'bg-amber-100 text-amber-700'
-                    }`}
-                  >
-                    {isPaid ? '✓' : '2'}
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-800">2. Terima Transaksi Pertama Min. Rp 10.000 (Tahap 1)</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
-                      Ajak pelanggan membayar pesanan via QRIS. Penjualan masuk utuh tanpa potongan MDR (0%) + bonus modal usaha Rp15.000 &amp; bebas biaya tarik tunai 7x.
+                <div className="mt-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded bg-amber-500 px-1.5 py-0.5 text-[8px] font-black text-white uppercase">
+                      {BIZ_ACTIONS[bubbleStep].tag}
+                    </span>
+                    <p className="text-xs font-black text-amber-950">
+                      {BIZ_ACTIONS[bubbleStep].title}
                     </p>
-                    {isPaid && (
-                      <div className="mt-1.5 rounded-lg bg-emerald-50 p-2 text-[10px] font-semibold text-emerald-700">
-                        🎉 Pembayaran {rupiah(m.firstPayment)} berhasil! Bonus Modal Usaha Rp15.000 &amp; Kupon Tarik Tunai 7x aktif di tab Reward.
-                      </div>
+                  </div>
+                  <p className="mt-1 text-[11px] leading-relaxed text-slate-700">
+                    {BIZ_ACTIONS[bubbleStep].desc}
+                  </p>
+                </div>
+
+                {/* Step navigation */}
+                <div className="mt-3 flex items-center justify-between gap-2 pt-2 border-t border-amber-200/60">
+                  <div className="flex gap-1">
+                    {BIZ_ACTIONS.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setBubbleStep(idx)}
+                        className={`h-1.5 rounded-full transition-all ${
+                          idx === bubbleStep ? 'w-4 bg-amber-500' : 'w-1.5 bg-amber-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    {bubbleStep > 0 && (
+                      <button
+                        onClick={() => setBubbleStep(bubbleStep - 1)}
+                        className="rounded-lg border border-amber-300 bg-white px-2.5 py-1 text-[10px] font-bold text-amber-900 active:bg-amber-50"
+                      >
+                        ← Kembali
+                      </button>
+                    )}
+                    {bubbleStep < BIZ_ACTIONS.length - 1 ? (
+                      <button
+                        onClick={handleNextBubble}
+                        className="rounded-lg bg-amber-500 px-3 py-1 text-[10px] font-extrabold text-white shadow-xs active:bg-amber-600"
+                      >
+                        Lanjut →
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleFinishBubble}
+                        className="rounded-lg bg-emerald-600 px-3 py-1 text-[10px] font-extrabold text-white shadow-xs active:bg-emerald-700"
+                      >
+                        Selesai Panduan ✓
+                      </button>
                     )}
                   </div>
                 </div>
 
-                {/* Step 3 */}
-                <div className="flex gap-2.5">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
-                    ✓
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-800">3. Suara Transaksi Nada DANA Aktif</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
-                      Aplikasi DANA otomatis bersuara menyebutkan nominal uang masuk tanpa perlu bolak-balik memeriksa layar HP.
-                    </p>
-                  </div>
-                </div>
+                {/* Downward pointer towards active action button */}
+                <div
+                  className="pointer-events-none absolute -bottom-2 h-4 w-4 rotate-45 border-r-2 border-b-2 border-amber-400 bg-orange-50 transition-all duration-300"
+                  style={{
+                    left: `calc(${bubbleStep * 25 + 12.5}% - 8px)`,
+                  }}
+                />
+              </div>
+            )}
 
-                {/* Step 4 */}
-                <div className="flex gap-2.5">
-                  <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                      m.testScan || isPaid ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
+            {/* 4 Quick Actions Grid */}
+            <div className="mt-3 grid grid-cols-4 gap-2">
+              {BIZ_ACTIONS.map((act, idx) => {
+                const isHighlighted = showBubbleGuide && isReferred && bubbleStep === idx;
+                return (
+                  <button
+                    key={act.id}
+                    onClick={() => {
+                      if (showBubbleGuide && isReferred) {
+                        setBubbleStep(idx);
+                      }
+                      act.action();
+                    }}
+                    className={`flex flex-col items-center gap-1.5 rounded-2xl p-2 transition-all ${
+                      isHighlighted
+                        ? 'ring-2 ring-amber-400 bg-amber-100/90 shadow-md scale-105 animate-pulse'
+                        : 'hover:bg-slate-50 active:scale-95'
                     }`}
                   >
-                    4
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-800">4. Kumpulkan 5 Transaksi Berbeda (Tahap 2)</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-slate-500">
-                      Rutin terima pembayaran QRIS dari 5 pelanggan berbeda untuk raih Bebas Biaya Admin 10x per bulan (bayar listrik warung, pulsa, &amp; transfer bank).
-                    </p>
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl transition ${
+                        isHighlighted ? 'bg-amber-400 text-amber-950 font-bold' : 'bg-dana-50 text-dana-600'
+                      }`}
+                    >
+                      <Icon name={act.icon} className="h-4 w-4" />
+                    </span>
+                    <span className="text-center text-[9px] leading-tight font-semibold text-slate-700">
+                      {act.label}
+                    </span>
+                    {act.sublabel && (
+                      <span className="text-center text-[8px] leading-none text-slate-400 -mt-1">
+                        {act.sublabel}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Hadiah Tahap 1 & Tahap 2 untuk Pak Joko */}
+          {isReferred && (
+            <div className="space-y-2.5">
+              {/* Card Hadiah Tahap 1 */}
+              <div
+                className={`rounded-2xl border p-3.5 transition ${
+                  isPaid ? 'border-emerald-300 bg-emerald-50/80' : 'border-slate-200 bg-white'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`flex h-7 w-7 items-center justify-center rounded-xl text-white text-xs font-bold ${
+                        isPaid ? 'bg-emerald-600 shadow-xs' : 'bg-slate-400'
+                      }`}
+                    >
+                      {isPaid ? '✓' : '1'}
+                    </span>
+                    <div>
+                      <p className="text-xs font-black text-slate-900">Hadiah Tahap 1: Bebas Tarik Tunai 2x</p>
+                      <p className="text-[10px] text-slate-500">Nilai: Rp9.000 (2 kupon x Rp4.500) · Bebas potongan</p>
+                    </div>
                   </div>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[9px] font-black ${
+                      isPaid ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-600'
+                    }`}
+                  >
+                    {isPaid ? 'AKTIF ✓' : 'TERKUNCI 🔒'}
+                  </span>
                 </div>
+                <p className="mt-2 text-[10px] leading-relaxed text-slate-600">
+                  {isPaid
+                    ? '🎉 Pembayaran pertama Rp15.000 masuk! Kupon Gratis Tarik Tunai 2x aktif di tab Reward untuk ditarik ke rekening bank kapan saja.'
+                    : 'Terima pembayaran QRIS pertama minimal Rp10.000 untuk mengaktifkan kupon bebas tarik tunai.'}
+                </p>
               </div>
+
+              {/* Card Hadiah Tahap 2 */}
+              <div
+                className={`rounded-2xl border p-3.5 transition ${
+                  stage2Done ? 'border-emerald-300 bg-emerald-50/80' : 'border-amber-200 bg-white'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`flex h-7 w-7 items-center justify-center rounded-xl text-white text-xs font-bold ${
+                        stage2Done ? 'bg-emerald-600 shadow-xs' : 'bg-amber-500 shadow-xs'
+                      }`}
+                    >
+                      {stage2Done ? '✓' : '2'}
+                    </span>
+                    <div>
+                      <p className="text-xs font-black text-slate-900">Hadiah Tahap 2: Bebas Biaya Admin 10x</p>
+                      <p className="text-[10px] text-slate-500">Nilai: Rp25.000 (10 kupon x Rp2.500) · Listrik, Pulsa &amp; TF</p>
+                    </div>
+                  </div>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[9px] font-black ${
+                      stage2Done ? 'bg-emerald-500 text-white' : 'bg-amber-100 text-amber-800'
+                    }`}
+                  >
+                    {stage2Done ? 'AKTIF ✓' : 'PROSES ⏳'}
+                  </span>
+                </div>
+                <p className="mt-2 text-[10px] leading-relaxed text-slate-600">
+                  {stage2Done
+                    ? '🎉 Target 5 transaksi unik tercapai & stiker QRIS terverifikasi! Kupon 10x Bebas Biaya Admin aktif 30 hari.'
+                    : 'Kumpulkan 5 transaksi unik dari pembeli berbeda & verifikasi foto QRIS terpajang di kasir warung.'}
+                </p>
+
+                {!stage2Done && (
+                  <button
+                    onClick={() => setShowVerifyModal(true)}
+                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 py-2.5 text-xs font-extrabold text-white shadow-md active:scale-98 transition"
+                  >
+                    📸 Verifikasi Foto QRIS Kasir &amp; Selesaikan Tahap 2
+                  </button>
+                )}
+              </div>
+
+              {/* Buka Tab Reward Button */}
+              <button
+                onClick={() => go('rewards')}
+                className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white p-3 text-xs font-bold text-slate-800 shadow-2xs active:bg-slate-50 transition"
+              >
+                <span className="flex items-center gap-2">
+                  <span>🎁</span> Lihat Rincian Kupon Saya di Tab Reward
+                </span>
+                <span className="text-dana-600 font-extrabold">Buka →</span>
+              </button>
             </div>
           )}
 
@@ -784,10 +1098,11 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
             <p className="mt-1 text-base leading-tight font-extrabold">
               Ajak rekan usaha sebelah,
               <br />
-              raih saldo hingga Rp40.000 per rekan
+              raih kupon bebas biaya operasional
             </p>
             <p className="mt-1 text-[10px] text-white/85">
-              Tahap 1: Rp10.000 (QRIS &amp; tx ≥Rp10k) · Tahap 2: Rp30.000 (5 tx &amp; validasi).
+              Tahap 1: {PERSONA_REWARDS.merchant.tahap1.title} (QRIS &amp; tx ≥Rp10k) · Tahap 2:{' '}
+              {PERSONA_REWARDS.merchant.tahap2.title} (5 tx &amp; validasi).
             </p>
             <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-dana-700">
               Buka Program <Icon name="next" className="h-3 w-3" />
@@ -812,9 +1127,12 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
                   <Icon name="wallet" className="h-4 w-4" />
                 </span>
                 <div className="flex-1">
-                  <p className="text-[11px] font-bold text-slate-900">Komisi Saldo DANA s/d Rp40.000 / Rekan</p>
+                  <p className="text-[11px] font-bold text-slate-900">
+                    Kupon Bebas Biaya 2 Tahap / Rekan Usaha
+                  </p>
                   <p className="text-[10px] leading-relaxed text-slate-500">
-                    Rp10.000 cair saat QRIS terbit &amp; transaksi pertama ≥Rp10k + Rp30.000 saat 5 transaksi unik lolos verifikasi.
+                    {PERSONA_REWARDS.merchant.tahap1.benefit} saat rekan terbit QRIS &amp; transaksi pertama ≥Rp10k,
+                    lalu {PERSONA_REWARDS.merchant.tahap2.benefit} saat 5 transaksi unik lolos verifikasi.
                   </p>
                 </div>
               </div>
@@ -850,15 +1168,15 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
             <p className="text-xs font-bold text-slate-500">Kesehatan Merchant</p>
             {(isReferred
               ? [
-                  ['Pembayaran QRIS 30 hari', `${txCount} transaksi`],
-                  ['Pelanggan unik', `${txCount > 0 ? 1 : 0} pembayar`],
-                  ['Status program mitra', isPaid ? 'Tahap 1 Selesai' : 'Warung Baru (KYC Light)'],
-                ]
+                ['Pembayaran QRIS 30 hari', `${txCount} transaksi`],
+                ['Pelanggan unik', `${txCount > 0 ? (stage2Done ? 5 : 1) : 0} pembayar`],
+                ['Status program mitra', stage2Done ? 'Merchant Juara' : (isPaid ? 'Tahap 1 Selesai' : 'Warung Baru (KYC Light)')],
+              ]
               : [
-                  ['Pembayaran QRIS 30 hari', '312 transaksi'],
-                  ['Pelanggan unik', '148 pembayar'],
-                  ['Status program mitra', 'Merchant Juara'],
-                ]
+                ['Pembayaran QRIS 30 hari', '312 transaksi'],
+                ['Pelanggan unik', '148 pembayar'],
+                ['Status program mitra', 'Merchant Juara'],
+              ]
             ).map(([k, v]) => (
               <div key={k} className="mt-3 flex justify-between text-xs">
                 <span className="text-slate-500">{k}</span>
@@ -869,19 +1187,20 @@ export function BizDash({ s, user, go, notify, initialTour = false }) {
         </div>
       </div>
 
-      {/* Modal Panduan Usaha QRIS Pak Joko (AIDA) */}
-      {showAidaGuide && (
-        <div className="absolute inset-0 z-50 overflow-hidden">
-          <MerchantAidaGuide
-            isOpen={showAidaGuide}
-            onClose={() => setShowAidaGuide(false)}
-            onAction={() => {
-              setShowAidaGuide(false);
-              go('qris');
-            }}
-          />
-        </div>
-      )}
+      {/* Modal Verifikasi Foto QRIS Kasir (Tahap 2) */}
+      <QrisCashierVerificationModal
+        isOpen={showVerifyModal}
+        onClose={() => setShowVerifyModal(false)}
+        onConfirm={() => {
+          if (completeStage2) completeStage2();
+          if (mark) {
+            mark('stage2_verify');
+            mark('stage2');
+          }
+          notify('🎉 Verifikasi meja kasir berhasil! Status tokomu resmi naik menjadi Merchant Juara.');
+        }}
+        merchant={{ name: storeName }}
+      />
 
       <HostNav active="Me" go={go} notify={notify} />
     </Shell>

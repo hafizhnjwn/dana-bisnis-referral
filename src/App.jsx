@@ -1,5 +1,14 @@
 import { useMemo, useRef, useState } from 'react';
-import { activeMerchants, claimAll, claimBreakdown, paidTotal, rupiah } from './rewards.js';
+import {
+  activeMerchants,
+  claimAll,
+  claimBreakdown,
+  MAX_PER_REFERRAL,
+  paidTotal,
+  PERSONA_REWARDS,
+  rupiah,
+  TIERS,
+} from './rewards.js';
 import screens, { WHATSAPP_NOTIFICATIONS, WhatsAppChatModal } from './screens.jsx';
 import { Icon } from './ui.jsx';
 
@@ -34,7 +43,7 @@ const ROLES = [
     entry: 'landing',
     name: 'Joko Santoso',
     initial: 'J',
-    store: 'Warung Nasi Pak Joko',
+    store: 'Warung Sembako Pak Joko',
     balance: 0,
   },
 ];
@@ -47,7 +56,7 @@ const SCENARIOS = [
     title: 'Skenario 1: Rian (Konsumen) ➔ Pak Joko (Warung)',
     tag: 'Track A · Sahabat Warung (C2B)',
     badgeColor: 'bg-dana-500 text-white',
-    summary: 'Rian bantu daftarkan warung nasi langganan. Reward: Saldo DANA Rp10k (Tahap 1) + Rp30k (Tahap 2).',
+    summary: `Rian bantu daftarkan warung sembako langganan. Reward: ${PERSONA_REWARDS.consumer.tahap1.title} (Tahap 1) + ${PERSONA_REWARDS.consumer.tahap2.title} (Tahap 2).`,
     role1: 'consumer',
     role2: 'referred',
   },
@@ -56,17 +65,101 @@ const SCENARIOS = [
     title: 'Skenario 2: Bu Ratna (Merchant) ➔ Pak Joko (Warung)',
     tag: 'Track B · Mitra Bisnis (B2B)',
     badgeColor: 'bg-emerald-600 text-white',
-    summary: 'Bu Ratna (Martabak Bu Ratna) mengajak warung sebelah. Reward: Bebas Transfer 10x (Tahap 1) + Bebas Admin 10x (Tahap 2).',
+    summary: `Bu Ratna (Martabak Bu Ratna) mengajak warung sebelah. Reward: ${PERSONA_REWARDS.merchant.tahap1.title} (Tahap 1) + ${PERSONA_REWARDS.merchant.tahap2.title} (Tahap 2).`,
     role1: 'merchant',
     role2: 'referred',
   },
 ];
 
+/**
+ * 10 Langkah alur skenario end-to-end yang dijalankan langsung di kedua handphone.
+ * Setiap langkah ditandai selesai oleh aksi nyata di layar HP.
+ */
+const stepDefs = (scenario, role1) => {
+  const r = PERSONA_REWARDS[role1];
+  const who1 = scenario === 'rian_joko' ? 'Rian' : 'Bu Ratna';
+  return [
+    {
+      id: 'open_hub',
+      stepNum: 1,
+      phone: 1,
+      title: `${who1} membuka banner program`,
+      hint:
+        scenario === 'rian_joko'
+          ? `Ketuk banner "Ajak Warung Langganan, Dapat Saldo s/d ${rupiah(MAX_PER_REFERRAL)}" di Beranda DANA.`
+          : 'Ketuk banner "Ajak Rekan Usaha" di dashboard DANA Bisnis.',
+    },
+    {
+      id: 'guide_done',
+      stepNum: 2,
+      phone: 1,
+      title: 'Menyelesaikan panduan referal program',
+      hint: 'Di panduan awal, baca sampai slide 4 lalu tekan tombol untuk masuk ke beranda program referal.',
+    },
+    {
+      id: 'open_nominate',
+      stepNum: 3,
+      phone: 1,
+      title: 'Klik banner ajak warung',
+      hint: `Ketuk tombol "${scenario === 'rian_joko' ? 'Bantu Daftarkan Warung Langganan' : 'Bantu Daftarkan Rekan Usaha'}" untuk buka form pendaftaran.`,
+    },
+    {
+      id: 'invite_sent',
+      stepNum: 4,
+      phone: 1,
+      title: 'Mengajak warung Pak Joko dengan isi form',
+      hint: 'Lengkapi formulir (Nama Warung, Kategori, No WA) lalu ketuk "Kirim Undangan Resmi DANA Bisnis".',
+    },
+    {
+      id: 'wa_notif',
+      stepNum: 5,
+      phone: 2,
+      title: 'Pak Joko menerima notifikasi WhatsApp',
+      hint: 'Notifikasi undangan pendaftaran dari pengundang masuk secara instan di layar HP 2.',
+    },
+    {
+      id: 'open_invite',
+      stepNum: 6,
+      phone: 2,
+      title: 'Pak Joko buka link WhatsApp & daftar toko',
+      hint: 'Buka notifikasi WhatsApp di HP 2, ketuk link pendaftaran, lalu tekan "Terbitkan QRIS Saya Sekarang".',
+    },
+    {
+      id: 'stage1_tx',
+      stepNum: 7,
+      phone: 2,
+      title: 'Transaksi pertama ≥Rp10.000 dari Rian (Tahap 1)',
+      hint: 'Di checklist QRIS, tekan "💳 Pelanggan Bayar Rp15.000". Saldo bertambah & reward Tahap 1 aktif!',
+    },
+    {
+      id: 'open_bizprofile',
+      stepNum: 8,
+      phone: 2,
+      title: 'Tekan "Buka Profil DANA Bisnis & Panduan Toko"',
+      hint: 'Tekan tombol hijau "Buka Profil DANA Bisnis & Panduan Toko" di bawah layar QRIS.',
+    },
+    {
+      id: 'biz_guide',
+      stepNum: 9,
+      phone: 2,
+      title: 'Panduan aksi fitur DANA Bisnis Pak Joko',
+      hint: 'Lihat bubble chat yang menyorot 4 aksi: Buka QRIS, Tarik Saldo, Transfer, & Pembayaran.',
+    },
+    {
+      id: 'stage2_verify',
+      stepNum: 10,
+      phone: 2,
+      title: '5 transaksi unik & foto verifikasi kasir (Tahap 2)',
+      hint: 'Tekan "Verifikasi Foto QRIS Kasir & Selesaikan Tahap 2" untuk mencairkan reward penuh Tahap 2!',
+    },
+  ];
+};
+
 const SEED_REFERRALS = [
   {
     id: 0,
-    name: 'Warung Nasi Pak Joko',
-    category: 'F&B / Warung Makan',
+    name: 'Warung Sembako Pak Joko',
+    category: 'Toko Kelontong',
     phone: '0812••••4409',
     stage: 0,
     claimedStage: 0,
@@ -153,21 +246,27 @@ export default function App() {
   // Scenario state: 'rian_joko' | 'ratna_joko'
   const [scenario, setScenario] = useState('rian_joko');
 
+  // Progres skenario: diisi oleh aksi nyata di kedua handphone.
+  const [progress, setProgress] = useState({});
+  const mark = (id) => setProgress((p) => (p[id] ? p : { ...p, [id]: true }));
+
+  // Penanda UI yang dikirim layar lewat patch(), mis. hasSeenAffiliateGuide.
+  const [flags, setFlags] = useState({});
+
   // Shared application state
   const [referrals, setReferrals] = useState(() => SEED_REFERRALS.map((r) => ({ ...r })));
   const [balances, setBalances] = useState(() => Object.fromEntries(ROLES.map((r) => [r.id, r.balance])));
   const [rewardQuotas, setRewardQuotas] = useState({
-    merchant: { transfer: 10, admin: 10 },
-    referred: { withdraw: 7, admin: 10 },
+    merchant: { transfer: 2, admin: 10 },
+    referred: { withdraw: 2, admin: 10 },
   });
   const [merchant, setMerchant] = useState({
-    name: 'Warung Nasi Pak Joko',
-    category: 'F&B / Warung Makan',
-    location: 'Jakarta Selatan',
+    name: 'Warung Sembako Pak Joko',
+    category: 'Toko Kelontong',
+    location: 'Jl. Tebet Barat Dalam VIII No.12, Jakarta Selatan',
     issued: false,
     testScan: false,
     firstPayment: 0,
-    modalBonus: 0,
   });
 
   // Phone 1 (Pengundang: Rian / Bu Ratna) State
@@ -181,7 +280,8 @@ export default function App() {
   const soundboxTimer1 = useRef(0);
 
   // Phone 2 (Penerima: Pak Joko) State
-  const [screen2, setScreen2] = useState('landing');
+  // HP 2 menunggu undangan dulu; halaman pendaftaran baru terbuka dari notifikasi WhatsApp.
+  const [screen2, setScreen2] = useState('waiting');
   const [toast2, setToast2] = useState(null);
   const [soundbox2, setSoundbox2] = useState(null);
   const [whatsappPush2, setWhatsappPush2] = useState(null);
@@ -218,19 +318,16 @@ export default function App() {
   const user1 = { ...roleOf(activeRole1), balance: balances[activeRole1] };
   const user2 = { ...roleOf('referred'), balance: balances.referred, store: merchant.name };
 
+  /** Ganti skenario = mulai alur dari langkah 1 lagi, supaya progres tidak campur. */
   const handleSwitchScenario = (scId) => {
+    if (scId === scenario) return;
     setScenario(scId);
-    setScreen1(scId === 'rian_joko' ? 'home' : 'bizdash');
-    setScreen2(merchant.issued ? 'bizdash' : 'landing');
-    setWhatsappPush1(null);
-    setWhatsappPush2(null);
-    setActiveWhatsAppChat1(null);
-    setActiveWhatsAppChat2(null);
+    resetDemo(scId);
     const label = scId === 'rian_joko' ? 'Skenario 1 (Rian ➔ Pak Joko)' : 'Skenario 2 (Bu Ratna ➔ Pak Joko)';
-    notify1(`Beralih ke ${label}`);
+    notify1(`Beralih ke ${label}. Ikuti langkah 1 di bawah.`);
   };
 
-  const handleReset = () => {
+  const resetDemo = (sc = scenario) => {
     clearTimeout(toastTimer1.current);
     clearTimeout(toastTimer2.current);
     clearTimeout(soundboxTimer1.current);
@@ -243,24 +340,44 @@ export default function App() {
     setWhatsappPush2(null);
     setActiveWhatsAppChat1(null);
     setActiveWhatsAppChat2(null);
+    setProgress({});
+    setFlags({});
     setReferrals(SEED_REFERRALS.map((r) => ({ ...r })));
     setBalances(Object.fromEntries(ROLES.map((r) => [r.id, r.balance])));
     setRewardQuotas({
-      merchant: { transfer: 10, admin: 10 },
-      referred: { withdraw: 7, admin: 10 },
+      merchant: { transfer: 2, admin: 10 },
+      referred: { withdraw: 2, admin: 10 },
     });
     setMerchant({
-      name: 'Warung Nasi Pak Joko',
-      category: 'F&B / Warung Makan',
-      location: 'Jakarta Selatan',
+      name: 'Warung Sembako Pak Joko',
+      category: 'Toko Kelontong',
+      location: 'Jl. Tebet Barat Dalam VIII No.12, Jakarta Selatan',
       issued: false,
       testScan: false,
       firstPayment: 0,
-      modalBonus: 0,
     });
-    setScreen1(scenario === 'rian_joko' ? 'home' : 'bizdash');
-    setScreen2('landing');
-    notify1('Data prototipe berhasil di-reset.');
+    setScreen1(sc === 'rian_joko' ? 'home' : 'bizdash');
+    setScreen2('waiting');
+  };
+
+  const handleReset = () => {
+    resetDemo();
+    notify1('Data prototipe berhasil di-reset. Mulai lagi dari langkah 1.');
+  };
+
+  /** Navigasi HP 1 sekaligus penanda langkah skenario. */
+  const go1 = (scr) => {
+    setScreen1(scr);
+    if (scr === 'hub') mark('open_hub');
+    if (scr === 'nominate') mark('open_nominate');
+  };
+
+  /** Navigasi HP 2 sekaligus penanda langkah skenario. */
+  const go2 = (scr) => {
+    setScreen2(scr);
+    // Membuka halaman undangan setelah undangan dikirim = Pak Joko mengklik link WhatsApp.
+    if ((scr === 'landing' || scr === 'register') && progress.invite_sent) mark('open_invite');
+    if (scr === 'bizprofile' || scr === 'bizdash') mark('open_bizprofile');
   };
 
   // Cross-phone interactive actions
@@ -268,21 +385,20 @@ export default function App() {
     /** Phone 1: Referrer pre-fills 3 fields -> sends WhatsApp invitation to Phone 2 */
     nominate: ({ name, category, phone }) => {
       const id = Date.now();
-      const warungName = name || 'Warung Nasi Pak Joko';
+      const warungName = name || 'Warung Sembako Pak Joko';
       setMerchant((m) => ({
         ...m,
         name: warungName,
-        category: category || 'F&B / Warung Makan',
+        category: category || 'Toko Kelontong',
         issued: false,
         testScan: false,
         firstPayment: 0,
-        modalBonus: 0,
       }));
       setReferrals((prev) => [
         {
           id,
           name: warungName,
-          category: category || 'F&B / Warung Makan',
+          category: category || 'Toko Kelontong',
           phone: phone || '0812••••4409',
           stage: 0,
           claimedStage: 0,
@@ -292,6 +408,8 @@ export default function App() {
         ...prev.filter((r) => r.id !== 0),
       ]);
       setScreen1('tracker');
+      mark('invite_sent');
+      mark('wa_notif'); // Pak Joko menerima notifikasi WhatsApp secara instan
       notify1(`Undangan pendaftaran terkirim ke ${warungName} via WhatsApp.`);
 
       // Trigger instant real-time WhatsApp invitation on Phone 2 (Pak Joko)
@@ -330,6 +448,8 @@ export default function App() {
         )
       );
       setScreen2('qris');
+      mark('open_invite');
+      mark('qris_issued');
       notify2('QRIS Nasional aktif seketika (KYC Light Rp0). Siap menerima pembayaran digital!');
       notify1(`🎉 ${storeName} berhasil menerbitkan QRIS! Menunggu transaksi pertama.`);
     },
@@ -337,19 +457,25 @@ export default function App() {
     testScan: () => {
       setMerchant((m) => ({ ...m, testScan: true }));
       announce2(1000);
+      mark('test_scan');
       notify2('Transaksi uji Rp1.000 masuk. Nada DANA berbunyi!');
     },
 
     /** Pelanggan bayar ke QRIS Pak Joko: Tahap 1 Reward aktif */
     receivePayment: (amount = 15000) => {
       const qualifies = amount >= 10000;
-      setMerchant((m) => ({ ...m, firstPayment: amount, modalBonus: 15000 }));
+      setMerchant((m) => ({ ...m, firstPayment: amount }));
       announce2(amount);
+      if (qualifies) {
+        mark('stage1_tx');
+        mark('stage1');
+      }
 
+      // Pak Joko menerima uang penjualannya di Saldo DANA Bisnis
       setBalances((prev) => ({
         ...prev,
-        referred: prev.referred + amount + (qualifies ? 15000 : 0),
-        consumer: prev.consumer + (scenario === 'rian_joko' && qualifies ? 10000 : 0),
+        referred: prev.referred + amount,
+        consumer: prev.consumer + (scenario === 'rian_joko' && qualifies ? TIERS[0].amount : 0),
       }));
 
       setReferrals((prev) =>
@@ -360,20 +486,22 @@ export default function App() {
         )
       );
 
-      notify2(`🎉 Pembayaran ${rupiah(amount)} diterima! Bonus Modal Usaha Rp15.000 masuk ke saldo tokomu.`);
+      notify2(`🎉 Pembayaran ${rupiah(amount)} diterima! Kupon Gratis Tarik Tunai 2x aktif di tab Reward.`);
       if (scenario === 'rian_joko') {
-        notify1(`🎉 Warung Pak Joko transaksi pertama! Reward Tahap 1 (Rp10.000) cair ke Saldo DANA.`);
+        notify1(`🎉 Warung Pak Joko transaksi pertama! Reward Tahap 1 (${rupiah(TIERS[0].amount)}) cair ke Saldo DANA.`);
       } else {
-        notify1(`🎉 Warung Pak Joko transaksi pertama! Kupon Gratis Transfer 10x aktif di tab Reward.`);
+        notify1(`🎉 Warung Pak Joko transaksi pertama! Kupon Gratis Transfer 2x aktif di tab Reward.`);
       }
     },
 
     /** Tahap 2: 5 transaksi unik tercapai & lolos audit validasi */
     completeStage2: () => {
       playChime();
+      mark('stage2_verify');
+      mark('stage2');
       setBalances((prev) => ({
         ...prev,
-        consumer: prev.consumer + (scenario === 'rian_joko' ? 30000 : 0),
+        consumer: prev.consumer + (scenario === 'rian_joko' ? TIERS[1].amount : 0),
       }));
 
       setReferrals((prev) =>
@@ -384,23 +512,17 @@ export default function App() {
         )
       );
 
-      notify2('🎉 Tokomu resmi memenuhi target 5 transaksi unik! Status toko naik menjadi Merchant Juara.');
+      notify2('🎉 Tokomu resmi memenuhi target 5 transaksi unik & foto kasir terverifikasi! Status toko naik menjadi Merchant Juara.');
       if (scenario === 'rian_joko') {
-        notify1(`🎉 Target 5 transaksi warung binaan tercapai! Reward Tahap 2 (Rp30.000) cair ke Saldo DANA.`);
+        notify1(`🎉 Target 5 transaksi warung binaan tercapai! Reward Tahap 2 (${rupiah(TIERS[1].amount)}) cair ke Saldo DANA.`);
       } else {
         notify1(`🎉 Target 5 transaksi warung binaan tercapai! Kupon Bebas Biaya Admin 10x aktif di tab Reward.`);
       }
     },
 
-    triggerWhatsApp: (id) => {
-      const notif = WHATSAPP_NOTIFICATIONS.find((n) => n.id === id) || WHATSAPP_NOTIFICATIONS[0];
-      if (notif.roleTarget === 'referred') {
-        setWhatsappPush2(notif);
-        notify2('💬 Notifikasi WhatsApp DANA Bisnis masuk ke HP Pak Joko.');
-      } else {
-        setWhatsappPush1(notif);
-        notify1('💬 Notifikasi WhatsApp DANA Bisnis masuk ke HP Pengundang.');
-      }
+    completeBizGuide: () => {
+      mark('biz_guide');
+      notify2('🎉 Panduan aksi DANA Bisnis selesai dipelajari!');
     },
 
     claim1: () => {
@@ -417,24 +539,44 @@ export default function App() {
     },
   };
 
+  /**
+   * patch() dari layar. Kunci yang tidak dikenal TIDAK dibuang lagi — disimpan di
+   * `flags` — supaya penanda UI seperti hasSeenAffiliateGuide benar-benar tersimpan.
+   */
+  const applyPatch = (fnOrObj) => {
+    const obj =
+      typeof fnOrObj === 'function' ? fnOrObj({ referrals, rewardQuotas, merchant, balances, ...flags }) : fnOrObj;
+    if (!obj) return;
+    const { referrals: r, rewardQuotas: q, balances: b, merchant: m, ...rest } = obj;
+    if (r) setReferrals(r);
+    if (q) setRewardQuotas(q);
+    if (b) setBalances(b);
+    if (m) setMerchant(m);
+    if (Object.keys(rest).length) {
+      setFlags((prev) => ({ ...prev, ...rest }));
+      if (rest.hasSeenAffiliateGuide) mark('guide_done');
+      if (rest.hasSeenBizGuide) mark('biz_guide');
+    }
+  };
+
+  /** Nudge WhatsApp dari tracker: kirim pesan pendampingan ke HP warung. */
+  const makeNudge = (notify) => (referral) => {
+    const waId =
+      referral.stage === 0
+        ? 'wa-invite-joko'
+        : referral.tx >= 1
+          ? 'wa-routine-joko'
+          : 'wa-payment-joko';
+    const notif = WHATSAPP_NOTIFICATIONS.find((n) => n.id === waId) ?? WHATSAPP_NOTIFICATIONS[0];
+    setWhatsappPush2({ ...notif, sender: user1.name });
+    notify(`Pesan pendampingan untuk ${referral.name} terkirim via WhatsApp.`);
+  };
+
   const sharedCtx = {
     referrals,
     rewardQuotas,
     merchant,
-    patch: (fnOrObj) => {
-      if (typeof fnOrObj === 'function') {
-        const res = fnOrObj({ referrals, rewardQuotas, merchant, balances });
-        if (res.rewardQuotas) setRewardQuotas(res.rewardQuotas);
-        if (res.referrals) setReferrals(res.referrals);
-        if (res.balances) setBalances(res.balances);
-        if (res.merchant) setMerchant(res.merchant);
-      } else {
-        if (fnOrObj.rewardQuotas) setRewardQuotas(fnOrObj.rewardQuotas);
-        if (fnOrObj.referrals) setReferrals(fnOrObj.referrals);
-        if (fnOrObj.balances) setBalances(fnOrObj.balances);
-        if (fnOrObj.merchant) setMerchant(fnOrObj.merchant);
-      }
-    },
+    patch: applyPatch,
   };
 
   // Phone 1 context
@@ -447,17 +589,22 @@ export default function App() {
       rewardQuotas,
       merchant,
       balances,
+      ...flags,
     },
     user: user1,
-    go: (scr) => setScreen1(scr),
+    go: go1,
     notify: notify1,
     announce: announce1,
     nominate: actions.nominate,
     claim: actions.claim1,
+    nudge: makeNudge(notify1),
+    openWhatsApp: (wa) => setActiveWhatsAppChat1(wa),
     inviter: user1.name,
     earned: paidTotal(referrals),
     activeCount: activeMerchants(referrals),
     claimable: claimBreakdown(referrals),
+    mark,
+    progress,
   };
 
   // Phone 2 context
@@ -470,23 +617,34 @@ export default function App() {
       rewardQuotas,
       merchant,
       balances,
+      ...flags,
     },
     user: user2,
-    go: (scr) => setScreen2(scr),
+    go: go2,
     notify: notify2,
     announce: announce2,
     issueQris: actions.issueQris,
     testScan: actions.testScan,
     receivePayment: actions.receivePayment,
+    completeStage2: actions.completeStage2,
+    completeBizGuide: actions.completeBizGuide,
     claim: actions.claim2,
+    nudge: makeNudge(notify2),
+    openWhatsApp: (wa) => setActiveWhatsAppChat2(wa),
     inviter: user1.name,
     earned: paidTotal(referrals),
     activeCount: activeMerchants(referrals),
     claimable: claimBreakdown(referrals),
+    mark,
+    progress,
   };
 
   const Screen1 = screens[screen1] ?? screens.home;
   const Screen2 = screens[screen2] ?? screens.landing;
+
+  const steps = stepDefs(scenario, activeRole1);
+  const currentIndex = steps.findIndex((st) => !progress[st.id]);
+  const currentStep = currentIndex === -1 ? null : steps[currentIndex];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 px-3 py-5 sm:px-6">
@@ -501,7 +659,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black tracking-widest text-dana-400 uppercase">
-                  AFFILIATE DANA BISNIS · DUAL-PHONE LIVE DEMO
+                  REFERRAL MERCHANT PROGRAM · DUAL-PHONE LIVE DEMO
                 </span>
                 <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-400 border border-emerald-500/30">
                   REAL-TIME SYNC
@@ -532,11 +690,10 @@ export default function App() {
               <button
                 key={sc.id}
                 onClick={() => handleSwitchScenario(sc.id)}
-                className={`flex-1 flex flex-col justify-between rounded-2xl p-3.5 text-left border transition-all ${
-                  active
-                    ? 'border-dana-400 bg-gradient-to-br from-dana-950/90 to-slate-900 shadow-xl shadow-dana-500/15 ring-2 ring-dana-500/50'
-                    : 'border-slate-800 bg-slate-900/60 hover:bg-slate-900 hover:border-slate-700 opacity-75 hover:opacity-100'
-                }`}
+                className={`flex-1 flex flex-col justify-between rounded-2xl p-3.5 text-left border transition-all ${active
+                  ? 'border-dana-400 bg-gradient-to-br from-dana-950/90 to-slate-900 shadow-xl shadow-dana-500/15 ring-2 ring-dana-500/50'
+                  : 'border-slate-800 bg-slate-900/60 hover:bg-slate-900 hover:border-slate-700 opacity-75 hover:opacity-100'
+                  }`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-black tracking-wide uppercase ${sc.badgeColor}`}>
@@ -555,75 +712,14 @@ export default function App() {
           })}
         </div>
 
-        {/* Section 2: Real-time Action Triggers Bar */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-3 shadow-lg">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
-            <span className="text-[11px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <span>⚡</span> Tombol Simulasi Interaksi Lintas Handphone (Real-Time)
-            </span>
-            <span className="text-[10px] text-slate-400">
-              Aksi otomatis disinkronkan &amp; memicu efek di kedua handphone
-            </span>
-          </div>
-
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            <button
-              onClick={() => actions.nominate({ name: 'Warung Nasi Pak Joko', category: 'F&B / Warung Makan', phone: '081244098811' })}
-              className="flex items-center gap-1.5 rounded-xl bg-dana-600 hover:bg-dana-500 px-3 py-2 text-xs font-bold text-white shadow-md transition active:scale-95"
-            >
-              <span>💬</span> Bantu Daftarkan &amp; Kirim WA ke Pak Joko
-            </button>
-
-            <button
-              onClick={() => actions.issueQris({ name: 'Warung Nasi Pak Joko', category: 'F&B / Warung Makan', location: 'Jakarta Selatan' })}
-              className="flex items-center gap-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-md transition active:scale-95"
-            >
-              <span>⚡</span> Pak Joko Aktifkan QRIS (KYC Light Rp0)
-            </button>
-
-            <button
-              onClick={() => actions.receivePayment(15000)}
-              className="flex items-center gap-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 px-3 py-2 text-xs font-bold text-white shadow-md transition active:scale-95"
-            >
-              <span>💳</span> Pelanggan Bayar Rp15.000 ke QRIS (Nada DANA)
-            </button>
-
-            <button
-              onClick={() => actions.completeStage2()}
-              className="flex items-center gap-1.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 px-3 py-2 text-xs font-bold text-white shadow-md transition active:scale-95"
-            >
-              <span>🏆</span> Selesaikan 5 Transaksi (Reward Tahap 2)
-            </button>
-
-            {/* WA Dropdown Trigger Pills */}
-            <div className="flex flex-wrap items-center gap-1.5 pl-1 border-l border-slate-700/80">
-              <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
-                <Icon name="whatsapp" className="h-3 w-3" /> Notifikasi WA:
-              </span>
-              {[
-                { id: 'wa-h1-joko', label: '[H+1] Unduh QRIS Kasir' },
-                { id: 'wa-payment-joko', label: 'Terima QRIS DANA' },
-                { id: 'wa-routine-joko', label: 'Rutin Terima QRIS' },
-                { id: 'wa-h3-ratna', label: '[H+3] Belum Ada Pembayaran' },
-                { id: 'wa-h7-inactive', label: '[H+7] Inaktivitas 7 Hari' },
-              ].map((w) => (
-                <button
-                  key={w.id}
-                  onClick={() => actions.triggerWhatsApp(w.id)}
-                  className="rounded-lg bg-emerald-950/80 border border-emerald-500/40 hover:bg-emerald-900 px-2 py-1 text-[10px] font-bold text-emerald-300 transition active:scale-95"
-                >
-                  {w.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Section 2: Step-by-step scenario progress (dijalankan langsung di kedua HP) */}
+        <ScenarioSteps steps={steps} progress={progress} />
 
         {/* Dual Phone Showcase Side-by-Side */}
         <div className="mt-2 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 xl:gap-14">
           {/* ----------------- LEFT PHONE: Pengundang (Rian / Bu Ratna) ----------------- */}
           <div className="flex flex-col items-center gap-3">
-            {/* Persona Badge & Quick Screen Jumper for Phone 1 */}
+            {/* Persona badge HP 1 (pengundang) */}
             <div className="w-[394px] rounded-2xl border border-slate-800 bg-slate-900 p-3 shadow-md">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -644,31 +740,15 @@ export default function App() {
                 </span>
               </div>
 
-              {/* Quick Screen Selector Buttons for Phone 1 */}
-              <div className="mt-2.5 pt-2 border-t border-slate-800 flex flex-wrap gap-1">
-                <span className="text-[9px] font-bold text-slate-400 self-center mr-1">Layar:</span>
-                {[
-                  ['home', 'Beranda DANA'],
-                  ['hub', 'Affiliate Hub'],
-                  ['nominate', 'Bantu Daftar'],
-                  ['tracker', 'Daftar Referal'],
-                  ['rewards', 'Reward'],
-                  ['receipt_data', 'Kasir Data (Admin)'],
-                  ['receipt_emoney', 'Kasir E-Money (Admin)'],
-                ].map(([scr, lbl]) => (
-                  <button
-                    key={scr}
-                    onClick={() => setScreen1(scr)}
-                    className={`rounded-lg px-2 py-0.5 text-[10px] font-bold transition ${
-                      screen1 === scr
-                        ? 'bg-dana-500 text-white shadow-xs'
-                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                    }`}
-                  >
-                    {lbl}
-                  </button>
-                ))}
-              </div>
+              <p className="mt-2 border-t border-slate-800 pt-2 text-[10px] leading-snug text-slate-400">
+                {currentStep?.phone === 1 ? (
+                  <>
+                    <span className="font-bold text-dana-300">Langkah {currentIndex + 1}:</span> {currentStep.hint}
+                  </>
+                ) : (
+                  'Navigasi hanya lewat layar, persis seperti aplikasi asli.'
+                )}
+              </p>
             </div>
 
             {/* Handphone 1 Frame */}
@@ -683,7 +763,7 @@ export default function App() {
               onDismissWhatsApp={() => setWhatsappPush1(null)}
               activeWhatsAppChat={activeWhatsAppChat1}
               onCloseWhatsApp={() => setActiveWhatsAppChat1(null)}
-              go={(scr) => setScreen1(scr)}
+              go={go1}
             >
               <Screen1 key={screen1} {...ctx1} />
             </Phone>
@@ -709,7 +789,7 @@ export default function App() {
 
           {/* ----------------- RIGHT PHONE: Penerima (Pak Joko) ----------------- */}
           <div className="flex flex-col items-center gap-3">
-            {/* Persona Badge & Quick Screen Jumper for Phone 2 */}
+            {/* Persona badge HP 2 (warung diundang) */}
             <div className="w-[394px] rounded-2xl border border-slate-800 bg-slate-900 p-3 shadow-md">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -718,7 +798,7 @@ export default function App() {
                   </span>
                   <div>
                     <p className="text-xs font-black text-white">
-                      HP 2 · Pak Joko (Warung Nasi Pak Joko)
+                      HP 2 · Pak Joko (Warung Sembako Pak Joko)
                     </p>
                     <p className="text-[10px] text-emerald-400 font-semibold">
                       Warung Binaan · KYC Light Rp0 Tanpa e-KTP di Awal
@@ -730,29 +810,15 @@ export default function App() {
                 </span>
               </div>
 
-              {/* Quick Screen Selector Buttons for Phone 2 */}
-              <div className="mt-2.5 pt-2 border-t border-slate-800 flex flex-wrap gap-1">
-                <span className="text-[9px] font-bold text-slate-400 self-center mr-1">Layar:</span>
-                {[
-                  ['landing', 'Undangan Web'],
-                  ['register', 'Form KYC Light'],
-                  ['qris', 'QRIS Toko'],
-                  ['bizprofile', 'Profil Bisnis & Panduan Toko'],
-                  ['rewards', 'Reward Pak Joko'],
-                ].map(([scr, lbl]) => (
-                  <button
-                    key={scr}
-                    onClick={() => setScreen2(scr)}
-                    className={`rounded-lg px-2 py-0.5 text-[10px] font-bold transition ${
-                      screen2 === scr
-                        ? 'bg-emerald-600 text-white shadow-xs'
-                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                    }`}
-                  >
-                    {lbl}
-                  </button>
-                ))}
-              </div>
+              <p className="mt-2 border-t border-slate-800 pt-2 text-[10px] leading-snug text-slate-400">
+                {currentStep?.phone === 2 ? (
+                  <>
+                    <span className="font-bold text-emerald-300">Langkah {currentIndex + 1}:</span> {currentStep.hint}
+                  </>
+                ) : (
+                  'Menunggu aksi di HP 1 dulu.'
+                )}
+              </p>
             </div>
 
             {/* Handphone 2 Frame */}
@@ -767,12 +833,119 @@ export default function App() {
               onDismissWhatsApp={() => setWhatsappPush2(null)}
               activeWhatsAppChat={activeWhatsAppChat2}
               onCloseWhatsApp={() => setActiveWhatsAppChat2(null)}
-              go={(scr) => setScreen2(scr)}
+              go={go2}
             >
               <Screen2 key={screen2} {...ctx2} />
             </Phone>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Papan progres skenario. Tidak ada tombol aksi di sini: setiap langkah ditandai
+ * selesai ketika penguji benar-benar melakukannya di dalam handphone.
+ */
+function ScenarioSteps({ steps, progress }) {
+  const doneCount = steps.filter((st) => progress[st.id]).length;
+  const currentIndex = steps.findIndex((st) => !progress[st.id]);
+  const finished = currentIndex === -1;
+
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-3 shadow-lg">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="flex items-center gap-1.5 text-[11px] font-black tracking-wider text-amber-400 uppercase">
+          <span>🧭</span> 10 Langkah Referral Merchant Program · Selesai Langsung di HP
+        </span>
+        <span className="text-[10px] font-bold text-slate-300">
+          {finished ? (
+            <span className="text-emerald-400">Semua {steps.length} langkah selesai 🎉</span>
+          ) : (
+            <>
+              {doneCount}/{steps.length} langkah selesai
+            </>
+          )}
+        </span>
+      </div>
+
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-800">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-dana-500 to-emerald-400 transition-all duration-500"
+          style={{ width: `${(doneCount / steps.length) * 100}%` }}
+        />
+      </div>
+
+      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        {steps.map((st, i) => {
+          const done = Boolean(progress[st.id]);
+          const active = i === currentIndex;
+          const isLast = i === steps.length - 1;
+          return (
+            <div
+              key={st.id}
+              className={`relative flex flex-col justify-between rounded-xl border p-2.5 transition-all ${
+                done
+                  ? 'border-emerald-500/40 bg-emerald-500/10'
+                  : active
+                    ? 'border-dana-400 bg-dana-950/70 ring-2 ring-dana-500/50 shadow-lg shadow-dana-500/15'
+                    : 'border-slate-800 bg-slate-950/40 opacity-60'
+              }`}
+            >
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${
+                      done
+                        ? 'bg-emerald-500 text-white'
+                        : active
+                          ? 'bg-dana-500 text-white'
+                          : 'bg-slate-800 text-slate-500'
+                    }`}
+                  >
+                    {done ? '✓' : i + 1}
+                  </span>
+                  <span
+                    className={`rounded px-1.5 py-0.5 text-[9px] font-black ${
+                      st.phone === 1 ? 'bg-dana-500/20 text-dana-300' : 'bg-emerald-500/20 text-emerald-300'
+                    }`}
+                  >
+                    HP {st.phone}
+                  </span>
+                  {active && (
+                    <span className="ml-auto flex items-center gap-1 text-[8px] font-black text-amber-300">
+                      <span className="h-1.5 w-1.5 animate-ping rounded-full bg-amber-300" /> SEKARANG
+                    </span>
+                  )}
+                  {done && <span className="ml-auto text-[8px] font-black text-emerald-400">SELESAI</span>}
+                </div>
+
+                <p
+                  className={`mt-1.5 text-[11px] leading-snug font-bold ${
+                    done ? 'text-emerald-200/90' : active ? 'text-white' : 'text-slate-400'
+                  }`}
+                >
+                  {st.title}
+                </p>
+                {!done && (
+                  <p className={`mt-0.5 text-[10px] leading-snug ${active ? 'text-slate-300' : 'text-slate-500'}`}>
+                    {st.hint}
+                  </p>
+                )}
+              </div>
+
+              {/* Step Flow Arrow to Next Step */}
+              {!isLast && (
+                <div className="mt-2 flex items-center justify-end text-[10px] font-bold text-slate-600">
+                  <span className="flex items-center gap-0.5">
+                    <span className="text-[9px] text-slate-500">Lanjut</span> ➔
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -847,9 +1020,8 @@ function Phone({
         {/* System Toast */}
         {toast && (
           <div
-            className={`absolute inset-x-3 z-40 rounded-2xl bg-slate-900/92 px-4 py-3 text-[11px] leading-snug font-semibold text-white shadow-xl animate-in fade-in duration-150 ${
-              soundbox || whatsappPush ? 'top-32' : 'top-12'
-            }`}
+            className={`absolute inset-x-3 z-40 rounded-2xl bg-slate-900/92 px-4 py-3 text-[11px] leading-snug font-semibold text-white shadow-xl animate-in fade-in duration-150 ${soundbox || whatsappPush ? 'top-32' : 'top-12'
+              }`}
           >
             {toast}
           </div>

@@ -26,18 +26,18 @@ const base = {
     soundbox: null,
     toast: null,
   },
-  go() {},
-  notify() {},
-  patch() {},
-  announce() {},
-  nominate() {},
-  issueQris() {},
-  testScan() {},
-  receivePayment() {},
-  reachRetention() {},
-  nudge() {},
-  claim() {},
-  reset() {},
+  go() { },
+  notify() { },
+  patch() { },
+  announce() { },
+  nominate() { },
+  issueQris() { },
+  testScan() { },
+  receivePayment() { },
+  reachRetention() { },
+  nudge() { },
+  claim() { },
+  reset() { },
   inviter: 'Rian Prasetya',
   earned: 50000,
   activeCount: 2,
@@ -70,7 +70,58 @@ if (ratnaHome.includes('Rian')) throw new Error('Home leaks the consumer persona
 if (!ratnaHome.includes('96.500')) throw new Error('Home does not show the active persona wallet');
 const ratnaBiz = renderToStaticMarkup(<screens.bizdash {...ratna} />);
 if (!ratnaBiz.includes('Martabak Bu Ratna')) throw new Error('Bisnis tab does not show the merchant store');
-const ratnaHub = renderToStaticMarkup(<screens.hub {...ratna} />);
+const ratnaHub = renderToStaticMarkup(
+  <screens.hub {...ratna} s={{ ...ratna.s, hasSeenAffiliateGuide: true }} />,
+);
 if (!ratnaHub.includes('Bantu Daftarkan Rekan Usaha')) throw new Error('Hub does not adapt to merchant');
+
+// Panduan juga harus tampil untuk track Mitra Bisnis, dengan reward kupon (bukan saldo),
+// supaya langkah "selesaikan panduan" bisa diselesaikan di skenario 2.
+const ratnaGuide = renderToStaticMarkup(<screens.hub {...ratna} />);
+if (!ratnaGuide.includes('PANDUAN REFERER')) throw new Error('Merchant track never sees the affiliate guide');
 console.log('persona isolation: ok');
 
+// Regression: panduan affiliate wajib hilang begitu penandanya tersimpan, kalau tidak
+// tombol "Bantu Daftarkan Warung Sekarang!" terasa mati karena panduan terbuka ulang.
+const rianAfterGuide = { ...rian, s: { ...rian.s, hasSeenAffiliateGuide: true } };
+const hubAfterGuide = renderToStaticMarkup(<screens.hub {...rianAfterGuide} />);
+if (hubAfterGuide.includes('PANDUAN REFERER')) {
+  throw new Error('Guide still covers the hub after hasSeenAffiliateGuide is set');
+}
+if (!hubAfterGuide.includes('Bantu Daftarkan Warung Langganan')) {
+  throw new Error('Hub content missing after the guide is dismissed');
+}
+
+// Regression: checklist QRIS harus punya tombol aksinya sendiri, karena tombol
+// simulasi global sudah dihapus dari luar handphone.
+const jokoQris = {
+  ...base,
+  s: { ...base.s, role: 'referred', merchant: { ...base.s.merchant, testScan: false, firstPayment: 0 } },
+  user: { id: 'referred', name: 'Joko Santoso', initial: 'J', store: 'Warung Nasi Pak Joko', balance: 0 },
+};
+const qrisHtml = renderToStaticMarkup(<screens.qris {...jokoQris} />);
+for (const label of ['Coba Scan Rp1.000', 'Pelanggan Bayar Rp15.000']) {
+  if (!qrisHtml.includes(label)) throw new Error(`QRIS checklist is missing its own action: ${label}`);
+}
+console.log('guide dismissal & in-phone actions: ok');
+
+// Regression: Qris must have button to open complete business profile & guide (Step 8)
+if (!qrisHtml.includes('Buka Profil DANA Bisnis &amp; Panduan Toko')) {
+  throw new Error('QRIS is missing button to open BizProfile');
+}
+
+// Regression: BizDash for Pak Joko must show the 4 actions, bubble guide, and reward cards (Step 9 & 10)
+const jokoBizHtml = renderToStaticMarkup(<screens.bizdash {...jokoQris} initialTour={true} />);
+for (const act of ['Buka QRIS', 'Tarik Saldo', 'Transfer', 'Pembayaran']) {
+  if (!jokoBizHtml.includes(act)) throw new Error(`BizDash is missing action: ${act}`);
+}
+if (!jokoBizHtml.includes('Panduan Aksi')) {
+  throw new Error('BizDash is missing the Bubble Chat Guide');
+}
+if (!jokoBizHtml.includes('Hadiah Tahap 1: Bebas Tarik Tunai 2x')) {
+  throw new Error('BizDash is missing Hadiah Tahap 1 card');
+}
+if (!jokoBizHtml.includes('Hadiah Tahap 2: Bebas Biaya Admin 10x')) {
+  throw new Error('BizDash is missing Hadiah Tahap 2 card');
+}
+console.log('4 quick actions, bubble chat guide & reward cards: ok');

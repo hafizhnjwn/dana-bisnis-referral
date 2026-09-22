@@ -4,8 +4,8 @@
  */
 import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { LEGACY, STAGES, TIERS, pendingTiers, rupiah } from './rewards.js';
-import { BizDash, Grid, Home, MerchantAidaGuide } from './hostApp.jsx';
+import { LEGACY, MAX_PER_REFERRAL, PERSONA_REWARDS, STAGES, TIERS, pendingTiers, rupiah } from './rewards.js';
+import { BizDash, Grid, Home, MerchantAidaGuide, QrisCashierVerificationModal } from './hostApp.jsx';
 import { Btn, Field, Icon, Pill, Shell, StatusBar, TopBar } from './ui.jsx';
 
 const CATEGORIES = ['F&B / Warung Makan', 'Toko Kelontong', 'Jasa / Bengkel', 'Fashion / Retail'];
@@ -40,10 +40,10 @@ export const WHATSAPP_NOTIFICATIONS = [
     time: 'Baru saja',
     tag: 'Undangan Warung',
     title: 'Undangan Bergabung DANA Bisnis',
-    preview: 'Halo Pak Joko! Saya sudah daftarkan Warung Nasi Pak Joko ke DANA Bisnis. QRIS langsung aktif Rp0...',
+    preview: 'Halo Pak Joko! Saya sudah daftarkan Warung Sembako Pak Joko ke DANA Bisnis. QRIS langsung aktif Rp0...',
     message: `Halo Pak Joko! 🏪
 
-Saya sudah bantu daftarkan *Warung Nasi Pak Joko* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa biaya potongan (0% MDR).
+Saya sudah bantu daftarkan *Warung Sembako Pak Joko* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa biaya potongan (0% MDR).
 
 Data sudah disiapkan, tinggal 1 langkah konfirmasi (tanpa perlu e-KTP di awal):
 👉 https://dana.id/bisnis/gabung?ref=HAF58W
@@ -61,8 +61,8 @@ Pajang QRIS di meja kasir, jualan makin laris & praktis!`,
     time: '08:30 WIB (Jam Operasional Toko)',
     tag: 'Jam Operasional H+1',
     title: 'Download Poster QRIS Kasir Tokomu',
-    preview: 'Halo Pak Joko! Selamat, toko Warung Nasi Pak Joko resmi terdaftar. Yuk unduh & cetak poster QRIS kasir...',
-    message: `Halo Pak Joko! 🏪 Selamat, toko *Warung Nasi Pak Joko* kini resmi terdaftar di DANA Bisnis!
+    preview: 'Halo Pak Joko! Selamat, toko Warung Sembako Pak Joko resmi terdaftar. Yuk unduh & cetak poster QRIS kasir...',
+    message: `Halo Pak Joko! 🏪 Selamat, toko *Warung Sembako Pak Joko* kini resmi terdaftar di DANA Bisnis!
 
 Jam operasional toko sudah dimulai nih. Yuk download & cetak poster QRIS kasir tokomu sekarang agar siap terima pembayaran non-tunai dari semua bank & e-wallet (BCA, Mandiri, BRI, DANA, GoPay, OVO):
 
@@ -82,15 +82,14 @@ Pajang di meja kasir warung, transaksi 100% masuk utuh tanpa potongan (0% MDR)!`
     time: '10:15 WIB (Jam Operasional Toko)',
     tag: 'Pembayaran Diterima',
     title: 'Pembayaran QRIS DANA Berhasil Diterima',
-    preview: '🎉 Pembayaran QRIS DANA Berhasil Diterima! Nominal: Rp12.000 (MDR 0%). Bonus Modal Usaha Rp15.000 masuk...',
+    preview: '🎉 Pembayaran QRIS DANA Berhasil Diterima! Nominal: Rp15.000. Kupon Tarik Tunai 2x aktif...',
     message: `🎉 *Pembayaran QRIS DANA Berhasil Diterima!*
 
-Halo Pak Joko, ada pembayaran masuk ke *Warung Nasi Pak Joko*:
-💰 *Nominal:* Rp 12.000
+Halo Pak Joko, ada pembayaran masuk ke *Warung Sembako Pak Joko*:
+💰 *Nominal:* Rp 15.000
 👤 *Dari:* Pelanggan DANA (0812••••9940)
 🕒 *Waktu:* 10:15 WIB
-✅ *MDR:* 0% (Gratis tanpa potongan)
-🎁 *Bonus Spesial:* Bonus Modal Usaha Rp 15.000 otomatis ditambahkan ke saldo tokomu!
+🎁 *Reward Baru:* Kupon Gratis Tarik Tunai 2x otomatis aktif di tab Reward!
 
 Saldo penjualan langsung masuk ke DANA Bisnis dan siap ditarik kapan saja.`,
     actionText: 'Lihat Saldo DANA Bisnis',
@@ -108,11 +107,11 @@ Saldo penjualan langsung masuk ke DANA Bisnis dan siap ditarik kapan saja.`,
     preview: '🌟 Luar Biasa, Pak Joko! Warung Anda Makin Aktif Menerima QRIS DANA. Ringkasan transaksi mingguan...',
     message: `🌟 *Luar Biasa, Pak Joko! Warung Anda Makin Aktif Menerima QRIS DANA!*
 
-Terima kasih telah rutin menerima pembayaran non-tunai di *Warung Nasi Pak Joko*.
+Terima kasih telah rutin menerima pembayaran non-tunai di *Warung Sembako Pak Joko*.
 
 📊 *Ringkasan Transaksi Mingguan:*
 • Total Transaksi: 8 transaksi minggu ini
-• Bebas Biaya Tarik Tunai: 7x Aktif
+• Kupon Aktif: ${PERSONA_REWARDS.referred.tahap1.title} + ${PERSONA_REWARDS.referred.tahap2.title}
 • Status Toko: Menuju *Merchant Juara DANA*
 
 💡 *Tips Usaha:* Pastikan poster QRIS selalu terlihat jelas di meja kasir agar pembeli semakin nyaman belanja tanpa ribet cari uang receh kembalian!`,
@@ -131,13 +130,13 @@ Terima kasih telah rutin menerima pembayaran non-tunai di *Warung Nasi Pak Joko*
     preview: 'Halo Bu Ratna! Warung rekanan Pak Joko sudah terdaftar 3 hari lalu tapi belum menerima pembayaran QRIS...',
     message: `Halo Bu Ratna! 👋
 
-Warung rekanan yang Anda bantu daftarkan, *Warung Nasi Pak Joko*, sudah terdaftar sejak 3 hari lalu tapi *belum menerima transaksi QRIS pertamanya*.
+Warung rekanan yang Anda bantu daftarkan, *Warung Sembako Pak Joko*, sudah terdaftar sejak 3 hari lalu tapi *belum menerima transaksi QRIS pertamanya*.
 
 Yuk bantu dan ingatkan Pak Joko untuk mulai menerima transaksi QRIS pertamanya (min. Rp10.000)!
 
 🎁 Begitu Pak Joko menerima transaksi pertamanya:
-• Anda langsung mendapatkan *Gratis Transfer Antar Bank 10x*!
-• Pak Joko mendapatkan *Gratis Tarik Tunai 7x* + *Bonus Modal Usaha Rp15.000*!
+• Anda langsung mendapatkan *${PERSONA_REWARDS.merchant.tahap1.title}*!
+• Pak Joko mendapatkan *${PERSONA_REWARDS.referred.tahap1.title}*!
 
 Dampingi Pak Joko sekarang agar reward Tahap 1 Anda aktif!`,
     actionText: 'Dampingi Pak Joko via WhatsApp',
@@ -152,10 +151,10 @@ Dampingi Pak Joko sekarang agar reward Tahap 1 Anda aktif!`,
     time: '14:00 WIB (Hari ke-7)',
     tag: 'Inaktivitas 7 Hari',
     title: 'Pak Joko Tidak Ada Aktivitas QRIS dalam 7 Hari',
-    preview: '⚠️ Pemberitahuan: Sudah 7 hari tidak ada aktivitas transaksi QRIS di Warung Nasi Pak Joko...',
+    preview: '⚠️ Pemberitahuan: Sudah 7 hari tidak ada aktivitas transaksi QRIS di Warung Sembako Pak Joko...',
     message: `⚠️ *Pemberitahuan Aktivitas QRIS Warung Binaan*
 
-Halo Bu Ratna, sudah *7 hari tidak ada aktivitas transaksi QRIS* di *Warung Nasi Pak Joko*.
+Halo Bu Ratna, sudah *7 hari tidak ada aktivitas transaksi QRIS* di *Warung Sembako Pak Joko*.
 
 Jangan biarkan peluang terlewat! Dampingi Pak Joko agar usahanya tetap aktif bertransaksi digital dan Anda bisa menyelesaikan target *Tahap 2 (Gratis Biaya Admin 10x)*:
 
@@ -202,9 +201,8 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
             <button
               key={t.id}
               onClick={() => go(t.id)}
-              className={`relative flex flex-1 flex-col items-center gap-1 text-[10px] font-bold ${
-                tab === t.id ? 'text-dana-600' : 'text-slate-400'
-              }`}
+              className={`relative flex flex-1 flex-col items-center gap-1 text-[10px] font-bold ${tab === t.id ? 'text-dana-600' : 'text-slate-400'
+                }`}
             >
               <Icon name={t.icon} className="h-5 w-5" />
               {t.label}
@@ -221,7 +219,10 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
 
 /* -------------------------------- Mini Program Beranda (hub) */
 
-function AffiliateCarouselGuide({ isOpen, onClose, onAction }) {
+function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer' }) {
+  // Reward slide mengikuti track pengundang: Rian dapat saldo, Bu Ratna dapat kupon.
+  const reward = PERSONA_REWARDS[role] ?? PERSONA_REWARDS.consumer;
+  const isSaldoTrack = reward.tahap1.type === 'saldo';
   const [step, setStep] = useState(0);
   if (!isOpen) return null;
 
@@ -294,25 +295,33 @@ function AffiliateCarouselGuide({ isOpen, onClose, onAction }) {
     },
     {
       tag: '[D] DESIRE · NILAI & REWARD',
-      title: 'Raih Reward Saldo Bertahap s/d Rp40.000',
-      subtitle: 'Tahap 1: Rp10.000 di transaksi pertama ≥Rp10k · Tahap 2: Rp30.000 saat 5 transaksi unik lolos verifikasi.',
+      title: isSaldoTrack
+        ? `Raih Reward Saldo Bertahap s/d ${rupiah(MAX_PER_REFERRAL)}`
+        : 'Raih Kupon Bebas Biaya Bertahap untuk Usahamu',
+      subtitle: `Tahap 1: ${reward.tahap1.title} di transaksi pertama ≥Rp10k · Tahap 2: ${reward.tahap2.title} saat 5 transaksi unik lolos verifikasi.`,
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center">
             <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
               <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
-              <p className="mt-0.5 text-lg font-black text-white">+Rp10.000</p>
+              <p className="mt-0.5 text-sm font-black text-white">
+                {isSaldoTrack ? `+${rupiah(reward.tahap1.amount)}` : reward.tahap1.title}
+              </p>
               <p className="text-[9px] text-white/80">Transaksi min. Rp10k</p>
             </div>
             <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
               <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
-              <p className="mt-0.5 text-lg font-black text-white">+Rp30.000</p>
+              <p className="mt-0.5 text-sm font-black text-white">
+                {isSaldoTrack ? `+${rupiah(reward.tahap2.amount)}` : reward.tahap2.title}
+              </p>
               <p className="text-[9px] text-white/80">5 transaksi unik pembeli</p>
             </div>
           </div>
           <div className="mt-2.5 rounded-xl border border-amber-300/40 bg-amber-400/20 p-2 text-center">
             <p className="text-[11px] font-black text-amber-200">
-              Total Rp40.000 Saldo DANA per Warung Binaan
+              {isSaldoTrack
+                ? `Total ${rupiah(MAX_PER_REFERRAL)} Saldo DANA per Warung Binaan`
+                : 'Kupon bebas biaya operasional untuk 2 tahap'}
             </p>
             <p className="text-[9px] text-white/80">⭐ Ditambah Bonus Rp1.000.000 tiap 50 warung aktif!</p>
           </div>
@@ -371,9 +380,8 @@ function AffiliateCarouselGuide({ isOpen, onClose, onAction }) {
               className="h-1 flex-1 overflow-hidden rounded-full bg-white/25 transition-all"
             >
               <div
-                className={`h-full transition-all duration-300 ${
-                  step === i ? 'w-full bg-white shadow-sm' : step > i ? 'w-full bg-white/90' : 'w-0'
-                }`}
+                className={`h-full transition-all duration-300 ${step === i ? 'w-full bg-white shadow-sm' : step > i ? 'w-full bg-white/90' : 'w-0'
+                  }`}
               />
             </button>
           ))}
@@ -439,9 +447,14 @@ export { MerchantAidaGuide };
 function Hub(p) {
   const { s, patch, go, notify, earned, activeCount } = p;
   const [manualGuide, setManualGuide] = useState(false);
-  const showGuide = (!s.hasSeenAffiliateGuide && s.role === 'consumer') || manualGuide;
+  // Panduan hanya boleh muncul sekali: tandai lokal + simpan ke state aplikasi,
+  // supaya tombol CTA-nya tidak langsung membuka ulang panduan yang sama.
+  const [guideDone, setGuideDone] = useState(false);
+  // Panduan muncul untuk kedua track pengundang (Rian & Bu Ratna), bukan hanya konsumen.
+  const showGuide = (!s.hasSeenAffiliateGuide && !guideDone) || manualGuide;
   const handleCloseGuide = () => {
     setManualGuide(false);
+    setGuideDone(true);
     if (!s.hasSeenAffiliateGuide && patch) {
       patch({ hasSeenAffiliateGuide: true });
     }
@@ -452,13 +465,18 @@ function Hub(p) {
   if (showGuide) {
     return (
       <div className="relative h-full w-full overflow-hidden bg-slate-900">
-        <AffiliateCarouselGuide isOpen={true} onClose={handleCloseGuide} />
+        <AffiliateCarouselGuide
+          isOpen={true}
+          onClose={handleCloseGuide}
+          onAction={handleCloseGuide}
+          role={s.role}
+        />
       </div>
     );
   }
 
   return (
-    <MiniShell title="Affiliate DANA Bisnis" tab="hub" {...p} unread={2}>
+    <MiniShell title="Referral Merchant Program" tab="hub" {...p} unread={2}>
 
       <div className="px-4 pt-3 pb-8">
         {/* Guide banner */}
@@ -471,8 +489,10 @@ function Hub(p) {
               💡
             </span>
             <div>
-              <p className="text-xs font-bold text-dana-900">Panduan Lengkap Affiliate DANA</p>
-              <p className="text-[10px] text-dana-700">Skema 2 tahap reward s/d Rp40.000 per warung</p>
+              <p className="text-xs font-bold text-dana-900">Panduan Lengkap Program Referal</p>
+              <p className="text-[10px] text-dana-700">
+                Skema 2 tahap reward s/d {rupiah(MAX_PER_REFERRAL)} per warung
+              </p>
             </div>
           </div>
           <span className="rounded-lg bg-white px-2 py-1 text-[10px] font-bold text-dana-700 shadow-2xs">
@@ -623,12 +643,22 @@ function Nominate(p) {
   return (
     <MiniShell title="Bantu Daftarkan Warung" onBack={() => go('hub')} {...p}>
       <div className="space-y-3 px-4 pt-3 pb-8">
-        <p className="rounded-2xl bg-dana-50 p-3 text-[11px] leading-relaxed text-dana-700">
-          Cukup 30 detik. DANA yang menghubungi pemilik usaha dengan undangan resmi berisi namamu, dan kode{' '}
-          <strong>{REFERRAL_CODE}</strong> sudah tertanam di link — tidak perlu diketik manual.
-        </p>
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-bold text-slate-700">Formulir Undangan Toko</span>
+          <button
+            type="button"
+            onClick={() => {
+              setName('Warung Sembako Pak Joko');
+              setCategory('Toko Kelontong');
+              setPhone('081244098822');
+            }}
+            className="rounded-full bg-dana-50 px-2.5 py-1 text-[10px] font-extrabold text-dana-700 active:bg-dana-100 border border-dana-200"
+          >
+            ⚡ Isi Data Warung Pak Joko
+          </button>
+        </div>
 
-        <Field step="1" label="Nama usaha / warung" hint="Contoh: Warung Nasi Pak Joko">
+        <Field step="1" label="Nama usaha / warung" hint="Contoh: Warung Sembako Pak Joko">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -721,9 +751,8 @@ function Tracker(p) {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-bold transition ${
-              tab === id ? 'bg-dana-500 text-white shadow-sm' : 'bg-white text-slate-500 shadow-xs'
-            }`}
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-bold transition ${tab === id ? 'bg-dana-500 text-white shadow-sm' : 'bg-white text-slate-500 shadow-xs'
+              }`}
           >
             {label}
           </button>
@@ -742,10 +771,10 @@ function Tracker(p) {
           const st = isStage2Done
             ? { label: 'Tahap 2 Selesai · Merchant Aktif', short: 'Aktif', color: 'emerald', progress: 100 }
             : isStage1Done
-            ? { label: 'Tahap 1 Selesai · Menuju 5 Transaksi Unik', short: 'Tahap 1 Selesai', color: 'amber', progress: 75 }
-            : isRegisteredNoTx
-            ? { label: 'Terdaftar (QRIS Aktif) · Menunggu Transaksi Pertama', short: 'Terdaftar', color: 'amber', progress: 50 }
-            : { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 25 };
+              ? { label: 'Tahap 1 Selesai · Menuju 5 Transaksi Unik', short: 'Tahap 1 Selesai', color: 'amber', progress: 75 }
+              : isRegisteredNoTx
+                ? { label: 'Terdaftar (QRIS Aktif) · Menunggu Transaksi Pertama', short: 'Terdaftar', color: 'amber', progress: 50 }
+                : { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 25 };
 
           const style = STAGE_STYLE[st.color] || STAGE_STYLE.slate;
           return (
@@ -776,9 +805,8 @@ function Tracker(p) {
                 ].map(([label, done]) => (
                   <span
                     key={label}
-                    className={`flex-1 rounded-md py-1 text-center ${
-                      done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-400'
-                    }`}
+                    className={`flex-1 rounded-md py-1 text-center ${done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-400'
+                      }`}
                   >
                     {label}
                   </span>
@@ -824,8 +852,8 @@ function Rewards(p) {
   const currentRole = user?.id || s?.role || 'consumer';
 
   const quotas = s.rewardQuotas || {
-    merchant: { transfer: 10, admin: 10 },
-    referred: { withdraw: 7, admin: 10 },
+    merchant: { transfer: 2, admin: 10 },
+    referred: { withdraw: 2, admin: 10 },
   };
 
   const handleUseVoucher = (roleKey, voucherKey, label) => {
@@ -849,8 +877,8 @@ function Rewards(p) {
   const handleResetQuotas = () => {
     patch({
       rewardQuotas: {
-        merchant: { transfer: 10, admin: 10 },
-        referred: { withdraw: 7, admin: 10 },
+        merchant: { transfer: 2, admin: 10 },
+        referred: { withdraw: 2, admin: 10 },
       },
     });
     notify('Kupon reward berhasil direset ke kuota awal.');
@@ -879,17 +907,19 @@ function Rewards(p) {
                   <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
                     TAHAP 1
                   </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Saldo DANA Rp10.000</h4>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">
+                    {PERSONA_REWARDS.consumer.tahap1.title}
+                  </h4>
                   <p className="mt-0.5 text-[10px] text-slate-500">
                     Cair otomatis di transaksi pertama warung binaan ≥ Rp10.000
                   </p>
                 </div>
-                <span className="text-sm font-black text-emerald-600">+Rp10.000</span>
+                <span className="text-sm font-black text-emerald-600">+{rupiah(TIERS[0].amount)}</span>
               </div>
               <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
                 <p className="font-semibold text-slate-800">Syarat &amp; Ketentuan:</p>
                 <p>• Warung binaan (Pak Joko) terbit QRIS &amp; menerima pembayaran pertama min. Rp10k.</p>
-                <p>• Uang Rp10.000 seketika masuk ke Pocket Saldo DANA pengundang.</p>
+                <p>• Uang {rupiah(TIERS[0].amount)} seketika masuk ke Pocket Saldo DANA pengundang.</p>
               </div>
             </div>
 
@@ -902,7 +932,7 @@ function Rewards(p) {
                   </span>
                   <h4 className="mt-1.5 text-sm font-black text-slate-900">Saldo DANA Rp30.000</h4>
                   <p className="mt-0.5 text-[10px] text-slate-500">
-                    Total reward: Rp40.000 per warung aktif binaan
+                    Total reward: {rupiah(MAX_PER_REFERRAL)} per warung aktif binaan
                   </p>
                 </div>
                 <span className="text-sm font-black text-emerald-600">+Rp30.000</span>
@@ -948,7 +978,9 @@ function Rewards(p) {
               </p>
               <div className="mt-3 flex gap-2 text-center text-xs">
                 <div className="flex-1 rounded-xl bg-white/15 p-2">
-                  <span className="block text-base font-black text-amber-300">{quotas.merchant?.transfer ?? 10}x</span>
+                  <span className="block text-base font-black text-amber-300">
+                    {quotas.merchant?.transfer ?? PERSONA_REWARDS.merchant.tahap1.quota}x
+                  </span>
                   <span className="text-[9px] text-white/80">Sisa Gratis Transfer</span>
                 </div>
                 <div className="flex-1 rounded-xl bg-white/15 p-2">
@@ -965,13 +997,16 @@ function Rewards(p) {
                   <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
                     TAHAP 1
                   </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Transfer Antar Bank 10x</h4>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">
+                    {PERSONA_REWARDS.merchant.tahap1.title}
+                  </h4>
                   <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
                     ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
                   </p>
                 </div>
                 <span className="rounded-lg bg-dana-50 px-2.5 py-1 text-xs font-black text-dana-700">
-                  {quotas.merchant?.transfer ?? 10}/10
+                  {quotas.merchant?.transfer ?? PERSONA_REWARDS.merchant.tahap1.quota}/
+                  {PERSONA_REWARDS.merchant.tahap1.quota}
                 </span>
               </div>
               <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
@@ -1027,11 +1062,11 @@ function Rewards(p) {
               <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Pak Joko · Merchant Binaan</p>
               <p className="mt-1 text-sm font-black text-white">Warung Nasi Pak Joko</p>
               <p className="mt-1 text-[11px] text-white/80">
-                Benefit eksklusif merchant baru: Tarik tunai gratis, bebas admin, 0% MDR, dan modal usaha.
+                Benefit eksklusif merchant baru: Bebas biaya tarik tunai dan gratis biaya admin transaksi.
               </p>
               <div className="mt-3 flex gap-2 text-center text-xs">
                 <div className="flex-1 rounded-xl bg-white/15 p-2">
-                  <span className="block text-base font-black text-amber-300">{quotas.referred?.withdraw ?? 7}x</span>
+                  <span className="block text-base font-black text-amber-300">{quotas.referred?.withdraw ?? 2}x</span>
                   <span className="text-[9px] text-white/80">Gratis Tarik Tunai</span>
                 </div>
                 <div className="flex-1 rounded-xl bg-white/15 p-2">
@@ -1048,20 +1083,20 @@ function Rewards(p) {
                   <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
                     TAHAP 1
                   </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Tarik Tunai 7x</h4>
+                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Tarik Tunai 2x</h4>
                   <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
                     ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
                   </p>
                 </div>
                 <span className="rounded-lg bg-dana-50 px-2.5 py-1 text-xs font-black text-dana-700">
-                  {quotas.referred?.withdraw ?? 7}/7
+                  {quotas.referred?.withdraw ?? 2}/2
                 </span>
               </div>
               <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
                 <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
                 <p>• Bebas biaya tarik tunai saldo penjualan di ATM BCA/BRI atau gerai Alfamart/Indomaret.</p>
                 <p>• Aktif setelah QRIS terbit &amp; transaksi pertama min. Rp10.000 diterima.</p>
-                <p className="text-emerald-700 font-bold">• Ekstra: Bonus Modal Usaha Rp15.000 + 0% MDR!</p>
+                <p className="text-emerald-700 font-bold">• Ekstra: Notifikasi Audio Nada DANA Aktif!</p>
               </div>
               <button
                 onClick={() => handleUseVoucher('referred', 'withdraw', 'Gratis Tarik Tunai')}
@@ -1386,12 +1421,19 @@ function Inbox(p) {
   const [tab, setTab] = useState('app'); // 'app' | 'wa'
   const m = s.merchant;
 
+  // Isi notifikasi mengikuti track pengundang: Rian dapat saldo, Bu Ratna dapat kupon.
+  const rw = PERSONA_REWARDS[s.role] ?? PERSONA_REWARDS.consumer;
+  const rewardLine = (tahap) =>
+    rw[tahap].type === 'saldo'
+      ? `Reward ${rw[tahap].title} otomatis masuk ke Saldo Pocket DANA.`
+      : `Reward ${rw[tahap].title} otomatis aktif di tab Reward.`;
+
   const appItems = [
     m.firstPayment >= 10000 && {
       tone: 'emerald',
       icon: 'bolt',
       title: `Tahap 1 Selesai : ${m.name}`,
-      body: `Reward Rp10.000 otomatis masuk ke Saldo Pocket DANA.`,
+      body: rewardLine('tahap1'),
       time: 'Baru saja',
     },
     m.issued && {
@@ -1405,14 +1447,14 @@ function Inbox(p) {
       tone: 'emerald',
       icon: 'trophy',
       title: 'Tahap 2 Selesai : Toko Kelontong Jaya',
-      body: 'Reward Rp30.000 otomatis masuk ke Saldo Pocket DANA.',
+      body: rewardLine('tahap2'),
       time: 'Kemarin',
     },
     {
       tone: 'emerald',
       icon: 'bolt',
       title: 'Tahap 1 Selesai : Kopi Pak Rudi',
-      body: 'Reward Rp10.000 otomatis masuk ke Saldo Pocket DANA.',
+      body: rewardLine('tahap1'),
       time: '3 hari lalu',
     },
     {
@@ -1439,17 +1481,15 @@ function Inbox(p) {
         <div className="flex rounded-xl bg-slate-200 p-1 text-[11px] font-bold">
           <button
             onClick={() => setTab('app')}
-            className={`flex-1 rounded-lg py-1.5 transition ${
-              tab === 'app' ? 'bg-dana-500 text-white shadow-xs' : 'text-slate-600'
-            }`}
+            className={`flex-1 rounded-lg py-1.5 transition ${tab === 'app' ? 'bg-dana-500 text-white shadow-xs' : 'text-slate-600'
+              }`}
           >
             Notifikasi DANA ({appItems.length})
           </button>
           <button
             onClick={() => setTab('wa')}
-            className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-1.5 transition ${
-              tab === 'wa' ? 'bg-[#25D366] text-white shadow-xs' : 'text-slate-600'
-            }`}
+            className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg py-1.5 transition ${tab === 'wa' ? 'bg-[#25D366] text-white shadow-xs' : 'text-slate-600'
+              }`}
           >
             <Icon name="whatsapp" className="h-3.5 w-3.5" />
             WhatsApp ({WHATSAPP_NOTIFICATIONS.length})
@@ -1510,6 +1550,29 @@ function Inbox(p) {
         )}
       </div>
     </MiniShell>
+  );
+}
+
+/* --------------------------- HP 2 idle: belum ada undangan masuk */
+
+function WaitingInvite({ inviter }) {
+  return (
+    <Shell className="bg-slate-900">
+      <StatusBar dark />
+      <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-3xl bg-[#25D366]/15 text-[#25D366]">
+          <Icon name="whatsapp" className="h-8 w-8" />
+        </span>
+        <p className="mt-4 text-sm font-extrabold text-white">Belum ada undangan masuk</p>
+        <p className="mt-2 text-[11px] leading-relaxed text-slate-400">
+          Pak Joko belum memakai DANA Bisnis. Undangan dari {inviter} akan tiba di sini sebagai notifikasi
+          WhatsApp, lalu ketuk notifikasinya untuk membuka link pendaftaran.
+        </p>
+        <div className="mt-5 flex items-center gap-2 rounded-full bg-slate-800 px-3 py-1.5 text-[10px] font-bold text-slate-300">
+          <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-400" /> Menunggu pesan WhatsApp
+        </div>
+      </div>
+    </Shell>
   );
 }
 
@@ -1684,9 +1747,15 @@ function Register({ s, go, issueQris, notify, inviter }) {
 
 /* -------------------------- instant QRIS + first-day checklist */
 
-function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
+function Qris(props) {
+  const { s, go, notify, testScan, receivePayment, completeStage2, inviter, mark } = props;
   const m = s.merchant;
   const isPaid = m.firstPayment >= 10000;
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+
+  // Warung ini di daftar referal pengundang: dipakai untuk status Tahap 2.
+  const myReferral = s.referrals?.find((r) => r.name === m.name || r.id === 0);
+  const stage2Done = (myReferral?.stage ?? 0) >= 2;
 
   const steps = [
     { done: m.issued, title: 'QRIS toko aktif (KYC Light)', desc: 'Akun siap menerima pembayaran digital dari seluruh bank & e-wallet.' },
@@ -1694,11 +1763,21 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
       done: m.testScan,
       title: 'Uji coba scan QRIS toko',
       desc: 'Scan QRIS untuk mencoba pembayaran dan mendengarkan Nada DANA.',
+      action: { label: '🔊 Coba Scan Rp1.000 Sekarang', onClick: testScan },
     },
     {
       done: isPaid,
       title: 'Terima pembayaran pertama min. Rp10.000',
-      desc: 'Uang penjualan masuk 100% utuh (0% MDR) dan aktifkan bonus modal usaha Rp15.000.',
+      desc: 'Terima pembayaran QRIS pertama dan aktifkan kupon Gratis Tarik Tunai 2x (Tahap 1).',
+      action: { label: '💳 Pelanggan Bayar Rp15.000', onClick: () => receivePayment(15000) },
+    },
+    {
+      done: stage2Done,
+      title: '5 transaksi unik & foto verifikasi kasir (Tahap 2)',
+      desc: 'Setelah lolos audit validitas transaksi (1–14 hari), kupon Gratis Biaya Admin 10x aktif (Tahap 2).',
+      action: isPaid
+        ? { label: '🏆 Selesaikan 5 Transaksi & Foto Kasir', onClick: () => setShowVerifyModal(true) }
+        : { label: '🔒 Selesaikan pembayaran pertama dulu', onClick: () => notify('Terima pembayaran pertama minimal Rp10.000 dulu untuk lanjut ke Tahap 2.') },
     },
   ];
 
@@ -1729,7 +1808,13 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
         </div>
 
         {/* Primary CTA to open complete business profile with step-by-step guidance */}
-        <Btn variant="green" onClick={() => go('bizprofile')}>
+        <Btn
+          variant="green"
+          onClick={() => {
+            if (mark) mark('open_bizprofile');
+            go('bizprofile');
+          }}
+        >
           Buka Profil DANA Bisnis &amp; Panduan Toko
         </Btn>
 
@@ -1739,19 +1824,25 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
               <Icon name="sound" className="h-4 w-4" /> Pembayaran pertama {rupiah(m.firstPayment)} diterima
             </p>
             <p className="mt-1 text-[11px] leading-relaxed text-emerald-700">
-              Pembayaran berhasil diterima! Uang penjualan masuk 100% utuh tanpa potongan MDR + Saldo Modal Usaha Rp15.000 telah ditambahkan ke saldo tokomu.
+              Pembayaran berhasil diterima! Kupon Gratis Tarik Tunai 2x telah aktif di tab Reward tokomu.
             </p>
           </div>
         )}
 
         <div className="rounded-2xl bg-white p-4 shadow-sm">
-          <p className="text-xs font-bold text-slate-500">Checklist Hari Pertama</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold text-slate-500">Checklist Hari Pertama</p>
+            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[9px] font-bold text-amber-700">
+              MODE DEMO · aksi pelanggan disimulasikan
+            </span>
+          </div>
           <div className="mt-3 space-y-3">
             {steps.map((st, i) => (
               <div key={i} className="flex gap-3">
                 <span
-                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${st.done ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'
-                    }`}
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
+                    st.done ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'
+                  }`}
                 >
                   {st.done ? <Icon name="check" className="h-3.5 w-3.5" /> : i + 1}
                 </span>
@@ -1784,6 +1875,20 @@ function Qris({ s, go, notify, testScan, receivePayment, inviter }) {
           </p>
         </div>
       </div>
+
+      <QrisCashierVerificationModal
+        isOpen={showVerifyModal}
+        onClose={() => setShowVerifyModal(false)}
+        onConfirm={() => {
+          if (completeStage2) completeStage2();
+          if (mark) {
+            mark('stage2_verify');
+            mark('stage2');
+          }
+          notify('🎉 Verifikasi kasir berhasil! Kupon Bebas Biaya Admin 10x aktif.');
+        }}
+        merchant={{ name: m.name }}
+      />
     </Shell>
   );
 }
@@ -1885,6 +1990,7 @@ export function WhatsAppChatModal({ chat, onClose, go }) {
 }
 
 export default {
+  waiting: WaitingInvite,
   home: Home,
   grid: Grid,
   bizdash: BizDash,
