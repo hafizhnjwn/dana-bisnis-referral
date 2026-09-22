@@ -1035,7 +1035,7 @@ export function BizDash({
                     onClick={() => receivePayment(15000)}
                     className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
                   >
-                    ⚡ Trigger Step 7: Transaksi Pertama Rp15.000
+                    + Tambah Transaksi Rp15.000
                   </button>
                 )}
               </div>
@@ -1074,12 +1074,12 @@ export function BizDash({
                     : 'Kumpulkan 5 transaksi unik dari pembeli berbeda & verifikasi foto QRIS terpajang di kasir warung.'}
                 </p>
 
-                {!stage2Done && (
+                {!stage2Done && completeStage2 && (
                   <button
-                    onClick={() => setShowVerifyModal(true)}
-                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
+                    onClick={() => completeStage2()}
+                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
                   >
-                    📸 Trigger Step 10: Verifikasi Foto Kasir &amp; Selesaikan Tahap 2
+                    + Tambah 5 Transaksi
                   </button>
                 )}
               </div>
