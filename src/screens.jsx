@@ -663,7 +663,7 @@ function Nominate(p) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Tulis nama warung langganan"
-            className="w-full rounded-xl border border-slate-200 px-3 py-3 text-sm outline-none focus:border-dana-500"
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none focus:border-dana-500 focus:ring-1 focus:ring-dana-500"
           />
         </Field>
 
@@ -688,7 +688,7 @@ function Nominate(p) {
             onChange={(e) => setPhone(e.target.value)}
             inputMode="tel"
             placeholder="08xx xxxx xxxx"
-            className={`w-full rounded-xl border px-3 py-3 text-sm outline-none ${phone && !phoneOk ? 'border-red-400' : 'border-slate-200 focus:border-dana-500'
+            className={`w-full rounded-xl border bg-white px-3 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none ${phone && !phoneOk ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-dana-500 focus:ring-1 focus:ring-dana-500'
               }`}
           />
           {phone && !phoneOk && <p className="mt-2 text-[10px] font-semibold text-red-500">Nomor WhatsApp belum valid.</p>}
@@ -742,7 +742,7 @@ function Tracker(p) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Cari nama usaha"
-            className="w-full bg-transparent text-xs outline-none placeholder:text-slate-400"
+            className="w-full bg-transparent text-xs font-medium text-slate-900 outline-none placeholder:text-slate-400"
           />
         </div>
       </div>
@@ -1697,7 +1697,7 @@ function Register({ s, go, issueQris, notify, inviter }) {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm outline-none focus:border-dana-500"
+            className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none focus:border-dana-500 focus:ring-1 focus:ring-dana-500"
           />
         </label>
 
@@ -1706,11 +1706,11 @@ function Register({ s, go, issueQris, notify, inviter }) {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm outline-none focus:border-dana-500"
+            className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-medium text-slate-900 outline-none focus:border-dana-500 focus:ring-1 focus:ring-dana-500"
           >
-            <option value="">Pilih kategori</option>
+            <option value="" className="text-slate-900 bg-white">Pilih kategori</option>
             {CATEGORIES.map((c) => (
-              <option key={c}>{c}</option>
+              <option key={c} className="text-slate-900 bg-white">{c}</option>
             ))}
           </select>
         </label>

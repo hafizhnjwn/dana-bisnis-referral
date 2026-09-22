@@ -11,8 +11,27 @@
   --color-dana-900: #064e8a;
 }
 
+:root {
+  color-scheme: light;
+}
+
 body {
   @apply bg-slate-100 text-slate-800 antialiased;
+  color-scheme: light;
+}
+
+/* Force dark readable text on inputs regardless of OS dark mode */
+input,
+select,
+textarea {
+  color: #0f172a !important;
+  background-color: #ffffff;
+  color-scheme: light;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
 }
 
 /* Hide the phone's inner scrollbar so the frame keeps looking like a device. */
