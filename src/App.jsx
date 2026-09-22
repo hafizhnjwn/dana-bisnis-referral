@@ -10,6 +10,7 @@ import {
   TIERS,
 } from './rewards.js';
 import screens, { WHATSAPP_NOTIFICATIONS, WhatsAppChatModal } from './screens.jsx';
+import { QrisCashierVerificationModal } from './hostApp.jsx';
 import { Icon } from './ui.jsx';
 
 /**
@@ -246,9 +247,12 @@ export default function App() {
   // Scenario state: 'rian_joko' | 'ratna_joko'
   const [scenario, setScenario] = useState('rian_joko');
 
-  // Progres skenario: diisi oleh aksi nyata di kedua handphone.
+  // Progres skenario: diisi oleh aksi nyata di kedua handphone atau tombol trigger.
   const [progress, setProgress] = useState({});
   const mark = (id) => setProgress((p) => (p[id] ? p : { ...p, [id]: true }));
+
+  // Modal Verifikasi Meja Kasir global (Step 10)
+  const [showVerifyModalGlobal, setShowVerifyModalGlobal] = useState(false);
 
   // Penanda UI yang dikirim layar lewat patch(), mis. hasSeenAffiliateGuide.
   const [flags, setFlags] = useState({});
@@ -646,6 +650,69 @@ export default function App() {
   const currentIndex = steps.findIndex((st) => !progress[st.id]);
   const currentStep = currentIndex === -1 ? null : steps[currentIndex];
 
+  /** Trigger langsung aksi per langkah (terutama Step 7 & Step 10) */
+  const handleTriggerStep = (stepId) => {
+    switch (stepId) {
+      case 'open_hub':
+        go1('hub');
+        break;
+      case 'guide_done':
+        applyPatch({ hasSeenAffiliateGuide: true });
+        mark('guide_done');
+        go1('hub');
+        break;
+      case 'open_nominate':
+        go1('nominate');
+        break;
+      case 'invite_sent':
+        actions.nominate({
+          name: 'Warung Sembako Pak Joko',
+          category: 'Toko Kelontong',
+          phone: '081244098822',
+        });
+        break;
+      case 'wa_notif': {
+        const notif =
+          WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-invite-joko') ?? WHATSAPP_NOTIFICATIONS[0];
+        setWhatsappPush2({ ...notif, sender: user1.name });
+        mark('wa_notif');
+        break;
+      }
+      case 'open_invite':
+        actions.issueQris({
+          name: 'Warung Sembako Pak Joko',
+          category: 'Toko Kelontong',
+          location: 'Jl. Tebet Barat Dalam VIII No.12, Jakarta Selatan',
+        });
+        break;
+      case 'stage1_tx':
+        if (!merchant.issued) {
+          setMerchant((m) => ({ ...m, issued: true }));
+        }
+        if (screen2 !== 'qris' && screen2 !== 'bizprofile') {
+          setScreen2('qris');
+        }
+        actions.receivePayment(15000);
+        break;
+      case 'open_bizprofile':
+        mark('open_bizprofile');
+        go2('bizprofile');
+        break;
+      case 'biz_guide':
+        actions.completeBizGuide();
+        go2('bizprofile');
+        break;
+      case 'stage2_verify':
+        if (screen2 !== 'bizprofile' && screen2 !== 'qris') {
+          setScreen2('bizprofile');
+        }
+        setShowVerifyModalGlobal(true);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 px-3 py-5 sm:px-6">
       {/* Top Header & Interactive Scenario Bar */}
@@ -712,8 +779,16 @@ export default function App() {
           })}
         </div>
 
-        {/* Section 2: Step-by-step scenario progress (dijalankan langsung di kedua HP) */}
-        <ScenarioSteps steps={steps} progress={progress} />
+        {/* Section 2: Step-by-step scenario progress (dijalankan langsung di kedua HP atau via tombol trigger) */}
+        <ScenarioSteps steps={steps} progress={progress} onTriggerStep={handleTriggerStep} />
+
+        {/* Section 3: Active Step Trigger Banner (Highlighted Bar for Step 7, Step 10, etc.) */}
+        <ActiveStepTriggerBanner
+          currentStep={currentStep}
+          currentIndex={currentIndex}
+          onTriggerStep={handleTriggerStep}
+          onQuickCompleteStage2={() => actions.completeStage2()}
+        />
 
         {/* Dual Phone Showcase Side-by-Side */}
         <div className="mt-2 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 xl:gap-14">
@@ -840,31 +915,41 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Global Cashier Verification Modal for Step 10 */}
+      <QrisCashierVerificationModal
+        isOpen={showVerifyModalGlobal}
+        onClose={() => setShowVerifyModalGlobal(false)}
+        onConfirm={() => {
+          actions.completeStage2();
+          setShowVerifyModalGlobal(false);
+        }}
+        merchant={merchant}
+      />
     </div>
   );
 }
 
 /**
- * Papan progres skenario. Tidak ada tombol aksi di sini: setiap langkah ditandai
- * selesai ketika penguji benar-benar melakukannya di dalam handphone.
+ * Papan progres skenario interaktif dengan tombol trigger langsung pada setiap langkah.
  */
-function ScenarioSteps({ steps, progress }) {
+function ScenarioSteps({ steps, progress, onTriggerStep }) {
   const doneCount = steps.filter((st) => progress[st.id]).length;
   const currentIndex = steps.findIndex((st) => !progress[st.id]);
   const finished = currentIndex === -1;
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-3 shadow-lg">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-3.5 shadow-lg">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-1.5 text-[11px] font-black tracking-wider text-amber-400 uppercase">
-          <span>🧭</span> 10 Langkah Referral Merchant Program · Selesai Langsung di HP
+          <span>🧭</span> 10 Langkah Referral Merchant Program · Selesai Langsung di HP atau Lewat Tombol Trigger
         </span>
         <span className="text-[10px] font-bold text-slate-300">
           {finished ? (
-            <span className="text-emerald-400">Semua {steps.length} langkah selesai 🎉</span>
+            <span className="text-emerald-400 font-extrabold">Semua {steps.length} langkah selesai 🎉</span>
           ) : (
             <>
-              {doneCount}/{steps.length} langkah selesai
+              <span className="text-amber-300 font-extrabold">{doneCount}</span>/{steps.length} langkah selesai
             </>
           )}
         </span>
@@ -877,11 +962,14 @@ function ScenarioSteps({ steps, progress }) {
         />
       </div>
 
-      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {steps.map((st, i) => {
           const done = Boolean(progress[st.id]);
           const active = i === currentIndex;
           const isLast = i === steps.length - 1;
+          const isStep7 = st.id === 'stage1_tx';
+          const isStep10 = st.id === 'stage2_verify';
+
           return (
             <div
               key={st.id}
@@ -889,8 +977,12 @@ function ScenarioSteps({ steps, progress }) {
                 done
                   ? 'border-emerald-500/40 bg-emerald-500/10'
                   : active
-                    ? 'border-dana-400 bg-dana-950/70 ring-2 ring-dana-500/50 shadow-lg shadow-dana-500/15'
-                    : 'border-slate-800 bg-slate-950/40 opacity-60'
+                    ? isStep7
+                      ? 'border-emerald-400 bg-emerald-950/70 ring-2 ring-emerald-500/60 shadow-lg shadow-emerald-500/20'
+                      : isStep10
+                        ? 'border-amber-400 bg-amber-950/70 ring-2 ring-amber-500/60 shadow-lg shadow-amber-500/20'
+                        : 'border-dana-400 bg-dana-950/70 ring-2 ring-dana-500/50 shadow-lg shadow-dana-500/15'
+                    : 'border-slate-800 bg-slate-950/40 opacity-70 hover:opacity-90'
               }`}
             >
               <div>
@@ -900,8 +992,12 @@ function ScenarioSteps({ steps, progress }) {
                       done
                         ? 'bg-emerald-500 text-white'
                         : active
-                          ? 'bg-dana-500 text-white'
-                          : 'bg-slate-800 text-slate-500'
+                          ? isStep7
+                            ? 'bg-emerald-500 text-white'
+                            : isStep10
+                              ? 'bg-amber-500 text-white'
+                              : 'bg-dana-500 text-white'
+                          : 'bg-slate-800 text-slate-400'
                     }`}
                   >
                     {done ? '✓' : i + 1}
@@ -915,7 +1011,7 @@ function ScenarioSteps({ steps, progress }) {
                   </span>
                   {active && (
                     <span className="ml-auto flex items-center gap-1 text-[8px] font-black text-amber-300">
-                      <span className="h-1.5 w-1.5 animate-ping rounded-full bg-amber-300" /> SEKARANG
+                      <span className="h-1.5 w-1.5 animate-ping rounded-full bg-amber-300" /> AKTIF
                     </span>
                   )}
                   {done && <span className="ml-auto text-[8px] font-black text-emerald-400">SELESAI</span>}
@@ -923,29 +1019,186 @@ function ScenarioSteps({ steps, progress }) {
 
                 <p
                   className={`mt-1.5 text-[11px] leading-snug font-bold ${
-                    done ? 'text-emerald-200/90' : active ? 'text-white' : 'text-slate-400'
+                    done ? 'text-emerald-200/90' : active ? 'text-white font-extrabold' : 'text-slate-300'
                   }`}
                 >
                   {st.title}
                 </p>
-                {!done && (
-                  <p className={`mt-0.5 text-[10px] leading-snug ${active ? 'text-slate-300' : 'text-slate-500'}`}>
-                    {st.hint}
-                  </p>
-                )}
+                <p className={`mt-0.5 text-[10px] leading-snug ${active ? 'text-slate-300' : 'text-slate-500'}`}>
+                  {st.hint}
+                </p>
               </div>
 
-              {/* Step Flow Arrow to Next Step */}
-              {!isLast && (
-                <div className="mt-2 flex items-center justify-end text-[10px] font-bold text-slate-600">
-                  <span className="flex items-center gap-0.5">
-                    <span className="text-[9px] text-slate-500">Lanjut</span> ➔
-                  </span>
-                </div>
-              )}
+              {/* Action / Trigger Buttons directly inside the Step Box */}
+              <div className="mt-2.5 pt-2 border-t border-slate-800/80">
+                {isStep7 ? (
+                  <button
+                    onClick={() => onTriggerStep('stage1_tx')}
+                    className={`flex w-full items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[10px] font-black shadow-md transition active:scale-95 cursor-pointer ${
+                      done
+                        ? 'bg-emerald-800/40 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-800/60'
+                        : 'bg-emerald-500 hover:bg-emerald-400 text-white ring-2 ring-emerald-300/60 shadow-emerald-500/30'
+                    }`}
+                  >
+                    {done ? '✓ Transaksi Rp15.000 Selesai' : '⚡ Trigger Bayar Rp15.000'}
+                  </button>
+                ) : isStep10 ? (
+                  <button
+                    onClick={() => onTriggerStep('stage2_verify')}
+                    className={`flex w-full items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[10px] font-black shadow-md transition active:scale-95 cursor-pointer ${
+                      done
+                        ? 'bg-emerald-800/40 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-800/60'
+                        : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white ring-2 ring-amber-300/60 shadow-amber-500/30'
+                    }`}
+                  >
+                    {done ? '✓ Tahap 2 Selesai (Buka Foto)' : '📸 Trigger Verifikasi Kasir'}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => onTriggerStep(st.id)}
+                    className={`flex w-full items-center justify-center gap-1 rounded-lg py-1 px-1.5 text-[9px] font-bold transition active:scale-95 cursor-pointer ${
+                      done
+                        ? 'bg-slate-800/50 text-slate-400 border border-slate-700/40 hover:bg-slate-800 hover:text-slate-300'
+                        : active
+                          ? 'bg-dana-500 hover:bg-dana-400 text-white font-black shadow-xs ring-1 ring-dana-300/50'
+                          : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
+                    }`}
+                  >
+                    {done ? 'Ulangi Langkah' : active ? '▶ Trigger Langkah' : 'Jalankan'}
+                  </button>
+                )}
+
+                {/* Step Flow Connector Arrow */}
+                {!isLast && (
+                  <div className="mt-1.5 flex items-center justify-end text-[9px] font-bold text-slate-500">
+                    <span className="flex items-center gap-0.5 opacity-60">
+                      <span>Lanjut</span> ➔
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Banner aktif di atas kedua handphone yang menyorot langkah saat ini beserta tombol trigger langsung.
+ */
+function ActiveStepTriggerBanner({ currentStep, currentIndex, onTriggerStep, onQuickCompleteStage2 }) {
+  if (!currentStep) {
+    return (
+      <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/40 p-4 text-center">
+        <p className="text-sm font-black text-emerald-300">
+          🎉 Seluruh 10 Langkah Referral Merchant Program Berhasil Diselesaikan!
+        </p>
+        <p className="text-xs text-slate-300 mt-1">
+          Warung Sembako Pak Joko telah aktif menerima pembayaran QRIS, reward Tahap 1 &amp; Tahap 2 telah cair ke akun masing-masing.
+        </p>
+      </div>
+    );
+  }
+
+  const isStep7 = currentStep.id === 'stage1_tx';
+  const isStep10 = currentStep.id === 'stage2_verify';
+
+  return (
+    <div
+      className={`rounded-2xl border-2 p-4 shadow-xl transition-all ${
+        isStep7
+          ? 'border-emerald-400 bg-gradient-to-r from-emerald-950/95 via-slate-900 to-emerald-950/95 ring-2 ring-emerald-500/40'
+          : isStep10
+            ? 'border-amber-400 bg-gradient-to-r from-amber-950/95 via-slate-900 to-amber-950/95 ring-2 ring-amber-500/40'
+            : 'border-dana-500/60 bg-gradient-to-r from-dana-950/80 via-slate-900 to-slate-900'
+      }`}
+    >
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <span
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white font-black text-base shadow-lg ${
+              isStep7
+                ? 'bg-emerald-500 shadow-emerald-500/30 animate-pulse'
+                : isStep10
+                  ? 'bg-amber-500 shadow-amber-500/30 animate-pulse'
+                  : 'bg-dana-500 shadow-dana-500/30'
+            }`}
+          >
+            {isStep7 ? '⚡7' : isStep10 ? '📸10' : `${currentIndex + 1}`}
+          </span>
+          <div className="flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`text-[10px] font-black uppercase tracking-wider ${
+                  isStep7 ? 'text-emerald-400' : isStep10 ? 'text-amber-400' : 'text-dana-400'
+                }`}
+              >
+                TOMBOL TRIGGER LANGKAH {currentIndex + 1} AKTIF
+              </span>
+              <span
+                className={`rounded-full px-2 py-0.5 text-[9px] font-black ${
+                  currentStep.phone === 1
+                    ? 'bg-dana-500/20 text-dana-300 border border-dana-500/30'
+                    : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                }`}
+              >
+                Aksi di HP {currentStep.phone}
+              </span>
+              {isStep7 && (
+                <span className="rounded-full bg-emerald-500/30 text-emerald-300 text-[9px] font-bold px-2 py-0.5 border border-emerald-500/40">
+                  Nominal: Rp15.000 (&gt; Rp10.000)
+                </span>
+              )}
+              {isStep10 && (
+                <span className="rounded-full bg-amber-500/30 text-amber-300 text-[9px] font-bold px-2 py-0.5 border border-amber-500/40">
+                  5 Tx Unik + Meja Kasir
+                </span>
+              )}
+            </div>
+            <h3 className="text-sm sm:text-base font-black text-white mt-0.5">
+              {currentStep.title}
+            </h3>
+            <p className="text-[11px] text-slate-300 mt-0.5 leading-snug">
+              {currentStep.hint}
+            </p>
+          </div>
+        </div>
+
+        {/* Action Button(s) */}
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
+          {isStep7 ? (
+            <button
+              onClick={() => onTriggerStep('stage1_tx')}
+              className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 px-5 py-3 text-xs sm:text-sm font-black text-white shadow-lg shadow-emerald-500/40 active:scale-95 transition cursor-pointer"
+            >
+              💳 KLIK DI SINI: TRIGGER SELESAI TRANSAKSI RP15.000
+            </button>
+          ) : isStep10 ? (
+            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+              <button
+                onClick={() => onTriggerStep('stage2_verify')}
+                className="flex-1 md:flex-initial flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 px-4 py-3 text-xs sm:text-sm font-black text-white shadow-lg shadow-amber-500/40 active:scale-95 transition cursor-pointer"
+              >
+                📸 Buka Modal Foto Kasir
+              </button>
+              <button
+                onClick={onQuickCompleteStage2}
+                className="flex-1 md:flex-initial flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-3 text-xs sm:text-sm font-black text-white shadow-md active:scale-95 transition cursor-pointer"
+              >
+                ⚡ Quick Trigger Selesai
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => onTriggerStep(currentStep.id)}
+              className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-dana-500 hover:bg-dana-400 px-5 py-2.5 text-xs font-black text-white shadow-md shadow-dana-500/30 active:scale-95 transition cursor-pointer"
+            >
+              ▶ Jalankan Langkah {currentIndex + 1}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

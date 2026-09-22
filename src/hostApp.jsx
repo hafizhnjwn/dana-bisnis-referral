@@ -697,6 +697,7 @@ export function BizDash({
   initialTour = false,
   completeBizGuide,
   completeStage2,
+  receivePayment,
   mark,
   progress,
 }) {
@@ -1029,6 +1030,14 @@ export function BizDash({
                     ? '🎉 Pembayaran pertama Rp15.000 masuk! Kupon Gratis Tarik Tunai 2x aktif di tab Reward untuk ditarik ke rekening bank kapan saja.'
                     : 'Terima pembayaran QRIS pertama minimal Rp10.000 untuk mengaktifkan kupon bebas tarik tunai.'}
                 </p>
+                {!isPaid && receivePayment && (
+                  <button
+                    onClick={() => receivePayment(15000)}
+                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
+                  >
+                    ⚡ Trigger Step 7: Transaksi Pertama Rp15.000
+                  </button>
+                )}
               </div>
 
               {/* Card Hadiah Tahap 2 */}
@@ -1068,9 +1077,9 @@ export function BizDash({
                 {!stage2Done && (
                   <button
                     onClick={() => setShowVerifyModal(true)}
-                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 py-2.5 text-xs font-extrabold text-white shadow-md active:scale-98 transition"
+                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 py-2.5 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
                   >
-                    📸 Verifikasi Foto QRIS Kasir &amp; Selesaikan Tahap 2
+                    📸 Trigger Step 10: Verifikasi Foto Kasir &amp; Selesaikan Tahap 2
                   </button>
                 )}
               </div>

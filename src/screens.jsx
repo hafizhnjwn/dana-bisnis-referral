@@ -1807,6 +1807,52 @@ function Qris(props) {
           </div>
         </div>
 
+        {/* Prominent Step 7 Trigger Card */}
+        {!isPaid && (
+          <div className="rounded-2xl border-2 border-emerald-500 bg-emerald-50 p-3.5 shadow-md text-slate-900">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-900">
+                ⚡ TOMBOL TRIGGER STEP 7
+              </span>
+              <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[9px] font-extrabold text-white">
+                +Rp15.000 (&gt; Rp10.000)
+              </span>
+            </div>
+            <p className="mt-1 text-[11px] leading-snug text-emerald-800">
+              Tekan tombol di bawah untuk menyimulasikan transaksi pertama dari Rian sebesar Rp15.000. Saldo bertambah &amp; Hadiah Tahap 1 cair!
+            </p>
+            <button
+              onClick={() => receivePayment(15000)}
+              className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-3 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
+            >
+              💳 Trigger Selesai Transaksi: Bayar Rp15.000
+            </button>
+          </div>
+        )}
+
+        {/* Prominent Step 10 Trigger Card */}
+        {isPaid && !stage2Done && (
+          <div className="rounded-2xl border-2 border-amber-500 bg-amber-50 p-3.5 shadow-md text-slate-900">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-900">
+                📸 TOMBOL TRIGGER STEP 10
+              </span>
+              <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[9px] font-extrabold text-white">
+                5 Tx + Meja Kasir
+              </span>
+            </div>
+            <p className="mt-1 text-[11px] leading-snug text-amber-800">
+              Verifikasi foto stiker QRIS di meja kasir warung Pak Joko untuk klaim Hadiah Tahap 2.
+            </p>
+            <button
+              onClick={() => setShowVerifyModal(true)}
+              className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 py-3 text-xs font-black text-white shadow-md active:scale-98 transition cursor-pointer"
+            >
+              📸 Trigger Verifikasi Foto Kasir &amp; Klaim Tahap 2
+            </button>
+          </div>
+        )}
+
         {/* Primary CTA to open complete business profile with step-by-step guidance */}
         <Btn
           variant="green"
