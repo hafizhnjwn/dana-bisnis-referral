@@ -80,7 +80,7 @@ if (!ratnaHub.includes('Bantu Daftarkan Rekan Usaha')) throw new Error('Hub does
 // Panduan juga harus tampil untuk track Mitra Bisnis, dengan reward kupon (bukan saldo),
 // supaya langkah "selesaikan panduan" bisa diselesaikan di skenario 2.
 const ratnaGuide = renderToStaticMarkup(<screens.hub {...ratna} />);
-if (!ratnaGuide.includes('DANA SAHABAT WARUNG (1/5)')) throw new Error('Guide header missing DANA SAHABAT WARUNG (1/5)');
+if (!ratnaGuide.includes('DANA SAHABAT WARUNG (1/4)')) throw new Error('Guide header missing DANA SAHABAT WARUNG (1/4)');
 if (ratnaGuide.includes('PANDUAN REFERER')) throw new Error('Guide header still contains PANDUAN REFERER');
 console.log('persona isolation: ok');
 
@@ -431,6 +431,58 @@ if (!guideSlide4.includes('Daftarkan warung favoritmu, hanya 1 menit!') || !guid
 }
 if (guideSlide4.includes('usaha kenalanmu') || guideSlide4.includes('Sahabat Dana')) {
   throw new Error('Guide slide 4 should not contain "usaha kenalanmu" or "Sahabat Dana"');
+}
+
+// Business Owner Guide checks (Bu Putu / Pak Joko: role="merchant" or role="referred")
+// Slide 1: Headline, body, Uang Tunai, QRIS Dana Bisnis, Quote
+const bizGuideSlide0 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={0} />);
+if (!bizGuideSlide0.includes('Bantu Usaha Sekitarmu Lebih Maju, Nikmati Gratis Biaya Admin hingga 10 Transaksi!')) {
+  throw new Error('Biz guide slide 0 missing business headline');
+}
+if (!bizGuideSlide0.includes('Sangat mengecewakan saat pelanggan ingin belanja namun harus batal')) {
+  throw new Error('Biz guide slide 0 missing business body');
+}
+if (!bizGuideSlide0.includes('Repot menyiapkan uang kembalian &amp; risiko uang palsu')) {
+  throw new Error('Biz guide slide 0 missing Uang Tunai text');
+}
+if (!bizGuideSlide0.includes('Terima pembayaran mudah, tinggal scan, praktis.')) {
+  throw new Error('Biz guide slide 0 missing QRIS text');
+}
+if (!bizGuideSlide0.includes('Kini banyak pelanggan lebih suka membayar non-tunai. Mari bersama-sama memajukan usaha di lingkungan kita!')) {
+  throw new Error('Biz guide slide 0 missing quote');
+}
+if (!bizGuideSlide0.includes('DANA SAHABAT WARUNG (1/4)')) {
+  throw new Error('Biz guide slide 0 missing (1/4) indicator');
+}
+
+// Slide 2 for Biz Owner (Index 1 of 4: Slide 3 in consumer)
+const bizGuideSlide1 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={1} />);
+if (!bizGuideSlide1.includes('Cukup bantu daftarin usaha sekitarmu, lewat hp tanpa ribet')) {
+  throw new Error('Biz guide slide 1 missing headline');
+}
+if (!bizGuideSlide1.includes('Usaha Sekitarmu')) {
+  throw new Error('Biz guide slide 1 missing Usaha Sekitarmu badge');
+}
+if (bizGuideSlide1.includes('babibuu') || bizGuideSlide1.includes('kenalanmu')) {
+  throw new Error('Biz guide slide 1 should not contain "babibuu" or "kenalanmu"');
+}
+
+// Slide 3 for Biz Owner (Index 2 of 4: Slide 4 in consumer)
+const bizGuideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={2} />);
+if (!bizGuideSlide2.includes('Ka Adit telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!')) {
+  throw new Error('Biz guide slide 2 missing Ka Adit testimonial headline');
+}
+
+// Slide 4 for Biz Owner (Index 3 of 4: Slide 5 in consumer)
+const bizGuideSlide3 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={3} />);
+if (!bizGuideSlide3.includes('Daftarkan usaha sekitarmu, hanya 1 menit!')) {
+  throw new Error('Biz guide slide 3 missing headline');
+}
+if (!bizGuideSlide3.includes('Daftarkan Usaha Sekitarmu Sekarang (1 Menit)')) {
+  throw new Error('Biz guide slide 3 missing CTA button');
+}
+if (bizGuideSlide3.includes('kenalanmu')) {
+  throw new Error('Biz guide slide 3 should not contain "kenalanmu"');
 }
 
 console.log('compact reward cards & pak joko referal isolation: ok');

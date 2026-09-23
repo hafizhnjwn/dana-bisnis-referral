@@ -220,54 +220,61 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
 /* -------------------------------- Mini Program Beranda (hub) */
 
 export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer', initialStep = 0 }) {
-  // Guide DANA Sahabat Warung (Track Konsumen / Rian)
+  const isBiz = role === 'merchant' || role === 'referred';
   const [step, setStep] = useState(initialStep);
   if (!isOpen) return null;
 
-  const slides = [
-    // 1. Headline: Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!
-    {
-      tag: 'DANA SAHABAT WARUNG',
-      title: 'Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!',
-      subtitle:
-        'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu warung langgananmu beralih ke QRIS DANA biar transaksi makin sat-set!',
-      visual: (
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="grid grid-cols-2 gap-2 text-center text-xs">
-            <div className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2.5">
-              <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg border-2 border-rose-400 bg-rose-500/30 text-rose-100 shadow-sm">
-                <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-              <p className="mt-1.5 font-bold text-rose-200">Uang Tunai</p>
-              <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
-                Drama kembalian &amp; ribet cari uang pas
-              </p>
+  const slide1 = {
+    tag: 'DANA SAHABAT WARUNG',
+    title: isBiz
+      ? 'Bantu Usaha Sekitarmu Lebih Maju, Nikmati Gratis Biaya Admin hingga 10 Transaksi!'
+      : 'Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!',
+    subtitle: isBiz
+      ? 'Sangat mengecewakan saat pelanggan ingin belanja namun harus batal karena tidak ada pembayaran non-tunai. Mari ajak rekan usaha di lingkunganmu beralih ke QRIS DANA agar pelayanan jadi lebih lengkap, memudahkan pelanggan, dan meningkatkan penjualan'
+      : 'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu warung langgananmu beralih ke QRIS DANA biar transaksi makin sat-set!',
+    visual: (
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+        <div className="grid grid-cols-2 gap-2 text-center text-xs">
+          <div className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2.5">
+            <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg border-2 border-rose-400 bg-rose-500/30 text-rose-100 shadow-sm">
+              <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </div>
-            <div className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 p-2.5">
-              <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg border-2 border-emerald-400 bg-emerald-500/30 text-emerald-100 shadow-sm">
-                <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <p className="mt-1.5 font-bold text-emerald-200">QRIS Dana Bisnis</p>
-              <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
-                Bayar apa aja tinggal scan, simpel &amp; modern
-              </p>
-            </div>
+            <p className="mt-1.5 font-bold text-rose-200">Uang Tunai</p>
+            <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
+              {isBiz
+                ? 'Repot menyiapkan uang kembalian & risiko uang palsu'
+                : 'Drama kembalian & ribet cari uang pas'}
+            </p>
           </div>
-          <div className="mt-3 rounded-xl border border-white/15 bg-white/10 p-2 text-center">
-            <p className="text-[10px] text-white/90 font-medium leading-snug">
-              💡 7 dari 10 orang sudah cashless. Yuk, jadi alasan warung langgananmu jadi lebih modern!
+          <div className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 p-2.5">
+            <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg border-2 border-emerald-400 bg-emerald-500/30 text-emerald-100 shadow-sm">
+              <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p className="mt-1.5 font-bold text-emerald-200">QRIS Dana Bisnis</p>
+            <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
+              {isBiz
+                ? 'Terima pembayaran mudah, tinggal scan, praktis.'
+                : 'Bayar apa aja tinggal scan, simpel & modern'}
             </p>
           </div>
         </div>
-      ),
-    },
+        <div className="mt-3 rounded-xl border border-white/15 bg-white/10 p-2 text-center">
+          <p className="text-[10px] text-white/90 font-medium leading-snug">
+            {isBiz
+              ? '💡 Kini banyak pelanggan lebih suka membayar non-tunai. Mari bersama-sama memajukan usaha di lingkungan kita!'
+              : '💡 7 dari 10 orang sudah cashless. Yuk, jadi alasan warung langgananmu jadi lebih modern!'}
+          </p>
+        </div>
+      </div>
+    ),
+  };
 
-    // 2. Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!
-    {
+  // 2. Program Referral Merchant (Hanya untuk Konsumen / Rian, dihilangkan untuk Bu Putu)
+  const slide2 = {
       tag: 'REWARD SALDO DANA',
       title:
         'Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
@@ -328,12 +335,14 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
           </div>
         </div>
       ),
-    },
+  };
 
-    // 3. Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu
-    {
-      tag: 'PENDAFTARAN KILAT',
-      title: 'Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu',
+  // 3. Pendaftaran Kilat Lewat HP
+  const slide3 = {
+    tag: 'PENDAFTARAN KILAT',
+    title: isBiz
+      ? 'Cukup bantu daftarin usaha sekitarmu, lewat hp tanpa ribet'
+      : 'Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial glow */}
@@ -395,17 +404,19 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               <span className="text-3xl">🏪</span>
             </div>
             <span className="mt-1.5 rounded-full bg-white/25 px-2.5 py-0.5 text-[8.5px] font-bold text-white shadow-xs">
-              Warung Favoritmu
+              {isBiz ? 'Usaha Sekitarmu' : 'Warung Favoritmu'}
             </span>
           </div>
         </div>
       ),
-    },
+  };
 
-    // 4. Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!
-    {
-      tag: 'BUKTI NYATA PROGRAM',
-      title: 'Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!',
+  // 4. Ka Adit Testimoni
+  const slide4 = {
+    tag: 'BUKTI NYATA PROGRAM',
+    title: isBiz
+      ? 'Ka Adit telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!'
+      : 'Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!',
       visual: (
         <div className="relative mx-auto my-2 flex h-60 w-full max-w-[290px] items-center justify-center">
           {/* Radial glow */}
@@ -519,12 +530,14 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
           </div>
         </div>
       ),
-    },
+  };
 
-    // 5. Daftarkan warung favoritmu, hanya 1 menit!
-    {
-      tag: 'HANYA 1 MENIT',
-      title: 'Daftarkan warung favoritmu, hanya 1 menit!',
+  // 5. CTA Daftarkan
+  const slide5 = {
+    tag: 'HANYA 1 MENIT',
+    title: isBiz
+      ? 'Daftarkan usaha sekitarmu, hanya 1 menit!'
+      : 'Daftarkan warung favoritmu, hanya 1 menit!',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial glow */}
@@ -561,15 +574,20 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             </div>
 
             <p className="mt-2 text-center text-[10.5px] font-semibold text-white/90">
-              Ketik nomor warung favoritmu &amp; QRIS langsung aktif sekarang
+              {isBiz
+                ? 'Ketik nomor usaha sekitarmu & QRIS langsung aktif sekarang'
+                : 'Ketik nomor warung favoritmu & QRIS langsung aktif sekarang'}
             </p>
           </div>
         </div>
       ),
-    },
-  ];
+  };
 
-  const curr = slides[step];
+  const slides = isBiz
+    ? [slide1, slide3, slide4, slide5]
+    : [slide1, slide2, slide3, slide4, slide5];
+
+  const curr = slides[step] || slides[0];
 
   return (
     <div className="relative h-full w-full flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#0D5995] via-[#108EE9] to-[#083556] text-white animate-in fade-in duration-200">
@@ -611,7 +629,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              DANA SAHABAT WARUNG ({step + 1}/5)
+              DANA SAHABAT WARUNG ({step + 1}/{slides.length})
             </span>
           </div>
           <button
@@ -646,14 +664,16 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98 cursor-pointer"
           >
-            Daftarkan Warung Favoritmu Sekarang (1 Menit) <Icon name="next" className="h-4 w-4" />
+            {isBiz
+              ? 'Daftarkan Usaha Sekitarmu Sekarang (1 Menit)'
+              : 'Daftarkan Warung Favoritmu Sekarang (1 Menit)'} <Icon name="next" className="h-4 w-4" />
           </button>
         ) : (
           <button
             onClick={() => setStep(step + 1)}
             className="flex w-full items-center justify-center gap-1.5 rounded-2xl bg-white/20 py-2.5 text-center text-xs font-bold text-white transition active:bg-white/30 cursor-pointer"
           >
-            Lanjut (Langkah {step + 1}/5) →
+            Lanjut (Langkah {step + 1}/{slides.length}) →
           </button>
         )}
       </div>
