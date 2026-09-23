@@ -768,6 +768,18 @@ export function BizDash({
   const step2Done = Boolean(has5Tx || stage2Done);
   const step3Done = Boolean(hasVerifyPhoto || stage2Done);
 
+  const jokoRef = s?.referrals?.find(
+    (r) => r.name?.toLowerCase().includes('joko') || r.id === 0
+  );
+  const isStage1Done = Boolean(
+    progress?.stage1 ||
+    progress?.stage1_tx ||
+    (s?.merchant?.firstPayment || 0) >= 10000 ||
+    (jokoRef && (jokoRef.claimedStage >= 1 || (jokoRef.stage >= 1 && (jokoRef.tx || 0) >= 1) || jokoRef.stage >= 2)) ||
+    stage2Done
+  );
+  const merchantHasReward = isStage1Done || stage2Done;
+
   const completedCount = (step1Done ? 1 : 0) + (step2Done ? 1 : 0) + (step3Done ? 1 : 0);
   const bizProgressPercent = Math.round((completedCount / 3) * 100);
 
@@ -1012,7 +1024,7 @@ export function BizDash({
           </div>
 
           {/* Card Gabungan: Progres 3 Tahap & Lihat Rincian Kupon Saya di Tab Reward */}
-          {(isReferred || isMerchant) && (
+          {(isReferred || (isMerchant && merchantHasReward)) && (
             <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-xs">
               <div
                 onClick={() => go('rewards')}
@@ -1027,9 +1039,13 @@ export function BizDash({
                       Lihat Rincian Kupon Saya di Tab Reward
                     </p>
                     <p className="text-[10px] text-slate-400 font-medium">
-                      {completedCount === 3
-                        ? 'Semua tahap selesai · Kupon aktif penuh ✓'
-                        : `${completedCount}/3 Tahap Selesai · Pantau kupon usaha`}
+                      {isMerchant
+                        ? (stage2Done
+                          ? 'Kupon Bebas Admin 10x & Transfer 2x Aktif ✓'
+                          : 'Kupon Gratis Transfer 2x Aktif ✓')
+                        : (completedCount === 3
+                          ? 'Semua tahap selesai · Kupon aktif penuh ✓'
+                          : `${completedCount}/3 Tahap Selesai · Pantau kupon usaha`)}
                     </p>
                   </div>
                 </div>

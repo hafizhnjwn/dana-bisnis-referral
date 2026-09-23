@@ -1237,7 +1237,7 @@ function Rewards(p) {
             </div>
 
             {/* Tahap 1 Card - Hanya muncul setelah Pak Joko selesai Tahap 1 */}
-            {isStage1Done ? (
+            {isStage1Done && (
               <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
                 <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
                   <p className="text-xs font-bold text-slate-800 truncate">
@@ -1262,16 +1262,6 @@ function Rewards(p) {
                     {(quotas.merchant?.transfer ?? 2) > 0 ? 'Gunakan Kupon' : 'Kupon Habis'}
                   </button>
                 </div>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-5 text-center shadow-2xs">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-xl text-amber-600">
-                  ⏳
-                </span>
-                <p className="mt-2.5 text-xs font-bold text-slate-800">Kupon Belum Tersedia</p>
-                <p className="mt-1 text-[11px] leading-relaxed text-slate-500 max-w-xs mx-auto">
-                  Kupon 2x Gratis Transfer akan aktif otomatis setelah warung binaan (Pak Joko) menyelesaikan transaksi pertama min. Rp10.000 (Tahap 1).
-                </p>
               </div>
             )}
 

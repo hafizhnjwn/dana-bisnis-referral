@@ -332,8 +332,23 @@ const ratnaRewardsBeforeStage1 = renderToStaticMarkup(<screens.rewards {...ratna
 if (ratnaRewardsBeforeStage1.includes('Gratis Transfer 2x')) {
   throw new Error('Bu Ratna should NOT see Gratis Transfer 2x before Pak Joko finishes Tahap 1');
 }
-if (!ratnaRewardsBeforeStage1.includes('Kupon Belum Tersedia')) {
-  throw new Error('Bu Ratna missing Kupon Belum Tersedia placeholder before Tahap 1');
+if (ratnaRewardsBeforeStage1.includes('Kupon Belum Tersedia') || ratnaRewardsBeforeStage1.includes('Kupon 2x Gratis Transfer akan aktif otomatis')) {
+  throw new Error('Bu Ratna should NOT see Kupon Belum Tersedia placeholder when no rewards have been earned');
+}
+
+// Regression: Bu Putu BizDash tidak boleh menampilkan card kupon / 0/3 Tahap Selesai sebelum punya reward
+const ratnaBizBeforeStage1 = renderToStaticMarkup(<screens.bizdash {...ratnaBeforeStage1} />);
+if (ratnaBizBeforeStage1.includes('Lihat Rincian Kupon Saya di Tab Reward') || ratnaBizBeforeStage1.includes('0/3 Tahap Selesai')) {
+  throw new Error('Bu Putu BizDash should NOT show coupon banner or 0/3 Tahap Selesai before she has earned rewards');
+}
+
+// Setelah Tahap 1 selesai, barulah card kupon Bu Putu muncul di BizDash
+const ratnaBizAfterStage1 = renderToStaticMarkup(<screens.bizdash {...ratnaBeforeStage1} progress={{ stage1: true }} />);
+if (!ratnaBizAfterStage1.includes('Lihat Rincian Kupon Saya di Tab Reward') || !ratnaBizAfterStage1.includes('Kupon Gratis Transfer 2x Aktif')) {
+  throw new Error('Bu Putu BizDash missing coupon banner after Tahap 1');
+}
+if (ratnaBizAfterStage1.includes('0/3 Tahap Selesai') || ratnaBizAfterStage1.includes('Progres Tahap Toko')) {
+  throw new Error('Bu Putu BizDash should NOT leak Pak Joko onboarding stages');
 }
 
 // Regression: JUARA ⭐ dan B2B REWARD tidak boleh muncul di profil DANA Bisnis siapapun
