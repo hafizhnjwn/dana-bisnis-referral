@@ -664,9 +664,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98 cursor-pointer"
           >
-            {isBiz
-              ? 'Daftarkan Usaha Sekitarmu Sekarang (1 Menit)'
-              : 'Daftarkan Warung Favoritmu Sekarang (1 Menit)'} <Icon name="next" className="h-4 w-4" />
+            Daftarkan Warung Favoritmu Sekarang <Icon name="next" className="h-4 w-4" />
           </button>
         ) : (
           <button

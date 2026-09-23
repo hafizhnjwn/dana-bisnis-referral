@@ -426,7 +426,7 @@ if (guideSlide3.includes('Bu Roro')) {
 
 // Slide 5 (Index 4): Daftarkan warung favoritmu, hanya 1 menit!
 const guideSlide4 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={4} />);
-if (!guideSlide4.includes('Daftarkan warung favoritmu, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Warung Favoritmu Sekarang (1 Menit)')) {
+if (!guideSlide4.includes('Daftarkan warung favoritmu, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Warung Favoritmu Sekarang')) {
   throw new Error('Guide slide 4 missing 1-minute CTA content');
 }
 if (guideSlide4.includes('usaha kenalanmu') || guideSlide4.includes('Sahabat Dana')) {
@@ -478,7 +478,7 @@ const bizGuideSlide3 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role=
 if (!bizGuideSlide3.includes('Daftarkan usaha sekitarmu, hanya 1 menit!')) {
   throw new Error('Biz guide slide 3 missing headline');
 }
-if (!bizGuideSlide3.includes('Daftarkan Usaha Sekitarmu Sekarang (1 Menit)')) {
+if (!bizGuideSlide3.includes('Daftarkan Warung Favoritmu Sekarang')) {
   throw new Error('Biz guide slide 3 missing CTA button');
 }
 if (bizGuideSlide3.includes('kenalanmu')) {
