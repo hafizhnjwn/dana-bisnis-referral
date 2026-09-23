@@ -1023,6 +1023,40 @@ export function BizDash({
             </div>
           </div>
 
+          {/* Discovery Banner DANA Sahabat Warung untuk Pemilik DANA Bisnis (Bu Putu) */}
+          {isMerchant && (
+            <div
+              onClick={() => {
+                if (mark) mark('open_hub');
+                go('hub');
+                notify('Membuka DANA Sahabat Warung...');
+              }}
+              className="rounded-2xl border border-dana-200 bg-gradient-to-r from-dana-500 via-[#108EE9] to-[#0D5995] p-3.5 text-white shadow-sm cursor-pointer transition active:scale-98"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white text-lg backdrop-blur-xs shadow-inner">
+                    🏪
+                  </span>
+                  <div>
+                    <span className="inline-block rounded-full bg-amber-400 px-2 py-0.5 text-[8px] font-black uppercase tracking-wider text-amber-950">
+                      DANA Sahabat Warung
+                    </span>
+                    <p className="text-xs font-black text-white leading-snug mt-0.5">
+                      Ajak usaha sekitarmu, nikmati bebas biaya admin!
+                    </p>
+                    <p className="text-[9.5px] text-white/85 leading-tight mt-0.5">
+                      Bantu rekan usaha pakai QRIS &amp; raih Gratis Transfer 2x + Bebas Admin 10x.
+                    </p>
+                  </div>
+                </div>
+                <button className="shrink-0 rounded-xl bg-white px-3 py-1.5 text-xs font-black text-[#108EE9] shadow-sm transition hover:bg-white/90 active:scale-95">
+                  Ajak →
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Card Gabungan: Progres 3 Tahap & Lihat Rincian Kupon Saya di Tab Reward */}
           {(isReferred || (isMerchant && merchantHasReward)) && (
             <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-xs">
