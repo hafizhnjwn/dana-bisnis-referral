@@ -79,14 +79,15 @@ if (!ratnaHub.includes('Bantu Daftarkan Rekan Usaha')) throw new Error('Hub does
 // Panduan juga harus tampil untuk track Mitra Bisnis, dengan reward kupon (bukan saldo),
 // supaya langkah "selesaikan panduan" bisa diselesaikan di skenario 2.
 const ratnaGuide = renderToStaticMarkup(<screens.hub {...ratna} />);
-if (!ratnaGuide.includes('PANDUAN REFERER')) throw new Error('Merchant track never sees the affiliate guide');
+if (!ratnaGuide.includes('DANA SAHABAT WARUNG (1/5)')) throw new Error('Guide header missing DANA SAHABAT WARUNG (1/5)');
+if (ratnaGuide.includes('PANDUAN REFERER')) throw new Error('Guide header still contains PANDUAN REFERER');
 console.log('persona isolation: ok');
 
 // Regression: panduan affiliate wajib hilang begitu penandanya tersimpan, kalau tidak
 // tombol "Bantu Daftarkan Warung Sekarang!" terasa mati karena panduan terbuka ulang.
 const rianAfterGuide = { ...rian, s: { ...rian.s, hasSeenAffiliateGuide: true } };
 const hubAfterGuide = renderToStaticMarkup(<screens.hub {...rianAfterGuide} />);
-if (hubAfterGuide.includes('PANDUAN REFERER')) {
+if (hubAfterGuide.includes('DANA SAHABAT WARUNG (1/5)')) {
   throw new Error('Guide still covers the hub after hasSeenAffiliateGuide is set');
 }
 if (!hubAfterGuide.includes('Bantu Daftarkan Warung Langganan')) {
@@ -314,12 +315,7 @@ if (!rianGuideSlide0.includes('DANA SAHABAT WARUNG')) {
   throw new Error('Rian guide slide 0 missing DANA SAHABAT WARUNG tag');
 }
 
-const ratnaGuideSlide0 = renderToStaticMarkup(<screens.hub {...ratna} />);
-if (!ratnaGuideSlide0.includes('Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Operasional Toko!') || !ratnaGuideSlide0.includes('Drama kembalian &amp; ribet cari uang pas')) {
-  throw new Error('Bu Ratna guide slide 0 missing merchant peer perspective');
-}
-
-// Slide 2 (Index 1): Reward slide differences (10x bebas biaya admin vs Saldo Rp35k)
+// Slide 2 (Index 1): Reward slide (Saldo Rp35k untuk Rian)
 const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />);
 if (!rianGuideReward.includes('Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu')) {
   throw new Error('Rian guide reward slide must contain Saldo DANA rewards headline');
@@ -328,35 +324,31 @@ if (rianGuideReward.includes('10x bebas biaya admin')) {
   throw new Error('Rian guide reward slide should not contain merchant kupon rewards');
 }
 
-const ratnaGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={1} />);
-if (!ratnaGuideReward.includes('10x bebas biaya admin')) {
-  throw new Error('Bu Ratna guide reward slide must contain merchant kupon rewards headline');
-}
-if (ratnaGuideReward.includes('Saldo DANA hingga Rp 35 Ribu')) {
-  throw new Error('Bu Ratna guide reward slide should not contain consumer saldo rewards');
-}
-
-const jokoGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="referred" initialStep={1} />);
-if (!jokoGuideReward.includes('10x bebas biaya admin')) {
-  throw new Error('Pak Joko guide reward slide must contain merchant kupon rewards headline');
-}
-
-// Slide 3 (Index 2): Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu
+// Slide 3 (Index 2): Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu
 const guideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
-if (!guideSlide2.includes('Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu')) {
+if (!guideSlide2.includes('Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu')) {
   throw new Error('Guide slide 2 missing headline');
 }
-
-// Slide 4 (Index 3): Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!
-const guideSlide3 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={3} />);
-if (!guideSlide3.includes('Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!')) {
-  throw new Error('Guide slide 3 missing Bu Roro testimonial headline');
+if (guideSlide2.includes('usaha kenalanmu')) {
+  throw new Error('Guide slide 2 should not contain "usaha kenalanmu"');
 }
 
-// Slide 5 (Index 4): Daftarkan usaha kenalanmu, hanya 1 menit!
+// Slide 4 (Index 3): Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!
+const guideSlide3 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={3} />);
+if (!guideSlide3.includes('Ka Adit telah membantu 5 warung menjadi Sahabat Dana') || !guideSlide3.includes('100K!')) {
+  throw new Error('Guide slide 3 missing Ka Adit testimonial headline');
+}
+if (guideSlide3.includes('Bu Roro')) {
+  throw new Error('Guide slide 3 should not contain Bu Roro');
+}
+
+// Slide 5 (Index 4): Daftarkan Sahabat Dana, hanya 1 menit!
 const guideSlide4 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={4} />);
-if (!guideSlide4.includes('Daftarkan usaha kenalanmu, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Usaha Sekarang (1 Menit)')) {
+if (!guideSlide4.includes('Daftarkan Sahabat Dana, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Sahabat Dana Sekarang (1 Menit)')) {
   throw new Error('Guide slide 4 missing 1-minute CTA content');
+}
+if (guideSlide4.includes('usaha kenalanmu')) {
+  throw new Error('Guide slide 4 should not contain "usaha kenalanmu"');
 }
 
 console.log('compact reward cards & pak joko referal isolation: ok');
@@ -366,9 +358,7 @@ const allRenderedScreens = [
   jokoBizHtml,
   ratnaBizHtml,
   rianGuideSlide0,
-  ratnaGuideSlide0,
   rianGuideReward,
-  ratnaGuideReward,
   guideSlide2,
   guideSlide3,
   guideSlide4,

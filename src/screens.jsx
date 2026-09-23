@@ -220,23 +220,17 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
 /* -------------------------------- Mini Program Beranda (hub) */
 
 export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer', initialStep = 0 }) {
-  // Reward slide mengikuti track pengundang: Rian dapat saldo, Bu Putu & Pak Joko dapat benefit kupon pemilik Dana Bisnis.
-  const hasDanaBisnis = role === 'merchant' || role === 'referred';
-  const reward = PERSONA_REWARDS[hasDanaBisnis ? 'merchant' : 'consumer'];
-  const isSaldoTrack = !hasDanaBisnis;
+  // Guide DANA Sahabat Warung (Track Konsumen / Rian)
   const [step, setStep] = useState(initialStep);
   if (!isOpen) return null;
 
   const slides = [
     // 1. Headline: Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!
     {
-      tag: hasDanaBisnis ? 'SESAMA PEMILIK USAHA' : 'DANA SAHABAT WARUNG',
-      title: hasDanaBisnis
-        ? 'Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Operasional Toko!'
-        : 'Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!',
-      subtitle: hasDanaBisnis
-        ? 'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu usaha sekitarmu beralih ke QRIS DANA biar transaksi makin sat-set!'
-        : 'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu warung langgananmu beralih ke QRIS DANA biar transaksi makin sat-set!',
+      tag: 'DANA SAHABAT WARUNG',
+      title: 'Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!',
+      subtitle:
+        'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu warung langgananmu beralih ke QRIS DANA biar transaksi makin sat-set!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center text-xs">
@@ -265,21 +259,18 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
           </div>
           <div className="mt-3 rounded-xl border border-white/15 bg-white/10 p-2 text-center">
             <p className="text-[10px] text-white/90 font-medium leading-snug">
-              💡 {hasDanaBisnis
-                ? '7 dari 10 orang sudah cashless. Yuk, jadi alasan usaha sekitarmu jadi lebih modern!'
-                : '7 dari 10 orang sudah cashless. Yuk, jadi alasan warung langgananmu jadi lebih modern!'}
+              💡 7 dari 10 orang sudah cashless. Yuk, jadi alasan warung langgananmu jadi lebih modern!
             </p>
           </div>
         </div>
       ),
     },
 
-    // 2. Program Referral Merchant, dapatkan 10x bebas biaya admin dengan membantu usaha disekitarmu naik kelas!
+    // 2. Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!
     {
-      tag: hasDanaBisnis ? 'REWARD PEMILIK DANA BISNIS' : 'REWARD SALDO DANA',
-      title: hasDanaBisnis
-        ? 'Program Referral Merchant, dapatkan 10x bebas biaya admin dengan membantu usaha disekitarmu naik kelas!'
-        : 'Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
+      tag: 'REWARD SALDO DANA',
+      title:
+        'Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial aura glow */}
@@ -321,7 +312,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
                   </div>
                 </div>
                 <span className="mt-2 rounded-full bg-amber-400 px-2.5 py-0.5 text-[8.5px] font-black uppercase text-amber-950 tracking-wider shadow">
-                  {hasDanaBisnis ? 'Kupon Aktif!' : 'Dapat Saldo!'}
+                  Dapat Saldo!
                 </span>
               </div>
 
@@ -331,7 +322,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             {/* Glowing Reward Banner */}
             <div className="mt-2.5 rounded-full border border-amber-300/40 bg-white/20 px-3.5 py-1 text-center shadow-lg backdrop-blur-md animate-pulse">
               <p className="text-[11px] font-black text-amber-200">
-                {hasDanaBisnis ? '🎉 10x Bebas Biaya Admin Usaha' : '🎉 Saldo DANA hingga Rp 35 Ribu'}
+                🎉 Saldo DANA hingga Rp 35 Ribu
               </p>
             </div>
           </div>
@@ -339,10 +330,10 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       ),
     },
 
-    // 3. Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu
+    // 3. Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu
     {
       tag: 'PENDAFTARAN KILAT',
-      title: 'Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu',
+      title: 'Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial glow */}
@@ -404,17 +395,17 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               <span className="text-3xl">🏪</span>
             </div>
             <span className="mt-1.5 rounded-full bg-white/25 px-2.5 py-0.5 text-[8.5px] font-bold text-white shadow-xs">
-              Kenalanmu
+              Sahabat Dana
             </span>
           </div>
         </div>
       ),
     },
 
-    // 4. Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!
+    // 4. Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!
     {
-      tag: hasDanaBisnis ? 'BUKTI NYATA REKAN USAHA' : 'BUKTI NYATA PROGRAM',
-      title: 'Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!',
+      tag: 'BUKTI NYATA PROGRAM',
+      title: 'Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!',
       visual: (
         <div className="relative mx-auto my-2 flex h-60 w-full max-w-[290px] items-center justify-center">
           {/* Radial glow */}
@@ -530,10 +521,10 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       ),
     },
 
-    // 5. Daftarkan usaha kenalanmu, hanya 1 menit!
+    // 5. Daftarkan Sahabat Dana, hanya 1 menit!
     {
       tag: 'HANYA 1 MENIT',
-      title: 'Daftarkan usaha kenalanmu, hanya 1 menit!',
+      title: 'Daftarkan Sahabat Dana, hanya 1 menit!',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial glow */}
@@ -570,7 +561,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             </div>
 
             <p className="mt-2 text-center text-[10.5px] font-semibold text-white/90">
-              Ketik nomor kenalanmu &amp; QRIS langsung aktif sekarang
+              Ketik nomor warung kenalanmu &amp; QRIS langsung aktif sekarang
             </p>
           </div>
         </div>
@@ -620,7 +611,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              PANDUAN REFERER · DANA SAHABAT WARUNG ({step + 1}/5)
+              DANA SAHABAT WARUNG ({step + 1}/5)
             </span>
           </div>
           <button
@@ -655,7 +646,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98 cursor-pointer"
           >
-            Daftarkan Usaha Sekarang (1 Menit) <Icon name="next" className="h-4 w-4" />
+            Daftarkan Sahabat Dana Sekarang (1 Menit) <Icon name="next" className="h-4 w-4" />
           </button>
         ) : (
           <button
