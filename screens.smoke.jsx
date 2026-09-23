@@ -76,6 +76,15 @@ const ratnaHub = renderToStaticMarkup(
   <screens.hub {...ratna} s={{ ...ratna.s, hasSeenAffiliateGuide: true }} />,
 );
 if (!ratnaHub.includes('Bantu Daftarkan Rekan Usaha')) throw new Error('Hub does not adapt to merchant');
+if (!ratnaHub.includes('Gratis transfer bank 2x') || !ratnaHub.includes('Gratis biaya admin 10x')) {
+  throw new Error('ratnaHub must show merchant reward tiers');
+}
+if (ratnaHub.includes('Rian: Saldo') || ratnaHub.includes('Pak Joko: Gratis')) {
+  throw new Error('ratnaHub should not show other persona tiers');
+}
+if (ratnaHub.includes('Benefit Warung:') || ratnaHub.includes('Kupon bebas biaya transfer &amp; bebas admin')) {
+  throw new Error('ratnaHub should not contain Benefit Warung or business coupon footnote');
+}
 
 // Panduan juga harus tampil untuk track Mitra Bisnis, dengan reward kupon (bukan saldo),
 // supaya langkah "selesaikan panduan" bisa diselesaikan di skenario 2.
@@ -93,6 +102,15 @@ if (hubAfterGuide.includes('DANA SAHABAT WARUNG (1/5)')) {
 }
 if (!hubAfterGuide.includes('Bantu Daftarkan Warung Langganan')) {
   throw new Error('Hub content missing after the guide is dismissed');
+}
+if (!hubAfterGuide.includes('Saldo DANA Rp5.000') || !hubAfterGuide.includes('Saldo DANA Rp30.000 (Total Rp35.000)')) {
+  throw new Error('hubAfterGuide must show consumer reward tiers');
+}
+if (hubAfterGuide.includes('Bu Putu: Gratis') || hubAfterGuide.includes('Pak Joko: Gratis')) {
+  throw new Error('hubAfterGuide should not show business persona tiers');
+}
+if (hubAfterGuide.includes('Benefit Warung:') || hubAfterGuide.includes('Kupon bebas biaya transfer &amp; bebas admin')) {
+  throw new Error('hubAfterGuide should not contain Benefit Warung or business coupon footnote');
 }
 if (hubAfterGuide.includes('Panduan Affiliate')) {
   throw new Error('Hub should not contain Panduan Affiliate section');

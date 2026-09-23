@@ -816,29 +816,36 @@ function Hub(p) {
           <div className="rounded-3xl bg-white p-4 shadow-sm">
             <p className="text-xs font-bold text-slate-500">Skema reward referral</p>
             <div className="mt-3 space-y-3">
-              {TIERS.map((t, i) => (
-                <div key={t.stage} className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-dana-50 text-[11px] font-bold text-dana-700">
-                    {i + 1}
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-slate-800">{t.label}</p>
-                    <p className="text-[10px] text-slate-500">{t.detail}</p>
-                    <p className="mt-0.5 text-[9px] font-medium text-emerald-600">Benefit Warung: {t.merchant}</p>
+              {TIERS.map((t, i) => {
+                const tierDetail = hasDanaBisnis
+                  ? (s.role === 'referred'
+                    ? (i === 0 ? 'Gratis tarik tunai 2x' : 'Gratis biaya admin 10x')
+                    : (i === 0 ? 'Gratis transfer bank 2x' : 'Gratis biaya admin 10x'))
+                  : (i === 0 ? 'Saldo DANA Rp5.000' : 'Saldo DANA Rp30.000 (Total Rp35.000)');
+
+                return (
+                  <div key={t.stage} className="flex gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-dana-50 text-[11px] font-bold text-dana-700">
+                      {i + 1}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-slate-800">{t.label}</p>
+                      <p className="text-[10px] text-slate-500">{tierDetail}</p>
+                    </div>
+                    <span className="text-xs font-extrabold text-dana-700">
+                      {hasDanaBisnis
+                        ? (i === 0 ? 'Kupon 2x' : (i === 1 ? 'Kupon 10x' : 'Selesai'))
+                        : (t.amount > 0 ? rupiah(t.amount) : 'Rp 0')}
+                    </span>
                   </div>
-                  <span className="text-xs font-extrabold text-dana-700">
-                    {hasDanaBisnis
-                      ? (i === 0 ? 'Kupon 2x' : (i === 1 ? 'Kupon 10x' : 'Selesai'))
-                      : (t.amount > 0 ? rupiah(t.amount) : 'Rp 0')}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
-              {hasDanaBisnis
-                ? '* Kupon bebas biaya transfer & bebas admin otomatis aktif di tab Reward akun bisnismu.'
-                : '* Reward Tahap 1 & 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.'}
-            </p>
+            {!hasDanaBisnis && (
+              <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
+                * Reward Tahap 1 &amp; 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.
+              </p>
+            )}
           </div>
 
           <div className="rounded-3xl bg-white p-4 shadow-sm">
