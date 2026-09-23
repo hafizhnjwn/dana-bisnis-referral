@@ -414,8 +414,11 @@ if (!rianGuideSlide0.includes('DANA SAHABAT WARUNG')) {
 
 // Slide 2 (Index 1): Reward slide (Saldo Rp35k untuk Rian)
 const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />);
-if (!rianGuideReward.includes('Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu')) {
-  throw new Error('Rian guide reward slide must contain Saldo DANA rewards headline');
+if (!rianGuideReward.includes('DANA Sahabat Warung, dapatkan saldo hingga Rp 35 Ribu')) {
+  throw new Error('Rian guide reward slide must contain Saldo DANA rewards headline with DANA Sahabat Warung');
+}
+if (rianGuideReward.includes('Program Referral Merchant')) {
+  throw new Error('Rian guide reward slide should not contain "Program Referral Merchant"');
 }
 if (rianGuideReward.includes('10x bebas biaya admin')) {
   throw new Error('Rian guide reward slide should not contain merchant kupon rewards');

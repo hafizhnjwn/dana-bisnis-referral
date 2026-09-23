@@ -273,11 +273,11 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
     ),
   };
 
-  // 2. Program Referral Merchant (Hanya untuk Konsumen / Rian, dihilangkan untuk Bu Putu)
+  // 2. DANA Sahabat Warung (Hanya untuk Konsumen / Rian, dihilangkan untuk Bu Putu)
   const slide2 = {
       tag: 'REWARD SALDO DANA',
       title:
-        'Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
+        'DANA Sahabat Warung, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial aura glow */}
@@ -2332,7 +2332,7 @@ function TransferBank(props) {
                     onClick={() => {
                       if (mark) mark('open_hub');
                       go('hub');
-                      notify('Membuka program referral DANA Bisnis...');
+                      notify('Membuka DANA Sahabat Warung...');
                     }}
                     className="shrink-0 rounded-lg bg-dana-500 hover:bg-dana-600 active:scale-95 px-3 py-1 text-xs font-extrabold text-white shadow-xs transition cursor-pointer"
                   >
