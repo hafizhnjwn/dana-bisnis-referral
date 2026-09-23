@@ -412,8 +412,8 @@ export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
     },
     {
       tag: 'FITUR DANA BISNIS',
-      title: '1 QRIS Semua Bank, 0% MDR & Nada DANA',
-      subtitle: 'Terima BCA, BRI, Mandiri, DANA, GoPay, OVO. Uang jualan 100% utuh tanpa potongan MDR!',
+      title: '1 QRIS Semua Bank & Nada DANA',
+      subtitle: 'Terima BCA, BRI, Mandiri, DANA, GoPay, OVO. Uang jualan langsung masuk utuh tanpa repot receh!',
       visual: (
         <div className="rounded-xl border border-white/20 bg-white/10 p-2.5 backdrop-blur-md space-y-1.5 text-xs">
           <div className="flex items-center justify-between rounded-lg bg-white/15 px-2.5 py-1.5">
@@ -421,8 +421,8 @@ export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
             <span className="font-bold text-emerald-300 text-[11px]">1 QRIS Nasional ✓</span>
           </div>
           <div className="flex items-center justify-between rounded-lg bg-white/15 px-2.5 py-1.5">
-            <span className="text-white/80 text-[11px]">💰 Potongan Transaksi</span>
-            <span className="font-bold text-amber-300 text-[11px]">0% MDR (Gratis Rp0) ✓</span>
+            <span className="text-white/80 text-[11px]">💰 Pendaftaran Toko</span>
+            <span className="font-bold text-amber-300 text-[11px]">Gratis Rp0 ✓</span>
           </div>
           <div className="flex items-center justify-between rounded-lg bg-white/15 px-2.5 py-1.5">
             <span className="text-white/80 text-[11px]">🔊 Notifikasi Pembayaran</span>
@@ -743,7 +743,7 @@ export function BizDash({
     ? (m.firstPayment > 0 ? `Penjualan hari ini · ${txCount} transaksi` : 'Penjualan hari ini · Belum ada transaksi')
     : 'Penjualan hari ini · 12 transaksi';
 
-  const mdrSubtext = isReferred
+  const cashoutSubtext = isReferred
     ? (isPaid
       ? 'Kupon Tarik Tunai 2x aktif · Siap ditarik ke bank'
       : 'Kupon Tarik Tunai 2x menanti transaksi pertama ≥Rp10k')
@@ -775,7 +775,7 @@ export function BizDash({
       icon: 'qr',
       tag: 'PEMBAYARAN DIGITAL',
       title: '1. QRIS Toko',
-      desc: 'Tampilkan QRIS di HP atau cetak poster kasir (0% MDR semua bank).',
+      desc: 'Tampilkan QRIS di HP atau cetak poster kasir untuk terima semua bank.',
       action: () => (m.issued || isMerchant ? go('qris') : notify('QRIS toko siap menerima pembayaran digital.')),
     },
     {
@@ -831,9 +831,9 @@ export function BizDash({
     {
       id: 'anwar',
       tag: 'HEMAT BIAYA',
-      badge: '0% MDR',
+      badge: 'Bebas Admin',
       store: 'Kios Sembako H. Anwar',
-      quote: 'Kupon bebas transfer & 0% MDR sangat menghemat biaya operasional kulakan beras mingguan toko kami.',
+      quote: 'Kupon bebas transfer & bebas biaya admin sangat menghemat biaya operasional kulakan beras mingguan toko kami.',
       location: 'Bandung',
       initial: 'A',
     },
@@ -920,7 +920,7 @@ export function BizDash({
             <div className="mt-3 rounded-xl bg-slate-50 p-3">
               <p className="text-[11px] text-slate-500">{salesLabel}</p>
               <p className="text-2xl font-extrabold text-slate-900">{rupiah(salesAmount)}</p>
-              <p className="text-[10px] font-semibold text-emerald-600">{mdrSubtext}</p>
+              <p className="text-[10px] font-semibold text-emerald-600">{cashoutSubtext}</p>
             </div>
 
 

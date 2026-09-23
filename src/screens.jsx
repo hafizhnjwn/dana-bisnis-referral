@@ -43,7 +43,7 @@ export const WHATSAPP_NOTIFICATIONS = [
     preview: 'Halo Pak Joko! Saya sudah daftarkan Warung Sembako Pak Joko ke DANA Bisnis. QRIS langsung aktif Rp0...',
     message: `Halo Pak Joko! 🏪
 
-Saya sudah bantu daftarkan *Warung Sembako Pak Joko* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa biaya potongan (0% MDR).
+Saya sudah bantu daftarkan *Warung Sembako Pak Joko* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa repot kembalian.
 
 Data sudah disiapkan, tinggal 1 langkah konfirmasi (tanpa perlu e-KTP di awal):
 👉 https://dana.id/bisnis/gabung?ref=HAF58W
@@ -69,7 +69,7 @@ Jam operasional toko sudah dimulai nih. Yuk download & cetak poster QRIS kasir t
 📥 *Download Poster QRIS Toko (PDF A6 Siap Cetak):*
 https://dana.id/bisnis/qris/download?id=ID1023288765432
 
-Pajang di meja kasir warung, transaksi 100% masuk utuh tanpa potongan (0% MDR)!`,
+Pajang di meja kasir warung, transaksi langsung masuk utuh tanpa repot receh!`,
     actionText: 'Buka & Unduh QRIS Toko',
     targetScreen: 'qris',
   },
@@ -309,7 +309,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             </p>
             <p className="text-[9px] text-white/80">
               {hasDanaBisnis
-                ? '⭐ Plus perpanjangan bebas MDR 0% 30 hari & prioritas modal usaha!'
+                ? '⭐ Kupon langsung aktif untuk hemat biaya operasional tokomu!'
                 : '⭐ Cair otomatis langsung ke Saldo DANA tanpa perlu klaim manual!'}
             </p>
           </div>
@@ -1746,8 +1746,8 @@ function Landing({ s, go, inviter }) {
     },
     {
       icon: 'wallet',
-      title: 'Bebas Potongan (0% MDR)',
-      desc: 'Hasil jualan masuk 100% utuh tanpa biaya potongan admin.',
+      title: 'Uang Masuk Langsung Utuh',
+      desc: 'Hasil jualan masuk 100% utuh tanpa repot kembalian receh.',
     },
     {
       icon: 'sound',
@@ -1998,7 +1998,7 @@ function Qris(props) {
             {rupiah(m.firstPayment + (m.testScan ? 1000 : 0))}
           </p>
           <p className="mt-1 text-[10px] text-slate-400">
-            Potongan 0% MDR, nominal masuk utuh tanpa biaya admin.
+            Nominal jualan masuk langsung utuh tanpa repot receh.
           </p>
         </div>
       </div>

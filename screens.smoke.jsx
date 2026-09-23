@@ -115,7 +115,7 @@ const jokoBizHtml = renderToStaticMarkup(<screens.bizdash {...jokoQris} initialT
 for (const act of ['Buka QRIS', 'Tarik Saldo', 'Transfer', 'Pembayaran']) {
   if (!jokoBizHtml.includes(act)) throw new Error(`BizDash is missing action: ${act}`);
 }
-if (!jokoBizHtml.includes('Tampilkan QRIS di HP atau cetak poster kasir (0% MDR semua bank).')) {
+if (!jokoBizHtml.includes('Tampilkan QRIS di HP atau cetak poster kasir untuk terima semua bank.')) {
   throw new Error('BizDash is missing the Bubble Chat Guide');
 }
 if (jokoBizHtml.includes('Panduan Fitur') || jokoBizHtml.includes('PEMBAYARAN DIGITAL') || jokoBizHtml.includes('1. QRIS Toko')) {
@@ -151,7 +151,7 @@ console.log('4 quick actions, bubble chat guide, trust signals, 3-stage progress
 const jokoBizAfterGuide = renderToStaticMarkup(
   <screens.bizdash {...jokoQris} progress={{ biz_guide: true }} />
 );
-if (jokoBizAfterGuide.includes('Tampilkan QRIS di HP atau cetak poster kasir (0% MDR semua bank).')) {
+if (jokoBizAfterGuide.includes('Tampilkan QRIS di HP atau cetak poster kasir untuk terima semua bank.')) {
   throw new Error('BizDash guide should NOT appear after being completed');
 }
 console.log('guide dismissal on reopen: ok');
@@ -352,9 +352,26 @@ if (!guideSlide4.includes('Daftarkan usaha kenalanmu, hanya 1 menit!') || !guide
 
 console.log('compact reward cards & pak joko referal isolation: ok');
 console.log('bu ratna clean referrals & transfer admin prompt: ok');
-console.log('tahap 2 5x tx trigger & manual photo verification: ok');
-console.log('ratna reward lock, no JUARA/B2B REWARD badges & ratna panduan toko button: ok');
-console.log('clean biz profile (no Keuntungan/Banner) & role-tailored 5-slide referral guide: ok');
+// Regression: Ensure NO MDR or 0% MDR is rendered across all key prototype screens
+const allRenderedScreens = [
+  jokoBizHtml,
+  ratnaBizHtml,
+  rianGuideSlide0,
+  ratnaGuideSlide0,
+  rianGuideReward,
+  ratnaGuideReward,
+  guideSlide2,
+  guideSlide3,
+  guideSlide4,
+  renderToStaticMarkup(<screens.landing {...jokoQris} />),
+  renderToStaticMarkup(<screens.bizprofile {...jokoQris} />),
+  renderToStaticMarkup(<screens.inbox {...jokoQris} />),
+].join(' ');
+
+if (allRenderedScreens.includes('MDR') || allRenderedScreens.includes('0% MDR')) {
+  throw new Error('Prototype should not mention MDR as benefit');
+}
+console.log('no MDR references across prototype screens: ok');
 
 
 

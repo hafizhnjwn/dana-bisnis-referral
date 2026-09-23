@@ -437,7 +437,7 @@ export default function App() {
         tag: 'Undangan Warung',
         title: 'Undangan Bergabung DANA Bisnis',
         preview: `Halo Pak Joko! ${user1.name} sudah bantu daftarkan ${warungName} ke DANA Bisnis. QRIS langsung aktif Rp0...`,
-        message: `Halo Pak Joko! 🏪\n\nSaya (${user1.name}) sudah bantu daftarkan *${warungName}* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa biaya potongan (0% MDR).\n\nData sudah disiapkan, tinggal 1 langkah konfirmasi:\n👉 https://dana.id/bisnis/gabung?ref=HAF58W\n\nPajang QRIS di meja kasir, jualan makin laris & praktis!`,
+        message: `Halo Pak Joko! 🏪\n\nSaya (${user1.name}) sudah bantu daftarkan *${warungName}* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa repot kembalian.\n\nData sudah disiapkan, tinggal 1 langkah konfirmasi:\n👉 https://dana.id/bisnis/gabung?ref=HAF58W\n\nPajang QRIS di meja kasir, jualan makin laris & praktis!`,
         actionText: 'Buka Undangan Pendaftaran',
         targetScreen: 'landing',
       };
