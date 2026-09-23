@@ -408,68 +408,131 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       tag: hasDanaBisnis ? 'BUKTI NYATA REKAN USAHA' : 'BUKTI NYATA PROGRAM',
       title: 'Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!',
       visual: (
-        <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
+        <div className="relative mx-auto my-2 flex h-60 w-full max-w-[290px] items-center justify-center">
           {/* Radial glow */}
-          <div className="absolute inset-0 rounded-full bg-sky-400/25 blur-2xl animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-sky-400/20 blur-2xl animate-pulse" />
 
           {/* Left: Customer Scanning Phone */}
-          <div className="relative z-20 flex flex-col items-center -mr-2 animate-float-slow">
-            <div className="relative h-40 w-24 rounded-2xl border-3 border-white/80 bg-gradient-to-b from-[#108EE9] to-[#0A3D66] p-1.5 shadow-2xl flex flex-col items-center justify-between">
+          <div className="relative z-20 flex flex-col items-center -mr-1 animate-float-slow">
+            <div className="relative h-44 w-24 rounded-2xl border-3 border-white/90 bg-gradient-to-b from-[#108EE9] to-[#0A3D66] p-1.5 shadow-2xl flex flex-col items-center justify-between">
+              {/* Speaker */}
               <div className="h-0.5 w-6 rounded-full bg-white/40" />
 
-              {/* Viewfinder with scan laser */}
-              <div className="relative my-auto flex h-24 w-20 flex-col items-center justify-center rounded-xl border border-white/30 bg-black/40 p-1 overflow-hidden">
-                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-300 to-transparent shadow-[0_0_8px_#34d399] animate-laser" />
-                <span className="text-2xl">📱</span>
-                <span className="mt-1 text-[7.5px] font-bold text-emerald-300">Scan QRIS</span>
+              {/* Viewfinder with scan laser pointing at QRIS */}
+              <div className="relative my-auto flex h-32 w-20 flex-col items-center justify-between rounded-xl border border-white/30 bg-black/50 p-1.5 overflow-hidden">
+                <div className="flex w-full justify-between text-[7px] text-white/80 font-mono">
+                  <span>[+]</span>
+                  <span className="text-emerald-300 font-bold">SCAN</span>
+                  <span>[+]</span>
+                </div>
+
+                {/* Animated laser scan beam */}
+                <div className="absolute inset-x-0 top-1/3 h-1 bg-gradient-to-r from-transparent via-emerald-300 to-transparent shadow-[0_0_10px_#34d399] animate-laser" />
+
+                {/* Target reticle with mini QR preview */}
+                <div className="relative flex h-16 w-16 items-center justify-center">
+                  <div className="absolute inset-0 rounded-lg border border-dashed border-emerald-400/60 animate-pulse" />
+                  <QRCodeSVG
+                    value={qrisPayload('Scan Preview')}
+                    size={38}
+                    level="L"
+                    className="opacity-40 invert"
+                  />
+                </div>
+
+                <span className="text-[7px] font-bold text-emerald-300 bg-emerald-950/60 px-1.5 py-0.5 rounded-full border border-emerald-500/40">
+                  Scan QRIS...
+                </span>
               </div>
 
+              {/* Home bar */}
               <div className="h-0.5 w-8 rounded-full bg-white/50" />
             </div>
-            <span className="mt-1.5 text-[8.5px] font-bold text-white/90">Pembeli</span>
+            <span className="mt-1 text-[8.5px] font-bold text-white/90">HP Pembeli</span>
           </div>
 
           {/* Center: Success Arrow */}
           <div className="relative z-10 flex flex-col items-center px-1">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-400 text-emerald-950 font-black shadow-lg animate-bounce">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-400 text-emerald-950 font-black shadow-lg shadow-emerald-500/50 animate-bounce">
               ✓
             </div>
-            <span className="text-[8.5px] font-black text-emerald-300 mt-1 whitespace-nowrap">
+            <span className="text-[8px] font-black text-emerald-300 mt-1 whitespace-nowrap">
               Uang Masuk
             </span>
           </div>
 
-          {/* Right: Warung Cashier QRIS Stand */}
-          <div className="relative z-20 flex flex-col items-center -ml-2 animate-float-slow delay-150">
-            <div className="relative h-36 w-24 rounded-2xl border-2 border-amber-300/60 bg-white p-2 shadow-2xl flex flex-col items-center justify-between">
-              <div className="flex w-full items-center justify-between">
-                <span className="text-[7.5px] font-black tracking-tight text-dana-700">QRIS</span>
-                <span className="text-[6.5px] font-bold text-slate-400">DANA</span>
-              </div>
-
-              <div className="my-auto flex h-16 w-16 items-center justify-center rounded-lg border border-slate-200 bg-slate-900 p-1">
-                <div className="grid grid-cols-3 gap-0.5 w-full h-full p-0.5 bg-white rounded">
-                  <div className="bg-slate-900 rounded-xs" />
-                  <div className="bg-slate-300 rounded-xs" />
-                  <div className="bg-slate-900 rounded-xs" />
-                  <div className="bg-slate-200 rounded-xs" />
-                  <div className="bg-emerald-500 rounded-xs" />
-                  <div className="bg-slate-900 rounded-xs" />
-                  <div className="bg-slate-900 rounded-xs" />
-                  <div className="bg-slate-300 rounded-xs" />
-                  <div className="bg-slate-900 rounded-xs" />
+          {/* Right: Authentic Indonesian QRIS Cashier Stand */}
+          <div className="relative z-20 flex flex-col items-center -ml-1 animate-float-slow delay-150">
+            {/* The Acrylic QRIS Stand */}
+            <div className="relative w-36 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-dana-950/50 flex flex-col items-center">
+              {/* National QRIS Red Header */}
+              <div className="w-full rounded-t-xl bg-[#E1251B] px-2 py-1 flex items-center justify-between text-white shadow-xs">
+                <div className="flex items-center gap-1">
+                  <span className="text-[11px] font-black tracking-tighter uppercase leading-none font-sans">
+                    QRIS
+                  </span>
+                  <span className="text-[5.5px] font-bold text-white/90 leading-none">
+                    PEMBAYARAN DIGITAL
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span className="rounded bg-white/20 px-1 py-0.2 text-[6px] font-extrabold text-white">
+                    GPN
+                  </span>
                 </div>
               </div>
 
-              <span className="text-[7px] font-bold text-slate-700 truncate w-full text-center">
-                Kasir Warung
-              </span>
+              {/* Merchant Store Header */}
+              <div className="mt-1 text-center w-full px-1">
+                <p className="text-[8.5px] font-black uppercase text-slate-900 leading-tight truncate">
+                  WARUNG TOKO BERKAH
+                </p>
+                <p className="text-[6px] text-slate-400 leading-none">
+                  NMID: ID1023288765432
+                </p>
+              </div>
+
+              {/* Authentic Real QR Code */}
+              <div className="relative my-1 rounded-lg border-2 border-slate-900/10 bg-white p-1 shadow-inner">
+                <QRCodeSVG
+                  value={qrisPayload('Warung Toko Berkah Bu Roro')}
+                  size={78}
+                  level="M"
+                  includeMargin={false}
+                />
+              </div>
+
+              {/* Supported Banks / E-Wallet Strip */}
+              <div className="w-full text-center border-t border-slate-100 pt-0.5">
+                <p className="text-[6px] font-black text-slate-700 tracking-tight leading-none uppercase">
+                  Satu QRIS Semua Bank &amp; E-Wallet
+                </p>
+                <div className="mt-0.5 flex items-center justify-center gap-1 text-[6px] font-bold text-dana-700">
+                  <span>BCA</span>
+                  <span>•</span>
+                  <span>BRI</span>
+                  <span>•</span>
+                  <span>DANA</span>
+                  <span>•</span>
+                  <span>GoPay</span>
+                </div>
+              </div>
+
+              {/* Acrylic Stand Base / Footer */}
+              <div className="mt-0.5 w-full rounded bg-slate-50 py-0.5 text-center border border-slate-100">
+                <p className="text-[5.5px] font-bold text-slate-400">
+                  DICETAK OLEH: <span className="font-extrabold text-dana-600">DANA BISNIS</span>
+                </p>
+              </div>
             </div>
-            <span className="mt-1.5 text-[8.5px] font-bold text-white/90">Kasir Toko</span>
+
+            <span className="mt-1 text-[8.5px] font-bold text-white/90">
+              Stand QRIS Kasir Toko
+            </span>
           </div>
 
           {/* Voice Alert pill */}
-          <div className="absolute -bottom-1 z-30 rounded-full border border-white/20 bg-white/20 px-3 py-1 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+          <div className="absolute -bottom-2 z-30 rounded-full border border-white/20 bg-white/20 px-3 py-1 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
             <span className="text-xs animate-ping">🔊</span>
             <span className="text-[10px] font-bold text-white">
               Nada DANA: &ldquo;Pembayaran Berhasil!&rdquo;
