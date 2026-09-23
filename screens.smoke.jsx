@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import screens, { AffiliateCarouselGuide } from './src/screens.jsx';
+import screens, { AffiliateCarouselGuide, WHATSAPP_NOTIFICATIONS } from './src/screens.jsx';
 import { QrisCashierVerificationModal } from './src/hostApp.jsx';
 
 const base = {
@@ -196,11 +196,11 @@ const jokoIsolated = {
   },
 };
 const jokoRewardsBeforeStage2 = renderToStaticMarkup(<screens.rewards {...jokoIsolated} />);
-if (!jokoRewardsBeforeStage2.includes('Reward Tahap 1 : Merchant Baru') || !jokoRewardsBeforeStage2.includes('Gratis Tarik Tunai 2x') || !jokoRewardsBeforeStage2.includes('Gunakan Kupon')) {
+if ((!jokoRewardsBeforeStage2.includes('Reward Tahap 1 · Warung Baru') && !jokoRewardsBeforeStage2.includes('Reward Tahap 1 : Merchant Baru')) || !jokoRewardsBeforeStage2.includes('Gratis Tarik Tunai 2x') || !jokoRewardsBeforeStage2.includes('Gunakan Kupon')) {
   throw new Error('Pak Joko Reward Tahap 1 missing concise card elements');
 }
 // Tahap 2 harus belum ada sebelum tahap 2 selesai
-if (jokoRewardsBeforeStage2.includes('Reward Tahap 2 : Merchant Baru')) {
+if (jokoRewardsBeforeStage2.includes('Reward Tahap 2 · Warung Baru') || jokoRewardsBeforeStage2.includes('Reward Tahap 2 : Merchant Baru')) {
   throw new Error('Pak Joko Reward Tahap 2 should NOT appear before stage 2 is complete');
 }
 
@@ -210,7 +210,7 @@ const jokoIsolatedStage2 = {
   progress: { stage2: true },
 };
 const jokoRewardsAfterStage2 = renderToStaticMarkup(<screens.rewards {...jokoIsolatedStage2} />);
-if (!jokoRewardsAfterStage2.includes('Reward Tahap 2 : Merchant Baru') || !jokoRewardsAfterStage2.includes('Gratis Admin 10x')) {
+if ((!jokoRewardsAfterStage2.includes('Reward Tahap 2 · Warung Baru') && !jokoRewardsAfterStage2.includes('Reward Tahap 2 : Merchant Baru')) || !jokoRewardsAfterStage2.includes('Gratis Admin 10x')) {
   throw new Error('Pak Joko Reward Tahap 2 missing after stage 2 is complete');
 }
 
@@ -478,8 +478,8 @@ if (bizGuideSlide1.includes('babibuu') || bizGuideSlide1.includes('kenalanmu')) 
 
 // Slide 3 for Biz Owner (Index 2 of 4: Slide 4 in consumer)
 const bizGuideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={2} />);
-if (!bizGuideSlide2.includes('Ka Adit telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!')) {
-  throw new Error('Biz guide slide 2 missing Ka Adit testimonial headline');
+if (!bizGuideSlide2.includes('Bu Roro telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!')) {
+  throw new Error('Biz guide slide 2 missing Bu Roro testimonial headline');
 }
 
 // Slide 4 for Biz Owner (Index 3 of 4: Slide 5 in consumer)
@@ -521,6 +521,53 @@ if (!ratnaBiz.includes('Sahabat DANA')) {
   throw new Error('BizDash must indicate registered merchant status as Sahabat DANA');
 }
 console.log('DANA Sahabat Warung & Sahabat DANA naming: ok');
+
+// Regression: Verify WhatsApp reminder notifications
+const notifTx1 = WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tx1');
+if (!notifTx1 || notifTx1.title !== 'Dampingi Transaksi Pertama via WhatsApp') {
+  throw new Error('Missing or invalid wa-nudge-tx1 notification');
+}
+if (notifTx1.message.includes('mampir bayar') || notifTx1.message.includes('saya bantu belanja') || !notifTx1.message.includes('Sekadar mengingatkan')) {
+  throw new Error('wa-nudge-tx1 must be purely a reminder without helping transaction');
+}
+
+const notifTx5 = WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tx5');
+if (!notifTx5 || notifTx5.title !== 'Dampingi Transaksi via WhatsApp') {
+  throw new Error('Missing or invalid wa-nudge-tx5 notification');
+}
+if (!notifTx5.message.includes('belum mencapai 5 transaksi') || !notifTx5.message.includes('pajang')) {
+  throw new Error('wa-nudge-tx5 must remind < 5 tx and remind to display QRIS');
+}
+
+const notifTempel = WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tempel');
+if (!notifTempel || notifTempel.title !== 'Dampingi Tempel QRIS via WhatsApp') {
+  throw new Error('Missing or invalid wa-nudge-tempel notification');
+}
+if (!notifTempel.message.includes('langkah terakhir') || !notifTempel.message.includes('Sahabat DANA') || (!notifTempel.message.includes('ditempel') && !notifTempel.message.includes('dipajang'))) {
+  throw new Error('wa-nudge-tempel must remind last step to become Sahabat DANA via QRIS display verification');
+}
+
+// Regression: Verify Tracker renders all WhatsApp nudge action buttons
+const trackerTestProps = {
+  ...base,
+  s: {
+    ...base.s,
+    referrals: [
+      { id: 1, name: 'Warung A', category: 'Warung', stage: 0, tx: 0, day: '1 hr' },
+      { id: 2, name: 'Warung B', category: 'Warung', stage: 1, tx: 0, day: '2 hr' },
+      { id: 3, name: 'Warung C', category: 'Warung', stage: 1, tx: 2, day: '3 hr' },
+      { id: 4, name: 'Warung D', category: 'Warung', stage: 1, tx: 5, day: '4 hr' },
+      { id: 5, name: 'Warung E', category: 'Warung', stage: 2, tx: 10, day: '5 hr' },
+    ],
+  },
+};
+const trackerHtml = renderToStaticMarkup(<screens.tracker {...trackerTestProps} />);
+if (!trackerHtml.includes('Dampingi Transaksi Pertama via WhatsApp') ||
+    !trackerHtml.includes('Dampingi Transaksi via WhatsApp') ||
+    !trackerHtml.includes('Dampingi Tempel QRIS via WhatsApp')) {
+  throw new Error('Tracker missing one or more WhatsApp nudge buttons');
+}
+console.log('WhatsApp nudge notifications & tracker buttons: ok');
 
 
 

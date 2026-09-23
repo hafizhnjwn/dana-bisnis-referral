@@ -35,22 +35,94 @@ export const WHATSAPP_NOTIFICATIONS = [
     id: 'wa-invite-joko',
     recipient: 'Pak Joko',
     roleTarget: 'referred',
-    sender: 'Rian Prasetya / Bu Putu',
+    sender: 'Rian Prasetya',
     phone: '0812-4409-xxxx',
     time: 'Baru saja',
-    tag: 'Undangan Warung',
-    title: 'Undangan Bergabung DANA Bisnis',
-    preview: 'Halo Pak Joko! Saya sudah daftarkan Warung Sembako Pak Joko ke DANA Bisnis. QRIS langsung aktif Rp0...',
+    tag: 'DANA Sahabat Warung',
+    title: 'Undangan Bergabung DANA Sahabat Warung',
+    preview: 'Halo Pak Joko! Saya Rian, sudah bantu daftarkan Warung Sembako Pak Joko ke DANA Sahabat Warung...',
     message: `Halo Pak Joko! 🏪
 
-Saya sudah bantu daftarkan *Warung Sembako Pak Joko* agar bisa terima pembayaran digital QRIS dari semua bank & e-wallet tanpa repot kembalian.
+Saya Rian, pelanggan warung Pak Joko.
 
-Data sudah disiapkan, tinggal 1 langkah konfirmasi (tanpa perlu e-KTP di awal):
-👉 https://dana.id/bisnis/gabung?ref=HAF58W
+Saya bantu daftarkan *Warung Sembako Pak Joko* lewat program *DANA Sahabat Warung* agar warung Pak Joko bisa langsung terima pembayaran digital QRIS dari semua bank & e-wallet tanpa repot cari receh kembalian.
 
-Pajang QRIS di meja kasir, jualan makin laris & praktis!`,
+Data toko sudah disiapkan, tinggal 1 langkah konfirmasi (instan < 30 detik tanpa perlu e-KTP di awal):
+👉 https://dana.id/sahabat-warung/gabung?ref=HAF58W
+
+Pajang QRIS di meja kasir, jualan makin laris, pembeli makin praktis! 🙌`,
     actionText: 'Buka Undangan Pendaftaran',
     targetScreen: 'landing',
+  },
+  {
+    id: 'wa-nudge-tx1',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'Rian Prasetya',
+    phone: '0812-4409-xxxx',
+    time: 'Baru saja',
+    tag: 'Reminder Transaksi Pertama',
+    title: 'Dampingi Transaksi Pertama via WhatsApp',
+    preview: 'Halo Pak Joko! Sekadar mengingatkan nih, QRIS DANA Bisnis untuk Warung Sembako Pak Joko sudah aktif dan siap digunakan...',
+    message: `Halo Pak Joko! 🏪
+
+Sekadar mengingatkan nih Pak, QRIS DANA Bisnis untuk *Warung Sembako Pak Joko* sudah aktif dan siap menerima pembayaran digital.
+
+Jangan lupa pajang poster QRIS di meja kasir ya Pak, agar pembeli bisa langsung bayar non-tunai dari bank atau e-wallet mana pun.
+
+Begitu ada transaksi pertama masuk (min. Rp10.000), kupon *Gratis Tarik Tunai 2x* Pak Joko akan langsung aktif otomatis di tab Reward!
+
+Semangat jualannya hari ini, Pak Joko! 🙌`,
+    actionText: 'Lihat QRIS Toko',
+    targetScreen: 'qris',
+  },
+  {
+    id: 'wa-nudge-tx5',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'Rian Prasetya',
+    phone: '0812-4409-xxxx',
+    time: 'Baru saja',
+    tag: 'Reminder Target 5 Transaksi',
+    title: 'Dampingi Transaksi via WhatsApp',
+    preview: 'Halo Pak Joko! Sekadar mengingatkan, saat ini transaksi QRIS di Warung Sembako Pak Joko masih belum mencapai 5 transaksi...',
+    message: `Halo Pak Joko! 🏪
+
+Sekadar mengingatkan nih Pak, saat ini transaksi QRIS di *Warung Sembako Pak Joko* masih belum mencapai 5 transaksi.
+
+Yuk pastikan poster QRIS selalu dipajang jelas di meja kasir warung agar pelanggan yang belanja bisa langsung scan pembayaran tanpa ribet cari uang receh kembalian.
+
+Tinggal sedikit lagi menuju 5 transaksi unik agar toko Pak Joko bisa membuka reward kupon *Gratis Biaya Admin 10x* dan melangkah ke status Sahabat DANA.
+
+Semoga dagangan makin laris manis ya Pak! 🙌`,
+    actionText: 'Cek Transaksi Toko',
+    targetScreen: 'bizprofile',
+  },
+  {
+    id: 'wa-nudge-tempel',
+    recipient: 'Pak Joko',
+    roleTarget: 'referred',
+    sender: 'Rian Prasetya',
+    phone: '0812-4409-xxxx',
+    time: 'Baru saja',
+    tag: 'Step Terakhir Sahabat DANA',
+    title: 'Dampingi Tempel QRIS via WhatsApp',
+    preview: 'Halo Pak Joko! Tinggal 1 langkah terakhir agar Pak Joko resmi menjadi Sahabat DANA: cukup verifikasi foto poster QRIS yang sudah dipajang atau ditempel...',
+    message: `Halo Pak Joko! 🏪
+
+Luar biasa, pelanggan *Warung Sembako Pak Joko* makin terbiasa bayar pakai QRIS!
+
+Sekadar mengingatkan nih Pak, ini adalah *langkah terakhir* agar Pak Joko resmi menjadi *Sahabat DANA*:
+Cukup lakukan verifikasi dengan memfoto poster QRIS yang sudah ditempel atau dipajang di kasir warung Pak Joko.
+
+Setelah foto terverifikasi, toko Pak Joko resmi berstatus Sahabat DANA dan kupon *Bebas Biaya Admin 10x* langsung aktif penuh!
+
+Yuk buka aplikasi DANA Bisnis dan verifikasi tempel QRIS sekarang:
+👉 https://dana.id/bisnis/verifikasi-tempel
+
+Sukses selalu untuk usahanya Pak Joko! 🙌`,
+    actionText: 'Verifikasi Tempel QRIS Sekarang',
+    targetScreen: 'bizprofile',
   },
   {
     id: 'wa-h1-joko',
@@ -347,11 +419,11 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       ),
   };
 
-  // 4. Ka Adit Testimoni
+  // 4. Testimoni (Bu Roro untuk Bisnis, Ka Adit untuk Konsumen)
   const slide4 = {
     tag: 'BUKTI NYATA PROGRAM',
     title: isBiz
-      ? 'Ka Adit telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!'
+      ? 'Bu Roro telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!'
       : 'Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!',
       visual: (
         <div className="relative mx-auto my-2 flex h-60 w-full max-w-[290px] items-center justify-center">
@@ -999,7 +1071,7 @@ function Tracker(p) {
 
               {r.stage === 0 && (
                 <button
-                  onClick={() => nudge(r)}
+                  onClick={() => nudge(r, 'invite')}
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
                 >
                   <Icon name="share" className="h-3.5 w-3.5" /> Ingatkan via WhatsApp
@@ -1007,7 +1079,7 @@ function Tracker(p) {
               )}
               {isRegisteredNoTx && (
                 <button
-                  onClick={() => nudge(r)}
+                  onClick={() => nudge(r, 'tx1')}
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
                 >
                   <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi Pertama via WhatsApp
@@ -1015,7 +1087,7 @@ function Tracker(p) {
               )}
               {isStage1Done && (
                 <button
-                  onClick={() => nudge(r)}
+                  onClick={() => nudge(r, 'tx5')}
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
                 >
                   <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi via WhatsApp
@@ -1023,7 +1095,7 @@ function Tracker(p) {
               )}
               {isStage2TxOnly && (
                 <button
-                  onClick={() => nudge(r)}
+                  onClick={() => nudge(r, 'tempel')}
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
                 >
                   <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Tempel QRIS via WhatsApp
@@ -1280,8 +1352,8 @@ function Rewards(p) {
             {/* Tahap 1 Card */}
             <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
               <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-                <p className="text-xs font-bold text-slate-800 truncate">
-                  Reward Tahap 1 : Merchant Baru
+                <p className="text-xs font-bold text-slate-800">
+                  Reward Tahap 1 · Warung Baru
                 </p>
                 <span className="shrink-0 text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
                   Expired {expiryDate}
@@ -1308,8 +1380,8 @@ function Rewards(p) {
             {isStage2Done && (
               <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
                 <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-                  <p className="text-xs font-bold text-slate-800 truncate">
-                    Reward Tahap 2 : Merchant Baru
+                  <p className="text-xs font-bold text-slate-800">
+                    Reward Tahap 2 · Warung Baru
                   </p>
                   <span className="shrink-0 text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
                     Expired {expiryDate}
@@ -2065,33 +2137,41 @@ function BizProfile(props) {
   return <BizDash {...props} initialTour={!hasCompletedGuide} />;
 }
 
+export function WhatsAppInviteScreen(props) {
+  const chat = props.chat || WHATSAPP_NOTIFICATIONS[0];
+  return <WhatsAppChatModal chat={chat} onClose={() => {}} go={props.go || (() => {})} />;
+}
+
 /* -------------------------- Full WhatsApp Chat View Modal */
 
 export function WhatsAppChatModal({ chat, onClose, go }) {
   if (!chat) return null;
 
   return (
-    <div className="absolute inset-0 z-50 flex flex-col bg-[#ECE5DD] text-slate-900 animate-in fade-in duration-150">
+    <div className="absolute inset-0 z-50 flex flex-col bg-[#ECE5DD] text-slate-900">
       {/* WhatsApp Header */}
-      <div className="flex items-center gap-2 bg-[#075E54] px-3 py-2.5 text-white shadow-md">
-        <button onClick={onClose} aria-label="Kembali" className="p-1 active:bg-white/10 rounded-full">
-          <Icon name="back" className="h-5 w-5 text-white" />
-        </button>
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#075E54] font-black text-sm">
-          D
-        </span>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1">
-            <p className="truncate text-xs font-bold text-white leading-none">{chat.sender}</p>
-            <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-400 text-[8px] font-black text-[#075E54]">
-              ✓
-            </span>
+      <div className="bg-[#075E54] text-white shrink-0 shadow-md">
+        <StatusBar dark />
+        <div className="flex items-center gap-2 px-3 pb-2.5">
+          <button onClick={onClose} aria-label="Kembali" className="p-1 active:bg-white/10 rounded-full">
+            <Icon name="back" className="h-5 w-5 text-white" />
+          </button>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#075E54] font-black text-sm">
+            D
+          </span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1">
+              <p className="truncate text-xs font-bold text-white leading-none">{chat.sender}</p>
+              <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-400 text-[8px] font-black text-[#075E54]">
+                ✓
+              </span>
+            </div>
+            <p className="text-[10px] text-emerald-200">Akun Bisnis Resmi · {chat.time}</p>
           </div>
-          <p className="text-[10px] text-emerald-200">Akun Bisnis Resmi · {chat.time}</p>
+          <button onClick={onClose} aria-label="Tutup" className="text-white/80 hover:text-white p-1">
+            <Icon name="close" className="h-5 w-5" />
+          </button>
         </div>
-        <button onClick={onClose} aria-label="Tutup" className="text-white/80 hover:text-white p-1">
-          <Icon name="close" className="h-5 w-5" />
-        </button>
       </div>
 
       {/* WhatsApp Chat Body */}
@@ -2321,6 +2401,7 @@ export default {
   receipt_data: ReceiptData,
   receipt_emoney: ReceiptEmoney,
   transfer: TransferBank,
+  whatsapp_invite: WhatsAppInviteScreen,
 };
 
 

@@ -628,16 +628,20 @@ export default function App() {
   };
 
   /** Nudge WhatsApp dari tracker: kirim pesan pendampingan ke HP warung. */
-  const makeNudge = (notify) => (referral) => {
-    const waId =
-      referral.stage === 0
-        ? 'wa-invite-joko'
-        : referral.tx >= 1
-          ? 'wa-routine-joko'
-          : 'wa-payment-joko';
+  const makeNudge = (notify) => (referral, nudgeType) => {
+    let waId = 'wa-invite-joko';
+    if (nudgeType === 'tx1' || (referral.stage === 1 && (referral.tx || 0) === 0)) {
+      waId = 'wa-nudge-tx1';
+    } else if (nudgeType === 'tempel' || referral.stage === 2 || (referral.tx || 0) >= 5) {
+      waId = 'wa-nudge-tempel';
+    } else if (nudgeType === 'tx5' || (referral.stage >= 1 && (referral.tx || 0) < 5)) {
+      waId = 'wa-nudge-tx5';
+    } else if (referral.stage === 0) {
+      waId = 'wa-invite-joko';
+    }
     const notif = WHATSAPP_NOTIFICATIONS.find((n) => n.id === waId) ?? WHATSAPP_NOTIFICATIONS[0];
     setWhatsappPush2({ ...notif, sender: user1.name });
-    notify(`Pesan pendampingan untuk ${referral.name} terkirim via WhatsApp.`);
+    notify(`Pesan pendampingan "${notif.title}" untuk ${referral.name} terkirim via WhatsApp.`);
   };
 
   const sharedCtx = {
