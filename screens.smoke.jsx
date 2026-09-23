@@ -527,24 +527,24 @@ const notifTx1 = WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tx1');
 if (!notifTx1 || notifTx1.title !== 'Dampingi Transaksi Pertama via WhatsApp') {
   throw new Error('Missing or invalid wa-nudge-tx1 notification');
 }
-if (notifTx1.message.includes('mampir bayar') || notifTx1.message.includes('saya bantu belanja') || !notifTx1.message.includes('Sekadar mengingatkan')) {
-  throw new Error('wa-nudge-tx1 must be purely a reminder without helping transaction');
+if (notifTx1.message.includes('mampir bayar') || notifTx1.message.includes('saya bantu belanja') || notifTx1.message.includes('Sekadar mengingatkan') || notifTx1.message.includes('Sekedar mengingatkan')) {
+  throw new Error('wa-nudge-tx1 must not contain helping transaction or repetitive reminder boilerplate');
 }
 
 const notifTx5 = WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tx5');
 if (!notifTx5 || notifTx5.title !== 'Dampingi Transaksi via WhatsApp') {
   throw new Error('Missing or invalid wa-nudge-tx5 notification');
 }
-if (!notifTx5.message.includes('belum mencapai 5 transaksi') || !notifTx5.message.includes('pajang')) {
-  throw new Error('wa-nudge-tx5 must remind < 5 tx and remind to display QRIS');
+if (!notifTx5.message.includes('belum mencapai 5 transaksi') || !notifTx5.message.includes('pajang') || notifTx5.message.includes('Sekadar mengingatkan') || notifTx5.message.includes('Sekedar mengingatkan')) {
+  throw new Error('wa-nudge-tx5 must remind < 5 tx, remind to display QRIS, and not contain Sekadar mengingatkan');
 }
 
 const notifTempel = WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tempel');
 if (!notifTempel || notifTempel.title !== 'Dampingi Tempel QRIS via WhatsApp') {
   throw new Error('Missing or invalid wa-nudge-tempel notification');
 }
-if (!notifTempel.message.includes('langkah terakhir') || !notifTempel.message.includes('Sahabat DANA') || (!notifTempel.message.includes('ditempel') && !notifTempel.message.includes('dipajang'))) {
-  throw new Error('wa-nudge-tempel must remind last step to become Sahabat DANA via QRIS display verification');
+if (!notifTempel.message.includes('langkah terakhir') || !notifTempel.message.includes('Sahabat DANA') || (!notifTempel.message.includes('ditempel') && !notifTempel.message.includes('dipajang')) || notifTempel.message.includes('Sekadar mengingatkan') || notifTempel.message.includes('Sekedar mengingatkan')) {
+  throw new Error('wa-nudge-tempel must remind last step to become Sahabat DANA and not contain Sekadar mengingatkan');
 }
 
 // Regression: Verify Tracker renders all WhatsApp nudge action buttons

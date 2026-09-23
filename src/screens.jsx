@@ -63,10 +63,10 @@ Pajang QRIS di meja kasir, jualan makin laris, pembeli makin praktis! 🙌`,
     time: 'Baru saja',
     tag: 'Reminder Transaksi Pertama',
     title: 'Dampingi Transaksi Pertama via WhatsApp',
-    preview: 'Halo Pak Joko! Sekadar mengingatkan nih, QRIS DANA Bisnis untuk Warung Sembako Pak Joko sudah aktif dan siap digunakan...',
+    preview: 'Halo Pak Joko! QRIS DANA Bisnis untuk Warung Sembako Pak Joko sudah aktif dan siap digunakan...',
     message: `Halo Pak Joko! 🏪
 
-Sekadar mengingatkan nih Pak, QRIS DANA Bisnis untuk *Warung Sembako Pak Joko* sudah aktif dan siap menerima pembayaran digital.
+Kabar baik Pak, QRIS DANA Bisnis untuk *Warung Sembako Pak Joko* sudah aktif dan siap menerima pembayaran digital.
 
 Jangan lupa pajang poster QRIS di meja kasir ya Pak, agar pembeli bisa langsung bayar non-tunai dari bank atau e-wallet mana pun.
 
@@ -85,10 +85,10 @@ Semangat jualannya hari ini, Pak Joko! 🙌`,
     time: 'Baru saja',
     tag: 'Reminder Target 5 Transaksi',
     title: 'Dampingi Transaksi via WhatsApp',
-    preview: 'Halo Pak Joko! Sekadar mengingatkan, saat ini transaksi QRIS di Warung Sembako Pak Joko masih belum mencapai 5 transaksi...',
+    preview: 'Halo Pak Joko! Saat ini transaksi QRIS di Warung Sembako Pak Joko masih belum mencapai 5 transaksi...',
     message: `Halo Pak Joko! 🏪
 
-Sekadar mengingatkan nih Pak, saat ini transaksi QRIS di *Warung Sembako Pak Joko* masih belum mencapai 5 transaksi.
+Saat ini transaksi QRIS di *Warung Sembako Pak Joko* masih belum mencapai 5 transaksi.
 
 Yuk pastikan poster QRIS selalu dipajang jelas di meja kasir warung agar pelanggan yang belanja bisa langsung scan pembayaran tanpa ribet cari uang receh kembalian.
 
@@ -112,7 +112,7 @@ Semoga dagangan makin laris manis ya Pak! 🙌`,
 
 Luar biasa, pelanggan *Warung Sembako Pak Joko* makin terbiasa bayar pakai QRIS!
 
-Sekadar mengingatkan nih Pak, ini adalah *langkah terakhir* agar Pak Joko resmi menjadi *Sahabat DANA*:
+Tinggal *langkah terakhir* nih Pak agar Pak Joko resmi menjadi *Sahabat DANA*:
 Cukup lakukan verifikasi dengan memfoto poster QRIS yang sudah ditempel atau dipajang di kasir warung Pak Joko.
 
 Setelah foto terverifikasi, toko Pak Joko resmi berstatus Sahabat DANA dan kupon *Bebas Biaya Admin 10x* langsung aktif penuh!
