@@ -385,13 +385,16 @@ if (rianGuideReward.includes('10x bebas biaya admin')) {
   throw new Error('Rian guide reward slide should not contain merchant kupon rewards');
 }
 
-// Slide 3 (Index 2): Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu
+// Slide 3 (Index 2): Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu
 const guideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
-if (!guideSlide2.includes('Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu')) {
+if (!guideSlide2.includes('Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu')) {
   throw new Error('Guide slide 2 missing headline');
 }
-if (guideSlide2.includes('usaha kenalanmu')) {
-  throw new Error('Guide slide 2 should not contain "usaha kenalanmu"');
+if (!guideSlide2.includes('Warung Favoritmu')) {
+  throw new Error('Guide slide 2 missing Warung Favoritmu badge');
+}
+if (guideSlide2.includes('usaha kenalanmu') || guideSlide2.includes('Sahabat Dana')) {
+  throw new Error('Guide slide 2 should not contain "usaha kenalanmu" or "Sahabat Dana"');
 }
 
 // Slide 4 (Index 3): Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!
@@ -403,13 +406,13 @@ if (guideSlide3.includes('Bu Roro')) {
   throw new Error('Guide slide 3 should not contain Bu Roro');
 }
 
-// Slide 5 (Index 4): Daftarkan Sahabat Dana, hanya 1 menit!
+// Slide 5 (Index 4): Daftarkan warung favoritmu, hanya 1 menit!
 const guideSlide4 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={4} />);
-if (!guideSlide4.includes('Daftarkan Sahabat Dana, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Sahabat Dana Sekarang (1 Menit)')) {
+if (!guideSlide4.includes('Daftarkan warung favoritmu, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Warung Favoritmu Sekarang (1 Menit)')) {
   throw new Error('Guide slide 4 missing 1-minute CTA content');
 }
-if (guideSlide4.includes('usaha kenalanmu')) {
-  throw new Error('Guide slide 4 should not contain "usaha kenalanmu"');
+if (guideSlide4.includes('usaha kenalanmu') || guideSlide4.includes('Sahabat Dana')) {
+  throw new Error('Guide slide 4 should not contain "usaha kenalanmu" or "Sahabat Dana"');
 }
 
 console.log('compact reward cards & pak joko referal isolation: ok');

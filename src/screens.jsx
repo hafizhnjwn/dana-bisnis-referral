@@ -330,10 +330,10 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       ),
     },
 
-    // 3. Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu
+    // 3. Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu
     {
       tag: 'PENDAFTARAN KILAT',
-      title: 'Cukup bantu daftarin Sahabat Dana, lewat hp tanpa babibuu',
+      title: 'Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial glow */}
@@ -395,7 +395,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               <span className="text-3xl">🏪</span>
             </div>
             <span className="mt-1.5 rounded-full bg-white/25 px-2.5 py-0.5 text-[8.5px] font-bold text-white shadow-xs">
-              Sahabat Dana
+              Warung Favoritmu
             </span>
           </div>
         </div>
@@ -521,10 +521,10 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       ),
     },
 
-    // 5. Daftarkan Sahabat Dana, hanya 1 menit!
+    // 5. Daftarkan warung favoritmu, hanya 1 menit!
     {
       tag: 'HANYA 1 MENIT',
-      title: 'Daftarkan Sahabat Dana, hanya 1 menit!',
+      title: 'Daftarkan warung favoritmu, hanya 1 menit!',
       visual: (
         <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
           {/* Radial glow */}
@@ -561,7 +561,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             </div>
 
             <p className="mt-2 text-center text-[10.5px] font-semibold text-white/90">
-              Ketik nomor warung kenalanmu &amp; QRIS langsung aktif sekarang
+              Ketik nomor warung favoritmu &amp; QRIS langsung aktif sekarang
             </p>
           </div>
         </div>
@@ -646,7 +646,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98 cursor-pointer"
           >
-            Daftarkan Sahabat Dana Sekarang (1 Menit) <Icon name="next" className="h-4 w-4" />
+            Daftarkan Warung Favoritmu Sekarang (1 Menit) <Icon name="next" className="h-4 w-4" />
           </button>
         ) : (
           <button
