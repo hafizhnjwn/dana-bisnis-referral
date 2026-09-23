@@ -304,6 +304,15 @@ if (!rianGuideSlide0.includes('Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo 
 if (!rianGuideSlide0.includes('Bayar apa aja tinggal scan, simpel &amp; modern') || !rianGuideSlide0.includes('7 dari 10 orang sudah cashless')) {
   throw new Error('Rian guide slide 0 missing boxes or social proof');
 }
+if (rianGuideSlide0.includes('Box Uang Tunai') || rianGuideSlide0.includes('Box QRIS Dana Bisnis')) {
+  throw new Error('Rian guide slide 0 should not contain "Box Uang Tunai" or "Box QRIS Dana Bisnis" prefix');
+}
+if (!rianGuideSlide0.includes('Uang Tunai') || !rianGuideSlide0.includes('QRIS Dana Bisnis')) {
+  throw new Error('Rian guide slide 0 missing "Uang Tunai" or "QRIS Dana Bisnis"');
+}
+if (!rianGuideSlide0.includes('DANA SAHABAT WARUNG')) {
+  throw new Error('Rian guide slide 0 missing DANA SAHABAT WARUNG tag');
+}
 
 const ratnaGuideSlide0 = renderToStaticMarkup(<screens.hub {...ratna} />);
 if (!ratnaGuideSlide0.includes('Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Operasional Toko!') || !ratnaGuideSlide0.includes('Drama kembalian &amp; ribet cari uang pas')) {
@@ -372,6 +381,15 @@ if (allRenderedScreens.includes('MDR') || allRenderedScreens.includes('0% MDR'))
   throw new Error('Prototype should not mention MDR as benefit');
 }
 console.log('no MDR references across prototype screens: ok');
+
+// Regression: Verify program name DANA Sahabat Warung and merchant designation Sahabat DANA
+if (!hubAfterGuide.includes('DANA Sahabat Warung')) {
+  throw new Error('Hub screen must have title DANA Sahabat Warung');
+}
+if (!ratnaBiz.includes('Sahabat DANA')) {
+  throw new Error('BizDash must indicate registered merchant status as Sahabat DANA');
+}
+console.log('DANA Sahabat Warung & Sahabat DANA naming: ok');
 
 
 

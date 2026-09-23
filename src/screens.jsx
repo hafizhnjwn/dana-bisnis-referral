@@ -230,7 +230,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
   const slides = [
     // 1. Headline: Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!
     {
-      tag: hasDanaBisnis ? 'SESAMA PEMILIK USAHA' : 'WARUNG LANGGANAN',
+      tag: hasDanaBisnis ? 'SESAMA PEMILIK USAHA' : 'DANA SAHABAT WARUNG',
       title: hasDanaBisnis
         ? 'Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Operasional Toko!'
         : 'Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!',
@@ -241,15 +241,23 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center text-xs">
             <div className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2.5">
-              <span className="text-xl">💵</span>
-              <p className="mt-1 font-bold text-rose-200">Box Uang Tunai</p>
+              <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg border-2 border-rose-400 bg-rose-500/30 text-rose-100 shadow-sm">
+                <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              <p className="mt-1.5 font-bold text-rose-200">Uang Tunai</p>
               <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
                 Drama kembalian &amp; ribet cari uang pas
               </p>
             </div>
             <div className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 p-2.5">
-              <span className="text-xl">📱</span>
-              <p className="mt-1 font-bold text-emerald-200">Box QRIS Dana Bisnis</p>
+              <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg border-2 border-emerald-400 bg-emerald-500/30 text-emerald-100 shadow-sm">
+                <svg className="h-4 w-4 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="mt-1.5 font-bold text-emerald-200">QRIS Dana Bisnis</p>
               <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
                 Bayar apa aja tinggal scan, simpel &amp; modern
               </p>
@@ -612,7 +620,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              PANDUAN REFERER ({step + 1}/5)
+              PANDUAN REFERER · DANA SAHABAT WARUNG ({step + 1}/5)
             </span>
           </div>
           <button
@@ -698,7 +706,7 @@ function Hub(p) {
   }
 
   return (
-    <MiniShell title="Referral Merchant Program" tab="hub" {...p} unread={2}>
+    <MiniShell title="DANA Sahabat Warung" tab="hub" {...p} unread={2}>
 
       <div className="px-4 pt-3 pb-8">
         {/* Guide banner */}
@@ -712,7 +720,7 @@ function Hub(p) {
             </span>
             <div>
               <p className="text-xs font-bold text-dana-900">
-                {hasDanaBisnis ? 'Panduan Mitra Bisnis' : 'Panduan Lengkap Program Referal'}
+                {hasDanaBisnis ? 'Panduan Mitra Bisnis' : 'Panduan DANA Sahabat Warung'}
               </p>
               <p className="text-[10px] text-dana-700">
                 {hasDanaBisnis

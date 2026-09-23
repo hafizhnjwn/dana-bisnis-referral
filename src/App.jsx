@@ -709,7 +709,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black tracking-widest text-dana-400 uppercase">
-                  REFERRAL MERCHANT PROGRAM · DUAL-PHONE LIVE DEMO
+                  DANA SAHABAT WARUNG · DUAL-PHONE LIVE DEMO
                 </span>
                 <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-400 border border-emerald-500/30">
                   REAL-TIME SYNC
@@ -856,7 +856,7 @@ export default function App() {
                   </div>
                 </div>
                 <span className="rounded-md bg-emerald-500/20 px-2 py-0.5 text-[9px] font-black text-emerald-300 border border-emerald-500/30">
-                  WARUNG TERDAFTAR
+                  SAHABAT DANA
                 </span>
               </div>
 
@@ -906,7 +906,7 @@ function ScenarioSteps({ steps, progress, onTriggerStep }) {
     <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-3.5 shadow-lg">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-1.5 text-[11px] font-black tracking-wider text-amber-400 uppercase">
-          <span>🧭</span> 10 Langkah Referral Merchant Program · Selesai Langsung di HP atau Lewat Tombol Trigger
+          <span>🧭</span> 10 Langkah DANA Sahabat Warung · Selesai Langsung di HP atau Lewat Tombol Trigger
         </span>
         <span className="text-[10px] font-bold text-slate-300">
           {finished ? (

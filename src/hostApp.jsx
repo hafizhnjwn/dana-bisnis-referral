@@ -17,7 +17,7 @@ const HOME_SHORTCUTS = [
   { label: 'Pulsa & Data', icon: 'bolt', tone: 'rose', nav: 'receipt_data' },
   { label: 'DANA Deals', icon: 'ticket', tone: 'orange' },
   { label: 'Travel', icon: 'plane', tone: 'violet' },
-  { label: 'Referral Merchant', icon: 'users', tone: 'blue', nav: 'hub' },
+  { label: 'Sahabat Warung', icon: 'users', tone: 'blue', nav: 'hub' },
   { label: 'View All', icon: 'more', tone: 'slate', nav: 'grid' },
 ];
 
@@ -311,7 +311,7 @@ const SERVICE_GROUPS = [
       { label: 'Tempo', icon: 'doc', tone: 'red' },
       { label: 'Patungan', icon: 'users', tone: 'dana' },
       { label: 'Jobseeker Partners', icon: 'person', tone: 'violet' },
-      { label: 'Referral Merchant', icon: 'users', tone: 'blue', nav: 'hub' },
+      { label: 'Sahabat Warung', icon: 'users', tone: 'blue', nav: 'hub' },
       { label: 'iBlooming', icon: 'heart', tone: 'dana' },
       { label: 'Kirim Barang by VELO', icon: 'send', tone: 'amber' },
       { label: 'Edit Foto Jualan', icon: 'camera', tone: 'violet' },
@@ -725,9 +725,9 @@ export function BizDash({
   );
   const stage2Done = (myReferral?.stage ?? 0) >= 2 || Boolean(progress?.stage2_verify || progress?.stage2);
   const storeStatus = isMerchant
-    ? 'NMID ID1023288765432 · Merchant aktif'
+    ? 'NMID ID1023288765432 · Sahabat DANA'
     : (stage2Done
-      ? 'NMID ID1023288765432 · QRIS Terverifikasi'
+      ? 'NMID ID1023288765432 · Sahabat DANA'
       : 'NMID ID1023288765432 · QRIS Aktif (KYC Light)');
 
   const isPaid = (m.firstPayment || 0) >= 10000;
@@ -1142,12 +1142,12 @@ export function BizDash({
               ? [
                 ['Pembayaran QRIS 30 hari', `${txCount} transaksi`],
                 ['Pelanggan unik', `${txCount > 0 ? (stage2Done ? 5 : 1) : 0} pembayar`],
-                ['Status program mitra', stage2Done ? 'Merchant Terverifikasi' : (isPaid ? 'Tahap 1 Selesai' : 'Warung Baru (KYC Light)')],
+                ['Status program mitra', stage2Done ? 'Sahabat DANA' : (isPaid ? 'Tahap 1 Selesai' : 'Warung Baru (KYC Light)')],
               ]
               : [
                 ['Pembayaran QRIS 30 hari', '312 transaksi'],
                 ['Pelanggan unik', '148 pembayar'],
-                ['Status program mitra', 'Merchant Terverifikasi'],
+                ['Status program mitra', 'Sahabat DANA'],
               ]
             ).map(([k, v]) => (
               <div key={k} className="mt-3 flex justify-between text-xs">
