@@ -466,48 +466,35 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             {/* The Acrylic QRIS Stand */}
             <div className="relative w-36 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-dana-950/50 flex flex-col items-center">
               {/* National QRIS Red Header */}
-              <div className="w-full rounded-t-xl bg-[#E1251B] px-2 py-1 flex items-center justify-between text-white shadow-xs">
-                <div className="flex items-center gap-1">
-                  <span className="text-[11px] font-black tracking-tighter uppercase leading-none font-sans">
-                    QRIS
-                  </span>
-                  <span className="text-[5.5px] font-bold text-white/90 leading-none">
-                    PEMBAYARAN DIGITAL
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <span className="rounded bg-white/20 px-1 py-0.2 text-[6px] font-extrabold text-white">
-                    GPN
-                  </span>
-                </div>
+              <div className="w-full rounded-t-xl bg-[#E1251B] px-2 py-1.5 flex items-center justify-center text-white shadow-xs">
+                <span className="text-[13px] font-black tracking-wider uppercase leading-none font-sans">
+                  QRIS
+                </span>
               </div>
 
               {/* Merchant Store Header */}
-              <div className="mt-1 text-center w-full px-1">
-                <p className="text-[8.5px] font-black uppercase text-slate-900 leading-tight truncate">
+              <div className="mt-1.5 text-center w-full px-1">
+                <p className="text-[9px] font-black uppercase text-slate-900 leading-tight truncate">
                   WARUNG TOKO BERKAH
-                </p>
-                <p className="text-[6px] text-slate-400 leading-none">
-                  NMID: ID1023288765432
                 </p>
               </div>
 
               {/* Authentic Real QR Code */}
-              <div className="relative my-1 rounded-lg border-2 border-slate-900/10 bg-white p-1 shadow-inner">
+              <div className="relative my-1.5 rounded-lg border-2 border-slate-900/10 bg-white p-1 shadow-inner">
                 <QRCodeSVG
                   value={qrisPayload('Warung Toko Berkah Bu Roro')}
-                  size={78}
+                  size={80}
                   level="M"
                   includeMargin={false}
                 />
               </div>
 
               {/* Supported Banks / E-Wallet Strip */}
-              <div className="w-full text-center border-t border-slate-100 pt-0.5">
-                <p className="text-[6px] font-black text-slate-700 tracking-tight leading-none uppercase">
+              <div className="w-full text-center border-t border-slate-100 pt-1 pb-0.5">
+                <p className="text-[6.5px] font-black text-slate-700 tracking-tight leading-none uppercase">
                   Satu QRIS Semua Bank &amp; E-Wallet
                 </p>
-                <div className="mt-0.5 flex items-center justify-center gap-1 text-[6px] font-bold text-dana-700">
+                <div className="mt-1 flex items-center justify-center gap-1.5 text-[6.5px] font-bold text-dana-700">
                   <span>BCA</span>
                   <span>•</span>
                   <span>BRI</span>
@@ -516,13 +503,6 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
                   <span>•</span>
                   <span>GoPay</span>
                 </div>
-              </div>
-
-              {/* Acrylic Stand Base / Footer */}
-              <div className="mt-0.5 w-full rounded bg-slate-50 py-0.5 text-center border border-slate-100">
-                <p className="text-[5.5px] font-bold text-slate-400">
-                  DICETAK OLEH: <span className="font-extrabold text-dana-600">DANA BISNIS</span>
-                </p>
               </div>
             </div>
 
