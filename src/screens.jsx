@@ -228,53 +228,111 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
   if (!isOpen) return null;
 
   const slides = [
+    // 1. Headline: Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!
     {
-      tag: hasDanaBisnis ? 'SESAMA PEMILIK USAHA' : 'TENTANG PROGRAM',
+      tag: hasDanaBisnis ? 'SESAMA PEMILIK USAHA' : 'WARUNG LANGGANAN',
       title: hasDanaBisnis
-        ? 'Ajak Rekan Usaha Sekitar Pakai QRIS!'
-        : 'Warung Langganan Masih Repot Uang Tunai?',
+        ? 'Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Operasional Toko!'
+        : 'Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!',
       subtitle: hasDanaBisnis
-        ? 'Sebagai sesama pemilik usaha, bantu warung rekanan beralih ke transaksi digital bebas repot kembalian & raih keuntungan bersama!'
-        : 'Sering kekurangan kembalian atau pembeli batal jajan karena tidak bawa uang pas. Saatnya bantu mereka beralih ke QRIS DANA!',
+        ? 'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu usaha sekitarmu beralih ke QRIS DANA biar transaksi makin sat-set!'
+        : 'Capek drama cari uang pas atau nunggu kembalian yang nggak ada? Saatnya bantu warung langgananmu beralih ke QRIS DANA biar transaksi makin sat-set!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center text-xs">
             <div className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2.5">
-              <span className="text-xl">❌</span>
-              <p className="mt-1 font-bold text-rose-200">{hasDanaBisnis ? 'Rekan Masih Tunai' : 'Uang Tunai'}</p>
-              <p className="mt-0.5 text-[9px] text-white/70">
-                {hasDanaBisnis ? 'Repot cari receh & rawan tolak pembeli e-wallet' : 'Ribet cari kembalian & resiko uang palsu'}
+              <span className="text-xl">💵</span>
+              <p className="mt-1 font-bold text-rose-200">Box Uang Tunai</p>
+              <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
+                Drama kembalian &amp; ribet cari uang pas
               </p>
             </div>
             <div className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 p-2.5">
-              <span className="text-xl">✅</span>
-              <p className="mt-1 font-bold text-emerald-200">QRIS DANA Bisnis</p>
-              <p className="mt-0.5 text-[9px] text-white/70">Terima semua bank/e-wallet &amp; 0% MDR</p>
+              <span className="text-xl">📱</span>
+              <p className="mt-1 font-bold text-emerald-200">Box QRIS Dana Bisnis</p>
+              <p className="mt-0.5 text-[9.5px] leading-tight text-white/80">
+                Bayar apa aja tinggal scan, simpel &amp; modern
+              </p>
             </div>
           </div>
-          <p className="mt-3 text-center text-[10px] text-white/80 font-medium">
-            {hasDanaBisnis
-              ? '💡 Ekosistem digital di sekitar tokomu makin ramai, bisnis makin maju & hemat biaya operasional!'
-              : '💡 7 dari 10 pelanggan lebih suka bayar non-tunai. Jadilah pahlawan warung sekitarmu!'}
-          </p>
+          <div className="mt-3 rounded-xl border border-white/15 bg-white/10 p-2 text-center">
+            <p className="text-[10px] text-white/90 font-medium leading-snug">
+              💡 {hasDanaBisnis
+                ? '7 dari 10 orang sudah cashless. Yuk, jadi alasan usaha sekitarmu jadi lebih modern!'
+                : '7 dari 10 orang sudah cashless. Yuk, jadi alasan warung langgananmu jadi lebih modern!'}
+            </p>
+          </div>
         </div>
       ),
     },
+
+    // 2. Program Referral Merchant, dapatkan 10x bebas biaya admin dengan membantu usaha disekitarmu naik kelas!
     {
-      tag: 'KEMUDAHAN DAFTAR',
-      title: 'Daftar Kilat 30 Detik Tanpa e-KTP di Awal',
-      subtitle: 'Cukup 3 data singkat, QRIS langsung terbit seketika (< 5 detik) secara gratis Rp0.',
+      tag: hasDanaBisnis ? 'REWARD PEMILIK DANA BISNIS' : 'REWARD SALDO DANA',
+      title: hasDanaBisnis
+        ? 'Program Referral Merchant, dapatkan 10x bebas biaya admin dengan membantu usaha disekitarmu naik kelas!'
+        : 'Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
+      subtitle: hasDanaBisnis
+        ? 'Raih kupon bebas biaya bertahap untuk tokomu tiap berhasil mengajak rekan usaha terbit QRIS & bertransaksi.'
+        : 'Raih reward saldo bertahap langsung ke Saldo DANA-mu tiap warung binaan aktif bertransaksi.',
+      visual: (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+          <div className="grid grid-cols-2 gap-2 text-center">
+            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
+              <p className="mt-0.5 text-sm font-black text-white">
+                {hasDanaBisnis ? 'Gratis Transfer 2x' : '+Rp15.000'}
+              </p>
+              <p className="text-[9px] text-white/80 leading-tight">
+                {hasDanaBisnis
+                  ? 'Bebas biaya TF ke semua bank saat rekan terbit QRIS & tx ≥Rp10k'
+                  : 'Saldo DANA · Warung terbit QRIS & transaksi pertama min. Rp10k'}
+              </p>
+            </div>
+            <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
+              <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
+              <p className="mt-0.5 text-sm font-black text-white">
+                {hasDanaBisnis ? 'Gratis Admin 10x' : '+Rp20.000'}
+              </p>
+              <p className="text-[9px] text-white/80 leading-tight">
+                {hasDanaBisnis
+                  ? '10x bebas biaya admin transaksi saat 5 transaksi unik lolos verifikasi'
+                  : 'Saldo DANA · 5 transaksi unik warung lolos verifikasi'}
+              </p>
+            </div>
+          </div>
+          <div className="mt-2.5 rounded-xl border border-amber-300/40 bg-amber-400/20 p-2 text-center">
+            <p className="text-[11px] font-black text-amber-200">
+              {hasDanaBisnis
+                ? 'Kupon Bebas Biaya Operasional untuk Usaha Tokomu'
+                : 'Total Rp35.000 Saldo DANA per Warung Binaan'}
+            </p>
+            <p className="text-[9px] text-white/80">
+              {hasDanaBisnis
+                ? '⭐ Plus perpanjangan bebas MDR 0% 30 hari & prioritas modal usaha!'
+                : '⭐ Cair otomatis langsung ke Saldo DANA tanpa perlu klaim manual!'}
+            </p>
+          </div>
+        </div>
+      ),
+    },
+
+    // 3. Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu
+    {
+      tag: 'PENDAFTARAN KILAT',
+      title: 'Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu',
+      subtitle: 'Tanpa berkas rumit dan tanpa e-KTP di awal. Cukup 3 data singkat dari HP-mu, QRIS langsung terbit seketika (< 5 detik) secara gratis Rp0!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
-              <span className="text-white/80">🏪 Nama Warung</span>
+              <span className="text-white/80">🏪 Nama Usaha</span>
               <span className="flex items-center gap-1 font-bold text-white">
                 Warung Nasi Pak Joko <span className="font-black text-emerald-300 animate-pop-check">✓</span>
               </span>
             </div>
             <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
-              <span className="text-white/80">🏷️ Kategori</span>
+              <span className="text-white/80">🏷️ Kategori Usaha</span>
               <span className="flex items-center gap-1 font-bold text-white">
                 F&amp;B / Warung Makan <span className="font-black text-emerald-300 animate-pop-check">✓</span>
               </span>
@@ -289,7 +347,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
 
           <div className="mt-2.5 flex items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/20 py-1.5 text-xs font-black text-emerald-200 animate-float-slow">
             <Icon name="bolt" className="h-4 w-4 text-amber-300 animate-pulse" />
-            <span>QRIS Terbit Instan &lt; 5 Detik</span>
+            <span>QRIS Terbit Instan &lt; 5 Detik &amp; Rp0 Biaya</span>
           </div>
 
           <div className="mt-2 flex items-center justify-around text-[10px] font-semibold text-white/80">
@@ -302,79 +360,85 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
         </div>
       ),
     },
+
+    // 4. Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!
     {
-      tag: hasDanaBisnis ? 'REWARD PEMILIK DANA BISNIS' : 'REWARD SALDO DANA',
-      title: hasDanaBisnis
-        ? 'Kupon Bebas Biaya Bertahap untuk Usahamu'
-        : `Raih Reward Saldo Bertahap s/d ${rupiah(MAX_PER_REFERRAL)}`,
+      tag: hasDanaBisnis ? 'BUKTI NYATA REKAN USAHA' : 'BUKTI NYATA PROGRAM',
+      title: 'Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!',
       subtitle: hasDanaBisnis
-        ? 'Tahap 1: 2x Bebas Biaya Transfer Bank (transaksi ≥Rp10k) · Tahap 2: 10x Bebas Biaya Admin Transaksi (5 transaksi unik).'
-        : `Tahap 1: ${reward.tahap1.title} di transaksi pertama ≥Rp10k · Tahap 2: ${reward.tahap2.title} saat 5 transaksi unik lolos verifikasi.`,
+        ? 'Sebagai sesama pemilik usaha, Bu Roro mengajak 5 warung sekitar beralih ke QRIS. Hemat biaya operasional harian hingga puluhan ribu rupiah!'
+        : 'Seperti Bu Roro yang sukses mendampingi 5 usaha di sekitarnya, kamu juga bisa kumpulkan total Saldo DANA hingga Rp175.000!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="grid grid-cols-2 gap-2 text-center">
-            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
-              <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
-              <p className="mt-0.5 text-sm font-black text-white">
-                {hasDanaBisnis ? 'Gratis Transfer 2x' : `+${rupiah(reward.tahap1.amount)}`}
-              </p>
-              <p className="text-[9px] text-white/80">
-                {hasDanaBisnis ? 'Bebas biaya TF ke semua bank' : 'Saldo DANA · Transaksi min. Rp10k'}
-              </p>
+          <div className="flex items-center gap-2.5 pb-2.5 border-b border-white/15">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-400 text-amber-950 font-black text-sm shadow-md">
+              BR
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-white truncate">Bu Roro</p>
+              <p className="text-[9.5px] text-white/75 truncate">Pemilik Toko Berkah, Surabaya</p>
             </div>
-            <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
-              <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
-              <p className="mt-0.5 text-sm font-black text-white">
-                {hasDanaBisnis ? 'Gratis Admin 10x' : `+${rupiah(reward.tahap2.amount)}`}
-              </p>
-              <p className="text-[9px] text-white/80">
-                {hasDanaBisnis ? 'Bebas admin listrik PLN & pulsa' : 'Saldo DANA · 5 transaksi unik'}
-              </p>
+            <span className="ml-auto shrink-0 rounded-full bg-emerald-400/20 border border-emerald-300/40 px-2 py-0.5 text-[8.5px] font-bold text-emerald-200">
+              ✓ Terverifikasi
+            </span>
+          </div>
+
+          <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center">
+            <div className="rounded-lg bg-white/15 p-1.5">
+              <p className="text-[8.5px] text-white/70">Terbantu</p>
+              <p className="text-xs font-black text-amber-300">5 Usaha</p>
+              <p className="text-[7.5px] text-white/60">QRIS Aktif</p>
+            </div>
+            <div className="rounded-lg bg-white/15 p-1.5">
+              <p className="text-[8.5px] text-white/70">{hasDanaBisnis ? 'Hemat Biaya' : 'Total Saldo'}</p>
+              <p className="text-xs font-black text-emerald-300">{hasDanaBisnis ? 'Hemat 50K' : '+Rp175K'}</p>
+              <p className="text-[7.5px] text-white/60">{hasDanaBisnis ? 'Operasional' : 'Saldo DANA'}</p>
+            </div>
+            <div className="rounded-lg bg-white/15 p-1.5">
+              <p className="text-[8.5px] text-white/70">{hasDanaBisnis ? 'Kupon Aktif' : 'Reward/Toko'}</p>
+              <p className="text-xs font-black text-amber-200">{hasDanaBisnis ? '10x Admin' : 'Rp35K'}</p>
+              <p className="text-[7.5px] text-white/60">{hasDanaBisnis ? 'Bebas Biaya' : 'per Warung'}</p>
             </div>
           </div>
-          <div className="mt-2.5 rounded-xl border border-amber-300/40 bg-amber-400/20 p-2 text-center">
-            <p className="text-[11px] font-black text-amber-200">
-              {hasDanaBisnis
-                ? 'Kupon Bebas Biaya Operasional untuk Usaha Tokomu'
-                : `Total ${rupiah(MAX_PER_REFERRAL)} Saldo DANA per Warung Binaan`}
-            </p>
-            <p className="text-[9px] text-white/80">
-              {hasDanaBisnis
-                ? '⭐ Perpanjangan bebas MDR 0% 30 hari & prioritas modal usaha!'
-                : '⭐ Cair otomatis langsung ke Saldo DANA tanpa perlu klaim manual!'}
-            </p>
-          </div>
+
+          <p className="mt-2.5 text-[9.5px] italic text-white/90 leading-tight bg-white/10 rounded-xl p-2 border border-white/10">
+            {hasDanaBisnis
+              ? '“Bantu toko sebelah ternyata untung berlipat. Biaya transfer kulakan dan tagihan operasional toko saya hemat lebih dari Rp50.000!”'
+              : '“Tiap warung kenalan yang kamu bantu terbit QRIS dan aktif transaksi akan mencairkan saldo langsung ke akun DANA-mu!”'}
+          </p>
         </div>
       ),
     },
+
+    // 5. Daftarkan usaha kenalanmu, hanya 1 menit!
     {
-      tag: hasDanaBisnis ? 'LANGKAH AJAK REKAN USAHA' : 'LANGKAH AJAK WARUNG',
-      title: hasDanaBisnis
-        ? 'Ajak Rekan Usaha Sebelah Hari Ini!'
-        : 'Ajak Warung Langgananmu Hari Ini!',
-      subtitle: hasDanaBisnis
-        ? 'Tiga langkah mudah: sapa pemilik usaha rekanan, bantu daftarkan lewat akun bisnismu, dan raih kupon operasional!'
-        : 'Tiga langkah mudah: tanya nomor WA warung, masukkan di Bantu Daftarkan, dan dampingi transaksi pertamanya!',
+      tag: 'HANYA 1 MENIT',
+      title: 'Daftarkan usaha kenalanmu, hanya 1 menit!',
+      subtitle: 'Hanya butuh 3 langkah singkat lewat HP untuk daftarkan kenalanmu dan aktifkan reward-nya:',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md space-y-2">
           {[
-            hasDanaBisnis
-              ? ['1', 'Ajak rekan pemilik warung/toko di sekitarmu bergabung.']
-              : ['1', 'Tanya nama & No. WhatsApp pemilik warung saat jajan.'],
-            hasDanaBisnis
-              ? ['2', 'Ketik nomor WA rekan di menu "Bantu Daftarkan".']
-              : ['2', 'Ketik di fitur "Bantu Daftarkan" (kode referral otomatis terisi).'],
-            hasDanaBisnis
-              ? ['3', 'Dampingi transaksi QRIS pertamanya untuk aktifkan kupon gratis tokomu!']
-              : ['3', 'Dampingi transaksi pertama ≥Rp10k pakai DANA untuk cairkan reward!'],
+            ['1', 'Tanya nama & No. WhatsApp pemilik usaha kenalanmu saat berkunjung.'],
+            ['2', 'Buka menu "Bantu Daftarkan", ketik nomornya (kode referral tokomu otomatis terisi).'],
+            [
+              '3',
+              hasDanaBisnis
+                ? 'Dampingi transaksi QRIS pertamanya untuk aktifkan kupon gratis tokomu!'
+                : 'Dampingi transaksi pertama ≥Rp10k pakai DANA untuk cairkan saldo reward!',
+            ],
           ].map(([num, text]) => (
             <div key={num} className="flex items-center gap-2.5 rounded-xl bg-white/15 p-2 text-xs">
               <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-400 text-[10px] font-black text-amber-950">
                 {num}
               </span>
-              <p className="text-[11px] font-semibold text-white/90 leading-tight">{text}</p>
+              <p className="text-[10.5px] font-semibold text-white/90 leading-tight">{text}</p>
             </div>
           ))}
+          <div className="mt-2 rounded-xl bg-emerald-500/20 border border-emerald-400/30 p-1.5 text-center">
+            <p className="text-[9.5px] font-bold text-emerald-200">
+              ⏱️ Proses hanya ~1 menit dari HP, QRIS warung langsung aktif seketika!
+            </p>
+          </div>
         </div>
       ),
     },
@@ -422,19 +486,19 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              PANDUAN REFERER
+              PANDUAN REFERER ({step + 1}/5)
             </span>
           </div>
           <button
             onClick={onClose}
-            className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-extrabold tracking-wider text-white backdrop-blur-xs transition hover:bg-white/25 active:scale-95"
+            className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[10px] font-extrabold tracking-wider text-white backdrop-blur-xs transition hover:bg-white/25 active:scale-95 cursor-pointer z-30"
           >
             LEWATI <Icon name="close" className="h-3 w-3" />
           </button>
         </div>
       </div>
 
-      <div className="pointer-events-none relative flex-1 px-5 py-2 flex flex-col justify-center">
+      <div className="relative flex-1 px-5 py-2 flex flex-col justify-center overflow-y-auto no-scrollbar z-20 pointer-events-none">
         <div>
           <div className="inline-block rounded-full bg-white/20 px-3 py-0.5 text-[9px] font-black tracking-widest uppercase text-amber-200">
             {curr.tag}
@@ -453,16 +517,16 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
               onClose();
               if (onAction) onAction();
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98 cursor-pointer"
           >
-            {hasDanaBisnis ? 'Bantu Daftarkan Rekan Usaha!' : 'Bantu Daftarkan Warung Sekarang!'} <Icon name="next" className="h-4 w-4" />
+            Daftarkan Usaha Sekarang (1 Menit) <Icon name="next" className="h-4 w-4" />
           </button>
         ) : (
           <button
             onClick={() => setStep(step + 1)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-2xl bg-white/20 py-2.5 text-center text-xs font-bold text-white transition active:bg-white/30"
+            className="flex w-full items-center justify-center gap-1.5 rounded-2xl bg-white/20 py-2.5 text-center text-xs font-bold text-white transition active:bg-white/30 cursor-pointer"
           >
-            Lanjut ke Langkah Berikutnya →
+            Lanjut (Langkah {step + 1}/5) →
           </button>
         )}
       </div>

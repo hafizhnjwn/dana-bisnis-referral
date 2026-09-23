@@ -295,51 +295,66 @@ if (jokoBizWaitingTx.includes('Keuntungan Mengajak Bisnis Lain') || jokoBizWaiti
   throw new Error('jokoBizWaitingTx should not contain Keuntungan Mengajak Bisnis Lain or PROGRAM MITRA BISNIS');
 }
 
-// Regression: Differentiate AIDA guide between DANA Bisnis owners (Bu Ratna & Pak Joko) vs consumer (Rian)
-// Slide 0: Perkenalan track
+// Regression: Differentiate 5-slide guide between DANA Bisnis owners (Bu Putu/Ratna & Pak Joko) vs consumer (Rian)
+// Slide 1 (Index 0): Headline, Body, Box Uang Tunai, Box QRIS DANA Bisnis, Social Proof
 const rianGuideSlide0 = renderToStaticMarkup(<screens.hub {...rian} />);
-if (!rianGuideSlide0.includes('Warung Langganan Masih Repot Uang Tunai?') || !rianGuideSlide0.includes('Ribet cari kembalian &amp; resiko uang palsu')) {
-  throw new Error('Rian guide slide 0 missing consumer perspective');
+if (!rianGuideSlide0.includes('Bantu Warung Favoritmu Naik Kelas, Dapetin Saldo Rp 35 Ribu!') || !rianGuideSlide0.includes('Drama kembalian &amp; ribet cari uang pas')) {
+  throw new Error('Rian guide slide 0 missing consumer perspective headline/body');
 }
-if (rianGuideSlide0.includes('Ajak Rekan Usaha Sekitar Pakai QRIS!')) {
-  throw new Error('Rian guide slide 0 should not use merchant peer language');
+if (!rianGuideSlide0.includes('Bayar apa aja tinggal scan, simpel &amp; modern') || !rianGuideSlide0.includes('7 dari 10 orang sudah cashless')) {
+  throw new Error('Rian guide slide 0 missing boxes or social proof');
 }
 
 const ratnaGuideSlide0 = renderToStaticMarkup(<screens.hub {...ratna} />);
-if (!ratnaGuideSlide0.includes('Ajak Rekan Usaha Sekitar Pakai QRIS!') || !ratnaGuideSlide0.includes('Rekan Masih Tunai')) {
+if (!ratnaGuideSlide0.includes('Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Operasional Toko!') || !ratnaGuideSlide0.includes('Drama kembalian &amp; ribet cari uang pas')) {
   throw new Error('Bu Ratna guide slide 0 missing merchant peer perspective');
 }
 
-// Slide 2: Reward slide differences
-const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
-if (!rianGuideReward.includes('Saldo DANA') || !rianGuideReward.includes('Total Rp35.000 Saldo DANA')) {
+// Slide 2 (Index 1): Reward slide differences (10x bebas biaya admin vs Saldo Rp35k)
+const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />);
+if (!rianGuideReward.includes('Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu') || !rianGuideReward.includes('Total Rp35.000 Saldo DANA')) {
   throw new Error('Rian guide reward slide must contain Saldo DANA rewards');
 }
-if (rianGuideReward.includes('Gratis Transfer 2x') || rianGuideReward.includes('Kupon Bebas Biaya Bertahap')) {
+if (rianGuideReward.includes('Gratis Transfer 2x') || rianGuideReward.includes('10x bebas biaya admin')) {
   throw new Error('Rian guide reward slide should not contain merchant kupon rewards');
 }
 
-const ratnaGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={2} />);
-if (!ratnaGuideReward.includes('Kupon Bebas Biaya Bertahap') || !ratnaGuideReward.includes('Gratis Transfer 2x') || !ratnaGuideReward.includes('Gratis Admin 10x')) {
+const ratnaGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={1} />);
+if (!ratnaGuideReward.includes('10x bebas biaya admin') || !ratnaGuideReward.includes('Gratis Transfer 2x') || !ratnaGuideReward.includes('Gratis Admin 10x')) {
   throw new Error('Bu Ratna guide reward slide must contain merchant kupon rewards');
 }
-if (ratnaGuideReward.includes('Saldo DANA Rp5.000') || ratnaGuideReward.includes('Total Rp35.000 Saldo DANA')) {
+if (ratnaGuideReward.includes('+Rp15.000') || ratnaGuideReward.includes('Total Rp35.000 Saldo DANA')) {
   throw new Error('Bu Ratna guide reward slide should not contain consumer saldo rewards');
 }
 
-const jokoGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="referred" initialStep={2} />);
-if (!jokoGuideReward.includes('Kupon Bebas Biaya Bertahap') || !jokoGuideReward.includes('Gratis Transfer 2x') || !jokoGuideReward.includes('Gratis Admin 10x')) {
+const jokoGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="referred" initialStep={1} />);
+if (!jokoGuideReward.includes('10x bebas biaya admin') || !jokoGuideReward.includes('Gratis Transfer 2x') || !jokoGuideReward.includes('Gratis Admin 10x')) {
   throw new Error('Pak Joko guide reward slide must contain merchant kupon rewards');
 }
-if (jokoGuideReward.includes('Saldo DANA Rp5.000') || jokoGuideReward.includes('Total Rp35.000 Saldo DANA')) {
-  throw new Error('Pak Joko guide reward slide should not contain consumer saldo rewards');
+
+// Slide 3 (Index 2): Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu
+const guideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
+if (!guideSlide2.includes('Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu') || !guideSlide2.includes('QRIS Terbit Instan &lt; 5 Detik')) {
+  throw new Error('Guide slide 2 missing fast registration content');
+}
+
+// Slide 4 (Index 3): Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!
+const guideSlide3 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={3} />);
+if (!guideSlide3.includes('Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!')) {
+  throw new Error('Guide slide 3 missing Bu Roro testimonial headline');
+}
+
+// Slide 5 (Index 4): Daftarkan usaha kenalanmu, hanya 1 menit!
+const guideSlide4 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={4} />);
+if (!guideSlide4.includes('Daftarkan usaha kenalanmu, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Usaha Sekarang (1 Menit)')) {
+  throw new Error('Guide slide 4 missing 1-minute CTA content');
 }
 
 console.log('compact reward cards & pak joko referal isolation: ok');
 console.log('bu ratna clean referrals & transfer admin prompt: ok');
 console.log('tahap 2 5x tx trigger & manual photo verification: ok');
 console.log('ratna reward lock, no JUARA/B2B REWARD badges & ratna panduan toko button: ok');
-console.log('clean biz profile (no Keuntungan/Banner) & role-tailored AIDA guide: ok');
+console.log('clean biz profile (no Keuntungan/Banner) & role-tailored 5-slide referral guide: ok');
 
 
 
