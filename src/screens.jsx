@@ -272,46 +272,60 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       title: hasDanaBisnis
         ? 'Program Referral Merchant, dapatkan 10x bebas biaya admin dengan membantu usaha disekitarmu naik kelas!'
         : 'Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
-      subtitle: hasDanaBisnis
-        ? 'Raih kupon bebas biaya bertahap untuk tokomu tiap berhasil mengajak rekan usaha terbit QRIS & bertransaksi.'
-        : 'Raih reward saldo bertahap langsung ke Saldo DANA-mu tiap warung binaan aktif bertransaksi.',
       visual: (
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="grid grid-cols-2 gap-2 text-center">
-            <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
-              <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
-              <p className="mt-0.5 text-sm font-black text-white">
-                {hasDanaBisnis ? 'Gratis Transfer 2x' : '+Rp15.000'}
-              </p>
-              <p className="text-[9px] text-white/80 leading-tight">
-                {hasDanaBisnis
-                  ? 'Bebas biaya TF ke semua bank saat rekan terbit QRIS & tx ≥Rp10k'
-                  : 'Saldo DANA · Warung terbit QRIS & transaksi pertama min. Rp10k'}
-              </p>
-            </div>
-            <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
-              <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
-              <p className="mt-0.5 text-sm font-black text-white">
-                {hasDanaBisnis ? 'Gratis Admin 10x' : '+Rp20.000'}
-              </p>
-              <p className="text-[9px] text-white/80 leading-tight">
-                {hasDanaBisnis
-                  ? '10x bebas biaya admin transaksi saat 5 transaksi unik lolos verifikasi'
-                  : 'Saldo DANA · 5 transaksi unik warung lolos verifikasi'}
-              </p>
-            </div>
+        <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
+          {/* Radial aura glow */}
+          <div className="absolute inset-0 rounded-full bg-amber-400/25 blur-2xl animate-pulse" />
+
+          {/* Floating celebratory particles */}
+          <div className="absolute top-2 left-6 animate-bounce">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-400 text-sm shadow-lg shadow-amber-500/50">
+              🪙
+            </span>
           </div>
-          <div className="mt-2.5 rounded-xl border border-amber-300/40 bg-amber-400/20 p-2 text-center">
-            <p className="text-[11px] font-black text-amber-200">
-              {hasDanaBisnis
-                ? 'Kupon Bebas Biaya Operasional untuk Usaha Tokomu'
-                : 'Total Rp35.000 Saldo DANA per Warung Binaan'}
-            </p>
-            <p className="text-[9px] text-white/80">
-              {hasDanaBisnis
-                ? '⭐ Kupon langsung aktif untuk hemat biaya operasional tokomu!'
-                : '⭐ Cair otomatis langsung ke Saldo DANA tanpa perlu klaim manual!'}
-            </p>
+          <div className="absolute top-4 right-8 animate-bounce delay-200">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-300 text-base shadow-lg shadow-amber-400/50">
+              🎁
+            </span>
+          </div>
+          <div className="absolute bottom-5 left-6 animate-float-slow">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-xs shadow-md shadow-emerald-500/40">
+              ⭐
+            </span>
+          </div>
+          <div className="absolute bottom-6 right-7 animate-bounce delay-300">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-200 text-sm shadow-md">
+              ✨
+            </span>
+          </div>
+
+          {/* Central phone with person receiving prize */}
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="relative h-44 w-28 rounded-3xl border-4 border-white/80 bg-gradient-to-b from-[#108EE9] via-[#0D5995] to-[#0A3D66] p-2 shadow-2xl shadow-dana-900/60 flex flex-col items-center justify-between">
+              <div className="h-1 w-8 rounded-full bg-white/40" />
+
+              {/* Character inside phone cheering */}
+              <div className="my-auto flex flex-col items-center text-center">
+                <div className="relative flex h-16 w-16 items-center justify-center">
+                  <div className="absolute inset-0 rounded-full bg-amber-400/30 animate-ping opacity-50" />
+                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-400 via-amber-300 to-amber-100 shadow-xl shadow-amber-500/50 animate-bounce">
+                    <span className="text-3xl">🥳</span>
+                  </div>
+                </div>
+                <span className="mt-2 rounded-full bg-amber-400 px-2.5 py-0.5 text-[8.5px] font-black uppercase text-amber-950 tracking-wider shadow">
+                  {hasDanaBisnis ? 'Kupon Aktif!' : 'Dapat Saldo!'}
+                </span>
+              </div>
+
+              <div className="h-1 w-10 rounded-full bg-white/50" />
+            </div>
+
+            {/* Glowing Reward Banner */}
+            <div className="mt-2.5 rounded-full border border-amber-300/40 bg-white/20 px-3.5 py-1 text-center shadow-lg backdrop-blur-md animate-pulse">
+              <p className="text-[11px] font-black text-amber-200">
+                {hasDanaBisnis ? '🎉 10x Bebas Biaya Admin Usaha' : '🎉 Saldo DANA hingga Rp 35 Ribu'}
+              </p>
+            </div>
           </div>
         </div>
       ),
@@ -321,41 +335,69 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
     {
       tag: 'PENDAFTARAN KILAT',
       title: 'Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu',
-      subtitle: 'Tanpa berkas rumit dan tanpa e-KTP di awal. Cukup 3 data singkat dari HP-mu, QRIS langsung terbit seketika (< 5 detik) secara gratis Rp0!',
       visual: (
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
-              <span className="text-white/80">🏪 Nama Usaha</span>
-              <span className="flex items-center gap-1 font-bold text-white">
-                Warung Nasi Pak Joko <span className="font-black text-emerald-300 animate-pop-check">✓</span>
-              </span>
+        <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
+          {/* Radial glow */}
+          <div className="absolute inset-0 rounded-full bg-emerald-400/20 blur-2xl animate-pulse" />
+
+          {/* Connection Arc */}
+          <svg className="absolute inset-0 h-full w-full pointer-events-none" viewBox="0 0 280 220" fill="none">
+            <path
+              d="M 55 110 Q 140 40 225 110"
+              stroke="rgba(255, 255, 255, 0.35)"
+              strokeWidth="3"
+              strokeDasharray="6 6"
+              className="animate-pulse"
+            />
+          </svg>
+
+          {/* Left: Inviter */}
+          <div className="relative z-10 flex flex-col items-center animate-float-slow">
+            <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-dana-400 to-sky-300 shadow-xl shadow-dana-500/40 border-2 border-white/70">
+              <span className="text-3xl">🙋‍♂️</span>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
-              <span className="text-white/80">🏷️ Kategori Usaha</span>
-              <span className="flex items-center gap-1 font-bold text-white">
-                F&amp;B / Warung Makan <span className="font-black text-emerald-300 animate-pop-check">✓</span>
-              </span>
+            <span className="mt-1.5 rounded-full bg-white/25 px-2.5 py-0.5 text-[8.5px] font-bold text-white shadow-xs">
+              Kamu
+            </span>
+          </div>
+
+          {/* Center: Smartphone with fast onboarding */}
+          <div className="relative z-20 mx-2.5 flex flex-col items-center">
+            <div className="relative h-44 w-28 rounded-3xl border-4 border-white/80 bg-gradient-to-b from-[#108EE9] via-[#0D5995] to-[#0A3D66] p-2 shadow-2xl shadow-dana-900/60 flex flex-col items-center justify-between">
+              <div className="h-1 w-8 rounded-full bg-white/40" />
+
+              <div className="my-auto flex flex-col items-center w-full px-1">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400 shadow-md shadow-emerald-500/40 animate-bounce">
+                  <span className="text-2xl">⚡</span>
+                </div>
+                <p className="mt-1.5 text-[9px] font-black text-emerald-200 tracking-wide">
+                  &lt; 5 Detik Instan
+                </p>
+                <div className="mt-1.5 w-full space-y-1">
+                  <div className="h-1.5 w-full rounded-full bg-white/40" />
+                  <div className="h-1.5 w-4/5 rounded-full bg-white/40" />
+                  <div className="h-1.5 w-3/5 rounded-full bg-emerald-400/80" />
+                </div>
+              </div>
+
+              <div className="h-1 w-10 rounded-full bg-white/50" />
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-white/15 px-3 py-1.5 text-xs">
-              <span className="text-white/80">📱 No. WhatsApp</span>
-              <span className="flex items-center gap-1 font-bold text-white">
-                0812-xxxx-4409 <span className="font-black text-emerald-300 animate-pop-check">✓</span>
-              </span>
+
+            <div className="mt-2.5 rounded-full border border-emerald-300/40 bg-white/20 px-3.5 py-1 text-center shadow-lg backdrop-blur-md">
+              <p className="text-[10.5px] font-extrabold text-emerald-200">
+                ⚡ Cukup Lewat HP · Tanpa Ribet
+              </p>
             </div>
           </div>
 
-          <div className="mt-2.5 flex items-center justify-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/20 py-1.5 text-xs font-black text-emerald-200 animate-float-slow">
-            <Icon name="bolt" className="h-4 w-4 text-amber-300 animate-pulse" />
-            <span>QRIS Terbit Instan &lt; 5 Detik &amp; Rp0 Biaya</span>
-          </div>
-
-          <div className="mt-2 flex items-center justify-around text-[10px] font-semibold text-white/80">
-            <span>🛡️ Tanpa e-KTP di Awal</span>
-            <span>•</span>
-            <span>Rp0 Biaya</span>
-            <span>•</span>
-            <span>Kode Terpasang Otomatis</span>
+          {/* Right: Partner / Warung Owner */}
+          <div className="relative z-10 flex flex-col items-center animate-float-slow delay-200">
+            <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-400 shadow-xl shadow-amber-500/40 border-2 border-white/70">
+              <span className="text-3xl">🏪</span>
+            </div>
+            <span className="mt-1.5 rounded-full bg-white/25 px-2.5 py-0.5 text-[8.5px] font-bold text-white shadow-xs">
+              Kenalanmu
+            </span>
           </div>
         </div>
       ),
@@ -365,47 +407,74 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
     {
       tag: hasDanaBisnis ? 'BUKTI NYATA REKAN USAHA' : 'BUKTI NYATA PROGRAM',
       title: 'Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!',
-      subtitle: hasDanaBisnis
-        ? 'Sebagai sesama pemilik usaha, Bu Roro mengajak 5 warung sekitar beralih ke QRIS. Hemat biaya operasional harian hingga puluhan ribu rupiah!'
-        : 'Seperti Bu Roro yang sukses mendampingi 5 usaha di sekitarnya, kamu juga bisa kumpulkan total Saldo DANA hingga Rp175.000!',
       visual: (
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
-          <div className="flex items-center gap-2.5 pb-2.5 border-b border-white/15">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-400 text-amber-950 font-black text-sm shadow-md">
-              BR
-            </span>
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-white truncate">Bu Roro</p>
-              <p className="text-[9.5px] text-white/75 truncate">Pemilik Toko Berkah, Surabaya</p>
+        <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
+          {/* Radial glow */}
+          <div className="absolute inset-0 rounded-full bg-sky-400/25 blur-2xl animate-pulse" />
+
+          {/* Left: Customer Scanning Phone */}
+          <div className="relative z-20 flex flex-col items-center -mr-2 animate-float-slow">
+            <div className="relative h-40 w-24 rounded-2xl border-3 border-white/80 bg-gradient-to-b from-[#108EE9] to-[#0A3D66] p-1.5 shadow-2xl flex flex-col items-center justify-between">
+              <div className="h-0.5 w-6 rounded-full bg-white/40" />
+
+              {/* Viewfinder with scan laser */}
+              <div className="relative my-auto flex h-24 w-20 flex-col items-center justify-center rounded-xl border border-white/30 bg-black/40 p-1 overflow-hidden">
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-300 to-transparent shadow-[0_0_8px_#34d399] animate-laser" />
+                <span className="text-2xl">📱</span>
+                <span className="mt-1 text-[7.5px] font-bold text-emerald-300">Scan QRIS</span>
+              </div>
+
+              <div className="h-0.5 w-8 rounded-full bg-white/50" />
             </div>
-            <span className="ml-auto shrink-0 rounded-full bg-emerald-400/20 border border-emerald-300/40 px-2 py-0.5 text-[8.5px] font-bold text-emerald-200">
-              ✓ Terverifikasi
+            <span className="mt-1.5 text-[8.5px] font-bold text-white/90">Pembeli</span>
+          </div>
+
+          {/* Center: Success Arrow */}
+          <div className="relative z-10 flex flex-col items-center px-1">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-400 text-emerald-950 font-black shadow-lg animate-bounce">
+              ✓
+            </div>
+            <span className="text-[8.5px] font-black text-emerald-300 mt-1 whitespace-nowrap">
+              Uang Masuk
             </span>
           </div>
 
-          <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center">
-            <div className="rounded-lg bg-white/15 p-1.5">
-              <p className="text-[8.5px] text-white/70">Terbantu</p>
-              <p className="text-xs font-black text-amber-300">5 Usaha</p>
-              <p className="text-[7.5px] text-white/60">QRIS Aktif</p>
+          {/* Right: Warung Cashier QRIS Stand */}
+          <div className="relative z-20 flex flex-col items-center -ml-2 animate-float-slow delay-150">
+            <div className="relative h-36 w-24 rounded-2xl border-2 border-amber-300/60 bg-white p-2 shadow-2xl flex flex-col items-center justify-between">
+              <div className="flex w-full items-center justify-between">
+                <span className="text-[7.5px] font-black tracking-tight text-dana-700">QRIS</span>
+                <span className="text-[6.5px] font-bold text-slate-400">DANA</span>
+              </div>
+
+              <div className="my-auto flex h-16 w-16 items-center justify-center rounded-lg border border-slate-200 bg-slate-900 p-1">
+                <div className="grid grid-cols-3 gap-0.5 w-full h-full p-0.5 bg-white rounded">
+                  <div className="bg-slate-900 rounded-xs" />
+                  <div className="bg-slate-300 rounded-xs" />
+                  <div className="bg-slate-900 rounded-xs" />
+                  <div className="bg-slate-200 rounded-xs" />
+                  <div className="bg-emerald-500 rounded-xs" />
+                  <div className="bg-slate-900 rounded-xs" />
+                  <div className="bg-slate-900 rounded-xs" />
+                  <div className="bg-slate-300 rounded-xs" />
+                  <div className="bg-slate-900 rounded-xs" />
+                </div>
+              </div>
+
+              <span className="text-[7px] font-bold text-slate-700 truncate w-full text-center">
+                Kasir Warung
+              </span>
             </div>
-            <div className="rounded-lg bg-white/15 p-1.5">
-              <p className="text-[8.5px] text-white/70">{hasDanaBisnis ? 'Hemat Biaya' : 'Total Saldo'}</p>
-              <p className="text-xs font-black text-emerald-300">{hasDanaBisnis ? 'Hemat 50K' : '+Rp175K'}</p>
-              <p className="text-[7.5px] text-white/60">{hasDanaBisnis ? 'Operasional' : 'Saldo DANA'}</p>
-            </div>
-            <div className="rounded-lg bg-white/15 p-1.5">
-              <p className="text-[8.5px] text-white/70">{hasDanaBisnis ? 'Kupon Aktif' : 'Reward/Toko'}</p>
-              <p className="text-xs font-black text-amber-200">{hasDanaBisnis ? '10x Admin' : 'Rp35K'}</p>
-              <p className="text-[7.5px] text-white/60">{hasDanaBisnis ? 'Bebas Biaya' : 'per Warung'}</p>
-            </div>
+            <span className="mt-1.5 text-[8.5px] font-bold text-white/90">Kasir Toko</span>
           </div>
 
-          <p className="mt-2.5 text-[9.5px] italic text-white/90 leading-tight bg-white/10 rounded-xl p-2 border border-white/10">
-            {hasDanaBisnis
-              ? '“Bantu toko sebelah ternyata untung berlipat. Biaya transfer kulakan dan tagihan operasional toko saya hemat lebih dari Rp50.000!”'
-              : '“Tiap warung kenalan yang kamu bantu terbit QRIS dan aktif transaksi akan mencairkan saldo langsung ke akun DANA-mu!”'}
-          </p>
+          {/* Voice Alert pill */}
+          <div className="absolute -bottom-1 z-30 rounded-full border border-white/20 bg-white/20 px-3 py-1 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+            <span className="text-xs animate-ping">🔊</span>
+            <span className="text-[10px] font-bold text-white">
+              Nada DANA: &ldquo;Pembayaran Berhasil!&rdquo;
+            </span>
+          </div>
         </div>
       ),
     },
@@ -414,29 +483,43 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
     {
       tag: 'HANYA 1 MENIT',
       title: 'Daftarkan usaha kenalanmu, hanya 1 menit!',
-      subtitle: 'Hanya butuh 3 langkah singkat lewat HP untuk daftarkan kenalanmu dan aktifkan reward-nya:',
       visual: (
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md space-y-2">
-          {[
-            ['1', 'Tanya nama & No. WhatsApp pemilik usaha kenalanmu saat berkunjung.'],
-            ['2', 'Buka menu "Bantu Daftarkan", ketik nomornya (kode referral tokomu otomatis terisi).'],
-            [
-              '3',
-              hasDanaBisnis
-                ? 'Dampingi transaksi QRIS pertamanya untuk aktifkan kupon gratis tokomu!'
-                : 'Dampingi transaksi pertama ≥Rp10k pakai DANA untuk cairkan saldo reward!',
-            ],
-          ].map(([num, text]) => (
-            <div key={num} className="flex items-center gap-2.5 rounded-xl bg-white/15 p-2 text-xs">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-400 text-[10px] font-black text-amber-950">
-                {num}
-              </span>
-              <p className="text-[10.5px] font-semibold text-white/90 leading-tight">{text}</p>
+        <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
+          {/* Radial glow */}
+          <div className="absolute inset-0 rounded-full bg-amber-400/25 blur-2xl animate-pulse" />
+
+          {/* Speed particles */}
+          <div className="absolute top-3 left-6 animate-bounce">
+            <span className="text-xl">⏱️</span>
+          </div>
+          <div className="absolute top-6 right-7 animate-bounce delay-150">
+            <span className="text-xl">⚡</span>
+          </div>
+          <div className="absolute bottom-5 left-7 animate-float-slow">
+            <span className="text-lg">✨</span>
+          </div>
+          <div className="absolute bottom-4 right-8 animate-bounce delay-300">
+            <span className="text-lg">🔥</span>
+          </div>
+
+          {/* Central Rocket */}
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="relative flex h-28 w-28 items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-400/30 to-amber-300/10 animate-ping opacity-40" />
+              <div className="relative flex h-24 w-24 items-center justify-center rounded-full border-4 border-amber-300/70 bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-200 shadow-2xl shadow-amber-500/50 animate-bounce">
+                <span className="text-5xl -rotate-12">🚀</span>
+              </div>
             </div>
-          ))}
-          <div className="mt-2 rounded-xl bg-emerald-500/20 border border-emerald-400/30 p-1.5 text-center">
-            <p className="text-[9.5px] font-bold text-emerald-200">
-              ⏱️ Proses hanya ~1 menit dari HP, QRIS warung langsung aktif seketika!
+
+            <div className="mt-3 flex items-center gap-1.5 rounded-full border border-amber-300/50 bg-white/20 px-4 py-1 backdrop-blur-md shadow-lg animate-pulse">
+              <span className="text-sm">⏱️</span>
+              <span className="text-xs font-black tracking-wider text-amber-200 uppercase">
+                Hanya 1 Menit!
+              </span>
+            </div>
+
+            <p className="mt-2 text-center text-[10.5px] font-semibold text-white/90">
+              Ketik nomor kenalanmu &amp; QRIS langsung aktif sekarang
             </p>
           </div>
         </div>
@@ -504,7 +587,9 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
             {curr.tag}
           </div>
           <h2 className="mt-2 text-xl font-black leading-tight text-white">{curr.title}</h2>
-          <p className="mt-1 text-xs text-white/85 leading-snug">{curr.subtitle}</p>
+          {curr.subtitle && (
+            <p className="mt-1 text-xs text-white/85 leading-snug">{curr.subtitle}</p>
+          )}
 
           <div className="mt-3">{curr.visual}</div>
         </div>

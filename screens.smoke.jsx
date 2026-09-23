@@ -312,30 +312,30 @@ if (!ratnaGuideSlide0.includes('Bantu Usaha Sekitarmu Naik Kelas, Bebas Biaya Op
 
 // Slide 2 (Index 1): Reward slide differences (10x bebas biaya admin vs Saldo Rp35k)
 const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />);
-if (!rianGuideReward.includes('Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu') || !rianGuideReward.includes('Total Rp35.000 Saldo DANA')) {
-  throw new Error('Rian guide reward slide must contain Saldo DANA rewards');
+if (!rianGuideReward.includes('Program Referral Merchant, dapatkan saldo hingga Rp 35 Ribu')) {
+  throw new Error('Rian guide reward slide must contain Saldo DANA rewards headline');
 }
-if (rianGuideReward.includes('Gratis Transfer 2x') || rianGuideReward.includes('10x bebas biaya admin')) {
+if (rianGuideReward.includes('10x bebas biaya admin')) {
   throw new Error('Rian guide reward slide should not contain merchant kupon rewards');
 }
 
 const ratnaGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={1} />);
-if (!ratnaGuideReward.includes('10x bebas biaya admin') || !ratnaGuideReward.includes('Gratis Transfer 2x') || !ratnaGuideReward.includes('Gratis Admin 10x')) {
-  throw new Error('Bu Ratna guide reward slide must contain merchant kupon rewards');
+if (!ratnaGuideReward.includes('10x bebas biaya admin')) {
+  throw new Error('Bu Ratna guide reward slide must contain merchant kupon rewards headline');
 }
-if (ratnaGuideReward.includes('+Rp15.000') || ratnaGuideReward.includes('Total Rp35.000 Saldo DANA')) {
+if (ratnaGuideReward.includes('Saldo DANA hingga Rp 35 Ribu')) {
   throw new Error('Bu Ratna guide reward slide should not contain consumer saldo rewards');
 }
 
 const jokoGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="referred" initialStep={1} />);
-if (!jokoGuideReward.includes('10x bebas biaya admin') || !jokoGuideReward.includes('Gratis Transfer 2x') || !jokoGuideReward.includes('Gratis Admin 10x')) {
-  throw new Error('Pak Joko guide reward slide must contain merchant kupon rewards');
+if (!jokoGuideReward.includes('10x bebas biaya admin')) {
+  throw new Error('Pak Joko guide reward slide must contain merchant kupon rewards headline');
 }
 
 // Slide 3 (Index 2): Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu
 const guideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
-if (!guideSlide2.includes('Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu') || !guideSlide2.includes('QRIS Terbit Instan &lt; 5 Detik')) {
-  throw new Error('Guide slide 2 missing fast registration content');
+if (!guideSlide2.includes('Cukup bantu daftarin usaha kenalanmu, lewat hp tanpa babibuu')) {
+  throw new Error('Guide slide 2 missing headline');
 }
 
 // Slide 4 (Index 3): Bu Roro telah membantu 5 usaha menjadi dana bisnis, dan telah menghemat operasional hingga 50K!
