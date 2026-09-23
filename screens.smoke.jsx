@@ -94,6 +94,9 @@ if (hubAfterGuide.includes('DANA SAHABAT WARUNG (1/5)')) {
 if (!hubAfterGuide.includes('Bantu Daftarkan Warung Langganan')) {
   throw new Error('Hub content missing after the guide is dismissed');
 }
+if (hubAfterGuide.includes('Panduan Affiliate')) {
+  throw new Error('Hub should not contain Panduan Affiliate section');
+}
 
 // Regression: checklist QRIS menampilkan milestone status tanpa tombol trigger demo
 const jokoQris = {

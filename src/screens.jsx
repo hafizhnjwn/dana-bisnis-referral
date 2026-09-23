@@ -842,27 +842,6 @@ function Hub(p) {
               {activeCount} / {LEGACY.achievementPer} usaha aktif
             </p>
           </div>
-
-          <div className="rounded-3xl bg-white p-4 shadow-sm">
-            <p className="text-xs font-bold text-slate-500">Panduan Affiliate</p>
-            {[
-              ['Kelebihan QRIS DANA Bisnis', 'Potongan 0%, saldo langsung ditarik, Nada DANA, AI foto produk, Rekan DANA'],
-              ['Cara Daftar DANA Bisnis', 'Jalur cepat: 3 data lewat link undangan, e-KTP menyusul saat pencairan'],
-              ['FAQ Komisi & Saldo', 'Reward 2 tahap otomatis masuk saldo Pocket DANA tanpa perlu klaim manual'],
-            ].map(([title, desc]) => (
-              <button
-                key={title}
-                onClick={() => notify(`${title}: ${desc}`)}
-                className="mt-3 flex w-full items-center gap-3 border-t border-slate-100 pt-3 text-left first:border-0 first:pt-0"
-              >
-                <span className="flex-1">
-                  <span className="block text-xs font-bold text-slate-800">{title}</span>
-                  <span className="block text-[10px] leading-snug text-slate-500">{desc}</span>
-                </span>
-                <Icon name="next" className="h-3.5 w-3.5 text-slate-400" />
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </MiniShell>
