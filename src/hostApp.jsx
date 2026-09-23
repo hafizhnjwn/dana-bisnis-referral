@@ -1034,105 +1034,105 @@ export function BizDash({
                 </button>
               </div>
 
-              {/* Progress Bar 3 Tahap: Transaksi >= Rp 10k, 5 Transaksi, Tempel QRIS */}
-              <div className="mt-3 pt-2.5 border-t border-slate-100">
-                <div className="flex items-center justify-between text-[10px] font-bold mb-1.5">
-                  <span className="text-slate-600 font-bold">Progres Tahap Toko</span>
-                  <span className={completedCount === 3 ? 'text-emerald-600 font-black' : 'text-dana-600 font-black'}>
-                    {bizProgressPercent}%
-                  </span>
-                </div>
+              {/* Progress Bar 3 Tahap & Verifikasi Tempel QRIS: Hilang jika sudah selesai Tahap 2 */}
+              {isReferred && !stage2Done && (
+                <div className="mt-3 pt-2.5 border-t border-slate-100">
+                  <div className="flex items-center justify-between text-[10px] font-bold mb-1.5">
+                    <span className="text-slate-600 font-bold">Progres Tahap Toko</span>
+                    <span className="text-dana-600 font-black">
+                      {bizProgressPercent}%
+                    </span>
+                  </div>
 
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-dana-500 to-emerald-500 transition-all duration-500"
-                    style={{ width: `${bizProgressPercent}%` }}
-                  />
-                </div>
-
-                <div className="mt-2.5 grid grid-cols-3 gap-1.5">
-                  {BIZ_REWARD_STAGES.map((st, idx) => (
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
                     <div
-                      key={st.id}
-                      className={`flex flex-col items-center rounded-xl p-1.5 text-center transition ${
-                        st.done
-                          ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
-                          : idx === completedCount
-                          ? 'bg-amber-50/90 border border-amber-300 text-amber-900 font-semibold'
-                          : 'bg-slate-50 border border-slate-100 text-slate-400'
-                      }`}
-                    >
-                      <span className="text-[10px] font-bold mb-0.5">
-                        {st.done ? '✓' : `${idx + 1}`}
-                      </span>
-                      <span className="text-[8.5px] font-bold leading-tight">
-                        {st.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                      className="h-full rounded-full bg-gradient-to-r from-dana-500 to-emerald-500 transition-all duration-500"
+                      style={{ width: `${bizProgressPercent}%` }}
+                    />
+                  </div>
 
-                {/* Button Verifikasi Tempel QRIS langsung di bawah 3 kotak progres */}
-                {isReferred && !step3Done && (
+                  <div className="mt-2.5 grid grid-cols-3 gap-1.5">
+                    {BIZ_REWARD_STAGES.map((st, idx) => (
+                      <div
+                        key={st.id}
+                        onClick={() => {
+                          if (st.id === 'tempel' && !st.done) setShowPhotoModal(true);
+                        }}
+                        className={`flex flex-col items-center rounded-xl p-1.5 text-center transition ${
+                          st.id === 'tempel' && !st.done ? 'cursor-pointer hover:border-emerald-400 active:scale-95' : ''
+                        } ${
+                          st.done
+                            ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+                            : idx === completedCount
+                            ? 'bg-amber-50/90 border border-amber-300 text-amber-900 font-semibold'
+                            : 'bg-slate-50 border border-slate-100 text-slate-400'
+                        }`}
+                      >
+                        <span className="text-[10px] font-bold mb-0.5">
+                          {st.done ? '✓' : `${idx + 1}`}
+                        </span>
+                        <span className="text-[8.5px] font-bold leading-tight">
+                          {st.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Button Verifikasi Tempel QRIS: Bisa verifikasi walau belum 5 transaksi */}
                   <button
                     onClick={() => setShowPhotoModal(true)}
-                    disabled={!step2Done}
-                    className={`mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-black transition active:scale-98 ${
-                      step2Done
-                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer ring-2 ring-emerald-400/50 shadow-emerald-500/20 animate-pulse'
-                        : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
-                    }`}
+                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-black transition active:scale-98 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer ring-2 ring-emerald-400/50 shadow-sm shadow-emerald-500/20"
                   >
                     <Icon name="camera" className="h-4 w-4" />
-                    {step2Done
-                      ? '📸 Verifikasi Tempel QRIS'
-                      : 'Menunggu 5 Transaksi Selesai'}
+                    📸 Verifikasi Tempel QRIS
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Trust Signals: Bukti Nyata Mitra Usaha DANA Bisnis (Horizontal Scroll) */}
-          <div className="rounded-2xl bg-white p-3 shadow-xs border border-slate-100">
-            <div className="mb-2">
-              <p className="text-xs font-bold text-slate-800 leading-tight">Bukti Nyata Rekan Usaha</p>
-              <p className="text-[9.5px] text-slate-400">Cerita sukses aktivasi QRIS DANA Bisnis</p>
-            </div>
+          {/* Trust Signals: Bukti Nyata Mitra Usaha DANA Bisnis (Hanya muncul jika belum menjadi Sahabat Dana Aktif: Pak Joko sebelum Tahap 2) */}
+          {isReferred && !stage2Done && (
+            <div className="rounded-2xl bg-white p-3 shadow-xs border border-slate-100">
+              <div className="mb-2">
+                <p className="text-xs font-bold text-slate-800 leading-tight">Bukti Nyata Rekan Usaha</p>
+                <p className="text-[9.5px] text-slate-400">Cerita sukses aktivasi QRIS DANA Bisnis</p>
+              </div>
 
-            <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
-              {TRUST_SIGNALS.map((t) => (
-                <div
-                  key={t.id}
-                  className="w-[230px] shrink-0 rounded-xl border border-dana-100 bg-gradient-to-br from-dana-50/60 to-white p-2.5 flex flex-col justify-between shadow-2xs"
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-1 mb-1.5">
-                      <span className="rounded bg-dana-600 px-1.5 py-0.5 text-[7.5px] font-black uppercase tracking-wider text-white">
-                        {t.tag}
-                      </span>
-                      <span className="text-[8.5px] font-bold text-dana-700 bg-white border border-dana-200/80 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow-2xs">
-                        ✓ {t.badge}
-                      </span>
+              <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar scroll-smooth">
+                {TRUST_SIGNALS.map((t) => (
+                  <div
+                    key={t.id}
+                    className="w-[230px] shrink-0 rounded-xl border border-dana-100 bg-gradient-to-br from-dana-50/60 to-white p-2.5 flex flex-col justify-between shadow-2xs"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-1 mb-1.5">
+                        <span className="rounded bg-dana-600 px-1.5 py-0.5 text-[7.5px] font-black uppercase tracking-wider text-white">
+                          {t.tag}
+                        </span>
+                        <span className="text-[8.5px] font-bold text-dana-700 bg-white border border-dana-200/80 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow-2xs">
+                          ✓ {t.badge}
+                        </span>
+                      </div>
+                      <p className="text-[10px] leading-snug text-slate-800">
+                        <span className="font-bold text-slate-900 not-italic">{t.store}:</span>{' '}
+                        <span className="italic font-medium text-slate-700">&ldquo;{t.quote}&rdquo;</span>
+                      </p>
                     </div>
-                    <p className="text-[10px] leading-snug text-slate-800">
-                      <span className="font-bold text-slate-900 not-italic">{t.store}:</span>{' '}
-                      <span className="italic font-medium text-slate-700">&ldquo;{t.quote}&rdquo;</span>
-                    </p>
-                  </div>
-                  <div className="mt-2 pt-1.5 border-t border-dana-100 flex items-center gap-2">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-dana-100 font-black text-dana-700 text-[9px] shadow-2xs border border-dana-200/60">
-                      {t.initial}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[9.5px] font-bold text-slate-800 truncate leading-tight">{t.store}</p>
-                      <p className="text-[8px] text-slate-400 truncate">{t.location}</p>
+                    <div className="mt-2 pt-1.5 border-t border-dana-100 flex items-center gap-2">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-dana-100 font-black text-dana-700 text-[9px] shadow-2xs border border-dana-200/60">
+                        {t.initial}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[9.5px] font-bold text-slate-800 truncate leading-tight">{t.store}</p>
+                        <p className="text-[8px] text-slate-400 truncate">{t.location}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
 
           {/* Kesehatan Merchant */}

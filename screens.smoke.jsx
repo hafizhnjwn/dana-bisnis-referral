@@ -142,6 +142,12 @@ const ratnaBizHtml = renderToStaticMarkup(<screens.bizdash {...ratna} />);
 if (!ratnaBizHtml.includes('Lihat Rincian Kupon Saya di Tab Reward')) {
   throw new Error('Bu Putu BizDash is missing button to open Reward tab');
 }
+if (ratnaBizHtml.includes('Bukti Nyata Rekan Usaha')) {
+  throw new Error('Bu Putu (active Sahabat Dana) should NOT see Bukti Nyata Rekan Usaha');
+}
+if (ratnaBizHtml.includes('Progres Tahap Toko')) {
+  throw new Error('Bu Putu should NOT see Progres Tahap Toko onboarding');
+}
 // Regression: Combined card has 3 stages (Transaksi >= Rp 10k, 5 Transaksi, Tempel QRIS)
 for (const stepLabel of ['Transaksi ≥ Rp 10k', '5 Transaksi', 'Tempel QRIS']) {
   if (!jokoBizHtml.includes(stepLabel)) throw new Error(`BizDash combined card missing stage: ${stepLabel}`);
@@ -232,12 +238,12 @@ if (ratnaTransferHtml.includes('+Rp2.500')) {
   throw new Error('Duplicate +Rp2.500 badge should not exist in transfer screen');
 }
 
-// Regression: Pak Joko manual photo verification button directly under progress stages
+// Regression: Pak Joko can verify tempel QRIS even before 5 transactions
 const jokoBizWaitingTx = renderToStaticMarkup(
   <screens.bizdash {...jokoIsolated} progress={{ stage1: true }} />
 );
-if (!jokoBizWaitingTx.includes('Menunggu 5 Transaksi Selesai')) {
-  throw new Error('Pak Joko BizDash should wait for 5 transactions before photo verification');
+if (!jokoBizWaitingTx.includes('Verifikasi Tempel QRIS')) {
+  throw new Error('Pak Joko BizDash should be able to verify tempel QRIS even before 5 transactions');
 }
 
 const jokoBizReadyPhoto = renderToStaticMarkup(
@@ -249,6 +255,20 @@ if (!jokoBizReadyPhoto.includes('Verifikasi Tempel QRIS')) {
 // The bulky separate card was removed as requested
 if (jokoBizReadyPhoto.includes('5/5 Transaksi Unik Selesai!')) {
   throw new Error('Bulky separate card should be removed from BizDash');
+}
+
+// Regression: Once Tahap 2 is done, everything disappears except Lihat Rincian Kupon Saya di Tab Reward
+const jokoBizCompleted = renderToStaticMarkup(
+  <screens.bizdash {...jokoIsolated} progress={{ stage1: true, stage2_tx: true, stage2_verify: true, stage2: true }} />
+);
+if (!jokoBizCompleted.includes('Lihat Rincian Kupon Saya di Tab Reward')) {
+  throw new Error('Completed BizDash missing Lihat Rincian Kupon Saya di Tab Reward');
+}
+if (jokoBizCompleted.includes('Progres Tahap Toko') || jokoBizCompleted.includes('Verifikasi Tempel QRIS')) {
+  throw new Error('Completed BizDash should hide progress stages and verification button');
+}
+if (jokoBizCompleted.includes('Bukti Nyata Rekan Usaha')) {
+  throw new Error('Completed BizDash should hide Bukti Nyata Rekan Usaha after Tahap 2');
 }
 
 // Regression: Bu Ratna kupon 2x gratis transfer TIDAK muncul sebelum Pak Joko selesai Tahap 1
