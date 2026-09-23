@@ -570,7 +570,7 @@ export function MerchantAidaGuide({ isOpen, onClose, onAction }) {
 
 /* -------------------------- Modal Verifikasi Foto QRIS Kasir (Tahap 2) */
 
-export function QrisCashierVerificationModal({ isOpen, onClose, onConfirm, merchant }) {
+export function QrisCashierVerificationModal({ isOpen, onClose, onConfirm, merchant, has5Tx, txCount = 0 }) {
   if (!isOpen) return null;
   const storeName = merchant?.name || 'Warung Sembako Pak Joko';
 
@@ -651,26 +651,39 @@ export function QrisCashierVerificationModal({ isOpen, onClose, onConfirm, merch
         <div className="mt-3 space-y-1.5 rounded-xl bg-slate-50 p-2.5 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-slate-600">1. Transaksi Pembeli Berbeda:</span>
-            <span className="font-extrabold text-emerald-600">5 / 5 Unik ✓</span>
+            {has5Tx ? (
+              <span className="font-extrabold text-emerald-600">5 / 5 Unik ✓</span>
+            ) : (
+              <span className="font-bold text-amber-600">{txCount || 1} / 5 (Menunggu 5 transaksi) ⏳</span>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <span className="text-slate-600">2. Standee QRIS Meja Kasir:</span>
             <span className="font-extrabold text-emerald-600">Terpasang Rapi ✓</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-slate-600">3. Audit Anti-Fraud:</span>
+            <span className="text-slate-600">3. Audit Foto Kasir:</span>
             <span className="font-extrabold text-emerald-600">Lolos Verifikasi ✓</span>
           </div>
         </div>
 
         {/* Unlocked rewards summary */}
-        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 text-xs text-emerald-900">
-          <p className="font-bold">🎁 Reward Terbuka Pasca Konfirmasi:</p>
-          <p className="mt-0.5 text-[10px] text-emerald-800 leading-snug">
-            • <b>Pak Joko</b>: Kupon 10x Bebas Biaya Admin (Listrik PLN, Pulsa, TF Bank)<br />
-            • <b>Pengundang</b>: Saldo DANA Rp30.000 (Rian) / 10x Bebas Admin (Bu Putu)
-          </p>
-        </div>
+        {has5Tx ? (
+          <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-2.5 text-xs text-emerald-900">
+            <p className="font-bold">🎁 Reward Terbuka Pasca Konfirmasi:</p>
+            <p className="mt-0.5 text-[10px] text-emerald-800 leading-snug">
+              • <b>Pak Joko</b>: Kupon 10x Bebas Biaya Admin (Listrik PLN, Pulsa, TF Bank)<br />
+              • <b>Pengundang</b>: Saldo DANA Rp30.000 (Rian) / 10x Bebas Admin (Bu Putu)
+            </p>
+          </div>
+        ) : (
+          <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-xs text-amber-900">
+            <p className="font-bold">⏳ Status Syarat Tahap 2:</p>
+            <p className="mt-0.5 text-[10px] text-amber-800 leading-snug">
+              Foto QRIS kasir akan diverifikasi. Tahap 2 &amp; kupon reward akan aktif setelah warung menyelesaikan total <b>5 transaksi unik</b> ({txCount || 1}/5 saat ini).
+            </p>
+          </div>
+        )}
 
         {/* Confirm Button */}
         <div className="mt-4">
@@ -681,7 +694,7 @@ export function QrisCashierVerificationModal({ isOpen, onClose, onConfirm, merch
             }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 py-3 text-sm font-extrabold text-white shadow-xl shadow-emerald-600/30 active:scale-98 transition"
           >
-            Konfirmasi &amp; Klaim Reward Tahap 2 ✓
+            {has5Tx ? 'Konfirmasi & Klaim Reward Tahap 2 ✓' : 'Konfirmasi Verifikasi Tempel QRIS ✓'}
           </button>
         </div>
       </div>
@@ -723,7 +736,9 @@ export function BizDash({
   const myReferral = s?.referrals?.find(
     (r) => r.name === storeName || r.name?.toLowerCase().includes('joko') || r.id === 0
   );
-  const stage2Done = (myReferral?.stage ?? 0) >= 2 || Boolean(progress?.stage2_verify || progress?.stage2);
+  const has5Tx = Boolean(progress?.stage2_tx || (myReferral?.tx ?? 0) >= 5);
+  const hasVerifyPhoto = Boolean(progress?.stage2_verify);
+  const stage2Done = (myReferral?.stage ?? 0) >= 2 || Boolean(progress?.stage2 || (has5Tx && hasVerifyPhoto));
   const storeStatus = isMerchant
     ? 'NMID ID1023288765432 · Sahabat DANA'
     : (stage2Done
@@ -731,7 +746,6 @@ export function BizDash({
       : 'NMID ID1023288765432 · QRIS Aktif (KYC Light)');
 
   const isPaid = (m.firstPayment || 0) >= 10000;
-  const has5Tx = Boolean(progress?.stage2_tx || stage2Done);
   const txCount = isReferred
     ? (has5Tx ? 5 : (m.firstPayment > 0 ? (m.testScan ? 2 : 1) : (m.testScan ? 1 : 0)))
     : 12;
@@ -750,13 +764,9 @@ export function BizDash({
     : 'Bebas biaya tarik tunai · saldo bisa langsung ditarik';
 
   // 3 Tahap Progres DANA Bisnis: Transaksi >= Rp 10k, 5 Transaksi, Tempel QRIS
-  const step1Done = isReferred
-    ? isPaid
-    : Boolean(m.firstPayment >= 10000 || progress?.stage1 || stage2Done);
-  const step2Done = isReferred
-    ? has5Tx
-    : Boolean(progress?.stage2_tx || stage2Done);
-  const step3Done = stage2Done;
+  const step1Done = Boolean(isPaid || m.firstPayment >= 10000 || progress?.stage1 || stage2Done);
+  const step2Done = Boolean(has5Tx || stage2Done);
+  const step3Done = Boolean(hasVerifyPhoto || stage2Done);
 
   const completedCount = (step1Done ? 1 : 0) + (step2Done ? 1 : 0) + (step3Done ? 1 : 0);
   const bizProgressPercent = Math.round((completedCount / 3) * 100);
@@ -1079,13 +1089,23 @@ export function BizDash({
                   </div>
 
                   {/* Button Verifikasi Tempel QRIS: Bisa verifikasi walau belum 5 transaksi */}
-                  <button
-                    onClick={() => setShowPhotoModal(true)}
-                    className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-black transition active:scale-98 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer ring-2 ring-emerald-400/50 shadow-sm shadow-emerald-500/20"
-                  >
-                    <Icon name="camera" className="h-4 w-4" />
-                    📸 Verifikasi Tempel QRIS
-                  </button>
+                  {step3Done ? (
+                    <button
+                      onClick={() => setShowPhotoModal(true)}
+                      className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold bg-emerald-50 border border-emerald-300 text-emerald-800 hover:bg-emerald-100 transition active:scale-98 cursor-pointer"
+                    >
+                      <span className="text-emerald-600 font-extrabold">✓</span>
+                      Tempel QRIS Terverifikasi · Menunggu 5 Transaksi
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setShowPhotoModal(true)}
+                      className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-black transition active:scale-98 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer ring-2 ring-emerald-400/50 shadow-sm shadow-emerald-500/20"
+                    >
+                      <Icon name="camera" className="h-4 w-4" />
+                      📸 Verifikasi Tempel QRIS
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -1168,6 +1188,8 @@ export function BizDash({
           setShowPhotoModal(false);
         }}
         merchant={m}
+        has5Tx={has5Tx}
+        txCount={txCount}
       />
 
       <HostNav active="Me" go={go} notify={notify} />

@@ -507,46 +507,83 @@ export default function App() {
       }
     },
 
-    /** Menambahkan 5 transaksi unik (kriteria transaksi Tahap 2) tanpa menyelesaikan verifikasi foto */
+    /** Menambahkan 5 transaksi unik (kriteria transaksi Tahap 2) */
     triggerStage2Tx: () => {
       playChime();
       mark('stage2_tx');
-      setReferrals((prev) =>
-        prev.map((r) =>
-          r.name.toLowerCase().includes('joko') || r.id === 0
-            ? { ...r, tx: 5, day: '5 transaksi unik tercapai · Menunggu foto kasir' }
-            : r
-        )
-      );
       announce2(75000);
-      notify2('🎉 5 transaksi unik dari pembeli berbeda masuk (5/5)! Silakan lakukan verifikasi foto kasir di HP Pak Joko.');
-      notify1('Warung Pak Joko mencapai 5 transaksi unik! Menunggu verifikasi foto kasir.');
+      const hasPhoto = Boolean(progress.stage2_verify);
+      if (hasPhoto) {
+        // Kedua syarat (5 tx & foto kasir) lengkap -> Tahap 2 selesai
+        mark('stage2');
+        setBalances((prev) => ({
+          ...prev,
+          consumer: prev.consumer + (scenario === 'rian_joko' ? TIERS[1].amount : 0),
+        }));
+        setReferrals((prev) =>
+          prev.map((r) =>
+            r.name.toLowerCase().includes('joko') || r.id === 0
+              ? { ...r, stage: 2, claimedStage: 2, tx: 5, day: 'Tahap 2 lolos audit validasi' }
+              : r
+          )
+        );
+        notify2('🎉 5 transaksi unik masuk & foto kasir lengkap! Tokomu resmi jadi Sahabat DANA & Kupon 10x Bebas Admin aktif.');
+        if (scenario === 'rian_joko') {
+          notify1(`🎉 Syarat Tahap 2 warung binaan lengkap! Reward Tahap 2 (${rupiah(TIERS[1].amount)}) cair ke Saldo DANA.`);
+        } else {
+          notify1(`🎉 Syarat Tahap 2 warung binaan lengkap! Kupon Bebas Biaya Admin 10x aktif di tab Reward.`);
+        }
+      } else {
+        // Baru 5 tx, foto kasir belum selesai
+        setReferrals((prev) =>
+          prev.map((r) =>
+            r.name.toLowerCase().includes('joko') || r.id === 0
+              ? { ...r, tx: 5, day: '5 transaksi unik tercapai · Menunggu foto kasir' }
+              : r
+          )
+        );
+        notify2('🎉 5 transaksi unik dari pembeli berbeda masuk (5/5)! Silakan lakukan verifikasi foto kasir di HP Pak Joko.');
+        notify1('Warung Pak Joko mencapai 5 transaksi unik! Menunggu verifikasi foto kasir.');
+      }
     },
 
-    /** Tahap 2: Foto kasir terverifikasi secara manual & reward Tahap 2 cair */
+    /** Verifikasi foto kasir (Tempel QRIS): Jika belum 5 transaksi, Tahap 2 belum selesai */
     completeStage2: () => {
       playChime();
-      mark('stage2_tx');
       mark('stage2_verify');
-      mark('stage2');
-      setBalances((prev) => ({
-        ...prev,
-        consumer: prev.consumer + (scenario === 'rian_joko' ? TIERS[1].amount : 0),
-      }));
-
-      setReferrals((prev) =>
-        prev.map((r) =>
-          r.name.toLowerCase().includes('joko') || r.id === 0
-            ? { ...r, stage: 2, claimedStage: 2, tx: 5, day: 'Tahap 2 lolos audit validasi' }
-            : r
-        )
-      );
-
-      notify2('🎉 Verifikasi foto kasir berhasil! Tokomu resmi terverifikasi & Kupon 10x Bebas Admin aktif.');
-      if (scenario === 'rian_joko') {
-        notify1(`🎉 Verifikasi foto warung binaan selesai! Reward Tahap 2 (${rupiah(TIERS[1].amount)}) cair ke Saldo DANA.`);
+      const jokoRef = referrals.find((r) => r.name?.toLowerCase().includes('joko') || r.id === 0);
+      const hasTx = Boolean(progress.stage2_tx || (jokoRef?.tx ?? 0) >= 5);
+      if (hasTx) {
+        // Kedua syarat (5 tx & foto kasir) lengkap -> Tahap 2 selesai
+        mark('stage2');
+        setBalances((prev) => ({
+          ...prev,
+          consumer: prev.consumer + (scenario === 'rian_joko' ? TIERS[1].amount : 0),
+        }));
+        setReferrals((prev) =>
+          prev.map((r) =>
+            r.name.toLowerCase().includes('joko') || r.id === 0
+              ? { ...r, stage: 2, claimedStage: 2, tx: 5, day: 'Tahap 2 lolos audit validasi' }
+              : r
+          )
+        );
+        notify2('🎉 Verifikasi foto kasir berhasil & 5 transaksi lengkap! Tokomu resmi jadi Sahabat DANA & Kupon 10x Bebas Admin aktif.');
+        if (scenario === 'rian_joko') {
+          notify1(`🎉 Syarat Tahap 2 warung binaan lengkap! Reward Tahap 2 (${rupiah(TIERS[1].amount)}) cair ke Saldo DANA.`);
+        } else {
+          notify1(`🎉 Syarat Tahap 2 warung binaan lengkap! Kupon Bebas Biaya Admin 10x aktif di tab Reward.`);
+        }
       } else {
-        notify1(`🎉 Verifikasi foto warung binaan selesai! Kupon Bebas Biaya Admin 10x aktif di tab Reward.`);
+        // Foto kasir selesai, tapi masih nunggu 5x transaksi dulu
+        setReferrals((prev) =>
+          prev.map((r) =>
+            r.name.toLowerCase().includes('joko') || r.id === 0
+              ? { ...r, day: 'Foto kasir terverifikasi · Menunggu 5 transaksi' }
+              : r
+          )
+        );
+        notify2('🎉 Verifikasi foto kasir berhasil! Tinggal selesaikan 5 transaksi unik untuk klaim reward Tahap 2.');
+        notify1('Warung Pak Joko telah verifikasi foto kasir! Menunggu pencapaian 5 transaksi unik.');
       }
     },
 
@@ -610,7 +647,7 @@ export default function App() {
     patch: applyPatch,
   };
 
-  const isStage2Done = !!(progress.stage2 || progress.stage2_verify);
+  const isStage2Done = Boolean(progress.stage2 || (progress.stage2_tx && progress.stage2_verify));
 
   // Phone 1 context
   const ctx1 = {

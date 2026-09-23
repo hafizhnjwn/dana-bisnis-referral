@@ -1153,7 +1153,7 @@ function Rewards(p) {
 
   const isStage2Done = !!(
     p.progress?.stage2 ||
-    p.progress?.stage2_verify ||
+    (p.progress?.stage2_tx && p.progress?.stage2_verify) ||
     s?.isStage2Done ||
     (s?.referrals?.find((r) => r.name?.toLowerCase().includes('joko') || r.id === 0)?.stage ?? 0) >= 2 ||
     (s?.merchant?.stage ?? 0) >= 2
@@ -2027,7 +2027,9 @@ function Qris(props) {
 
   // Warung ini di daftar referal pengundang: dipakai untuk status Tahap 2.
   const myReferral = s.referrals?.find((r) => r.name === m.name || r.id === 0);
-  const stage2Done = (myReferral?.stage ?? 0) >= 2;
+  const stage2Done =
+    (myReferral?.stage ?? 0) >= 2 ||
+    Boolean(props.progress?.stage2 || (props.progress?.stage2_tx && props.progress?.stage2_verify));
 
   const steps = [
     { done: m.issued, title: 'QRIS toko aktif (KYC Light)', desc: 'Akun siap menerima pembayaran digital dari seluruh bank & e-wallet.' },

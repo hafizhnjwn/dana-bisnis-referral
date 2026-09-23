@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import screens, { AffiliateCarouselGuide } from './src/screens.jsx';
+import { QrisCashierVerificationModal } from './src/hostApp.jsx';
 
 const base = {
   s: {
@@ -269,6 +270,46 @@ if (jokoBizCompleted.includes('Progres Tahap Toko') || jokoBizCompleted.includes
 }
 if (jokoBizCompleted.includes('Bukti Nyata Rekan Usaha')) {
   throw new Error('Completed BizDash should hide Bukti Nyata Rekan Usaha after Tahap 2');
+}
+
+// Regression: Kalau belum 5x transaksi lalu selesai verifikasi foto, Tahap 2 belum selesai (masih nunggu 5x transaksi)
+const jokoBizPhotoOnly = renderToStaticMarkup(
+  <screens.bizdash {...jokoIsolated} progress={{ stage1: true, stage2_verify: true }} />
+);
+if (!jokoBizPhotoOnly.includes('Progres Tahap Toko')) {
+  throw new Error('BizDash should still show progress stages when only photo is verified without 5 tx');
+}
+if (!jokoBizPhotoOnly.includes('2/3 Tahap Selesai')) {
+  throw new Error('BizDash should show 2/3 Tahap Selesai when 10k & photo are done but 5 tx is not');
+}
+if (!jokoBizPhotoOnly.includes('Tempel QRIS Terverifikasi · Menunggu 5 Transaksi')) {
+  throw new Error('BizDash should show Tempel QRIS Terverifikasi · Menunggu 5 Transaksi');
+}
+if (!jokoBizPhotoOnly.includes('Bukti Nyata Rekan Usaha')) {
+  throw new Error('BizDash should still show Bukti Nyata Rekan Usaha when Tahap 2 is not completed');
+}
+
+// Regression: Modal verifikasi checklist & button berbeda jika belum 5 transaksi vs sudah 5 transaksi
+const modalWaitingTxHtml = renderToStaticMarkup(
+  <QrisCashierVerificationModal isOpen has5Tx={false} txCount={1} />
+);
+if (!modalWaitingTxHtml.includes('Menunggu 5 transaksi') || !modalWaitingTxHtml.includes('Konfirmasi Verifikasi Tempel QRIS ✓')) {
+  throw new Error('Modal with < 5 tx missing waiting status or confirmation text');
+}
+
+const modalReadyTxHtml = renderToStaticMarkup(
+  <QrisCashierVerificationModal isOpen has5Tx={true} txCount={5} />
+);
+if (!modalReadyTxHtml.includes('5 / 5 Unik ✓') || !modalReadyTxHtml.includes('Konfirmasi &amp; Klaim Reward Tahap 2 ✓')) {
+  throw new Error('Modal with 5 tx missing 5/5 unik or claim button');
+}
+
+// Regression: Rewards screen also must NOT consider Tahap 2 done if only photo is verified
+const rianPhotoOnlyRewards = renderToStaticMarkup(
+  <screens.rewards {...rian} progress={{ stage1: true, stage2_verify: true }} />
+);
+if (rianPhotoOnlyRewards.includes('Reward Tahap 2 : Warung Sembako Pak Joko')) {
+  throw new Error('Rian rewards should NOT consider Tahap 2 done when only photo is verified');
 }
 
 // Regression: Bu Ratna kupon 2x gratis transfer TIDAK muncul sebelum Pak Joko selesai Tahap 1
