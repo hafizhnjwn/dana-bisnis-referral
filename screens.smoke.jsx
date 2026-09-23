@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import screens from './src/screens.jsx';
+import screens, { AffiliateCarouselGuide } from './src/screens.jsx';
 
 const base = {
   s: {
@@ -56,7 +56,8 @@ const asRole = (id, name, initial, store, balance) => ({
 });
 
 const rian = asRole('consumer', 'Rian Prasetya', 'R', null, 152300);
-const ratna = asRole('merchant', 'Ratna Dewi', 'R', 'Martabak Bu Ratna', 96500);
+const putu = asRole('merchant', 'Putu Dewi', 'P', 'Toko Grosir Bu Putu', 96500);
+const ratna = putu; // backward compatibility alias
 
 for (const [name, Screen] of Object.entries(screens)) {
   const html = renderToStaticMarkup(<Screen {...rian} />);
@@ -66,10 +67,10 @@ for (const [name, Screen] of Object.entries(screens)) {
 
 // Regression: host-app screens must never render another persona's identity.
 const ratnaHome = renderToStaticMarkup(<screens.home {...ratna} />);
-if (ratnaHome.includes('Rian')) throw new Error('Home leaks the consumer persona while viewing as Bu Ratna');
+if (ratnaHome.includes('Rian')) throw new Error('Home leaks the consumer persona while viewing as Bu Putu');
 if (!ratnaHome.includes('96.500')) throw new Error('Home does not show the active persona wallet');
 const ratnaBiz = renderToStaticMarkup(<screens.bizdash {...ratna} />);
-if (!ratnaBiz.includes('Martabak Bu Ratna')) throw new Error('Bisnis tab does not show the merchant store');
+if (!ratnaBiz.includes('Toko Grosir Bu Putu')) throw new Error('Bisnis tab does not show the merchant store');
 const ratnaHub = renderToStaticMarkup(
   <screens.hub {...ratna} s={{ ...ratna.s, hasSeenAffiliateGuide: true }} />,
 );
@@ -114,13 +115,231 @@ const jokoBizHtml = renderToStaticMarkup(<screens.bizdash {...jokoQris} initialT
 for (const act of ['Buka QRIS', 'Tarik Saldo', 'Transfer', 'Pembayaran']) {
   if (!jokoBizHtml.includes(act)) throw new Error(`BizDash is missing action: ${act}`);
 }
-if (!jokoBizHtml.includes('Panduan Aksi')) {
+if (!jokoBizHtml.includes('Tampilkan QRIS di HP atau cetak poster kasir (0% MDR semua bank).')) {
   throw new Error('BizDash is missing the Bubble Chat Guide');
 }
-if (!jokoBizHtml.includes('Hadiah Tahap 1: Bebas Tarik Tunai 2x')) {
-  throw new Error('BizDash is missing Hadiah Tahap 1 card');
+if (jokoBizHtml.includes('Panduan Fitur') || jokoBizHtml.includes('PEMBAYARAN DIGITAL') || jokoBizHtml.includes('1. QRIS Toko')) {
+  throw new Error('BizDash guide should only show description, without header or tags');
 }
-if (!jokoBizHtml.includes('Hadiah Tahap 2: Bebas Biaya Admin 10x')) {
-  throw new Error('BizDash is missing Hadiah Tahap 2 card');
+if (!jokoBizHtml.includes('Lihat Rincian Kupon Saya di Tab Reward')) {
+  throw new Error('BizDash is missing button to open Reward tab');
 }
-console.log('4 quick actions, bubble chat guide & reward cards: ok');
+// Regression: Trust Signals horizontal scroll deck (toko di luar tanda quote)
+if (!jokoBizHtml.includes('Toko Grosir Bu Siti') || !jokoBizHtml.includes('Aktivasi QRIS Dana Bisnis meningkatkan pendapatan sampai 20%')) {
+  throw new Error('BizDash is missing required Bu Siti trust signal');
+}
+if (!jokoBizHtml.includes('Bukti Nyata Rekan Usaha') || !jokoBizHtml.includes('Warung Madura Cak Munir')) {
+  throw new Error('BizDash is missing trust signals deck');
+}
+if (jokoBizHtml.includes('&ldquo;Warung Madura Cak Munir') || jokoBizHtml.includes('“Warung Madura Cak Munir')) {
+  throw new Error('Store name must be outside quotation marks');
+}
+if (jokoBizHtml.includes('★') || jokoBizHtml.includes('Geser')) {
+  throw new Error('BizDash trust signals section should not have star icon or Geser indicator');
+}
+const ratnaBizHtml = renderToStaticMarkup(<screens.bizdash {...ratna} />);
+if (!ratnaBizHtml.includes('Lihat Rincian Kupon Saya di Tab Reward')) {
+  throw new Error('Bu Putu BizDash is missing button to open Reward tab');
+}
+// Regression: Combined card has 3 stages (Transaksi >= Rp 10k, 5 Transaksi, Tempel QRIS)
+for (const stepLabel of ['Transaksi ≥ Rp 10k', '5 Transaksi', 'Tempel QRIS']) {
+  if (!jokoBizHtml.includes(stepLabel)) throw new Error(`BizDash combined card missing stage: ${stepLabel}`);
+}
+console.log('4 quick actions, bubble chat guide, trust signals, 3-stage progress card & reward buttons: ok');
+
+// Regression: Once guide is completed, it should NOT show automatically when reopened
+const jokoBizAfterGuide = renderToStaticMarkup(
+  <screens.bizdash {...jokoQris} progress={{ biz_guide: true }} />
+);
+if (jokoBizAfterGuide.includes('Tampilkan QRIS di HP atau cetak poster kasir (0% MDR semua bank).')) {
+  throw new Error('BizDash guide should NOT appear after being completed');
+}
+console.log('guide dismissal on reopen: ok');
+
+// Regression: Pak Joko compact reward cards & referal isolation
+const jokoIsolated = {
+  ...jokoQris,
+  s: {
+    ...jokoQris.s,
+    role: 'referred',
+    referrals: [],
+    rewardQuotas: { referred: { withdraw: 2, admin: 10 } },
+  },
+};
+const jokoRewardsBeforeStage2 = renderToStaticMarkup(<screens.rewards {...jokoIsolated} />);
+if (!jokoRewardsBeforeStage2.includes('Reward Tahap 1 : Merchant Baru') || !jokoRewardsBeforeStage2.includes('Gratis Tarik Tunai 2x') || !jokoRewardsBeforeStage2.includes('Gunakan Kupon')) {
+  throw new Error('Pak Joko Reward Tahap 1 missing concise card elements');
+}
+// Tahap 2 harus belum ada sebelum tahap 2 selesai
+if (jokoRewardsBeforeStage2.includes('Reward Tahap 2 : Merchant Baru')) {
+  throw new Error('Pak Joko Reward Tahap 2 should NOT appear before stage 2 is complete');
+}
+
+// Setelah Tahap 2 selesai, barulah Tahap 2 muncul
+const jokoIsolatedStage2 = {
+  ...jokoIsolated,
+  progress: { stage2: true },
+};
+const jokoRewardsAfterStage2 = renderToStaticMarkup(<screens.rewards {...jokoIsolatedStage2} />);
+if (!jokoRewardsAfterStage2.includes('Reward Tahap 2 : Merchant Baru') || !jokoRewardsAfterStage2.includes('Gratis Admin 10x')) {
+  throw new Error('Pak Joko Reward Tahap 2 missing after stage 2 is complete');
+}
+
+const jokoTrackerHtml = renderToStaticMarkup(<screens.tracker {...jokoIsolated} />);
+if (!jokoTrackerHtml.includes('Program Referal Kosong')) {
+  throw new Error('Pak Joko referral tracker is not empty');
+}
+
+// Regression: Bu Ratna compact reward cards
+const ratnaRewardsBeforeStage2 = renderToStaticMarkup(<screens.rewards {...ratna} />);
+if (!ratnaRewardsBeforeStage2.includes('Reward Tahap 1 : Warung Sembako Pak Joko') || !ratnaRewardsBeforeStage2.includes('Gratis Transfer 2x') || !ratnaRewardsBeforeStage2.includes('Gunakan Kupon')) {
+  throw new Error('Bu Ratna Reward Tahap 1 missing concise card elements');
+}
+if (ratnaRewardsBeforeStage2.includes('Reward Tahap 2 : Warung Sembako Pak Joko')) {
+  throw new Error('Bu Ratna Reward Tahap 2 should NOT appear before stage 2 is complete');
+}
+
+// Regression: Rian compact reward cards
+const rianRewardsHtml = renderToStaticMarkup(<screens.rewards {...rian} />);
+if (!rianRewardsHtml.includes('Reward Tahap 1 : Warung Sembako Pak Joko') || !rianRewardsHtml.includes('Saldo DANA Rp 5.000') || !rianRewardsHtml.includes('Telah masuk ke saldo')) {
+  throw new Error('Rian Reward Tahap 1 missing concise card elements');
+}
+// Regression: Bu Ratna isolated with no referral history
+const ratnaIsolated = {
+  ...ratna,
+  s: {
+    ...ratna.s,
+    referrals: [],
+  },
+};
+const ratnaTrackerHtml = renderToStaticMarkup(<screens.tracker {...ratnaIsolated} />);
+if (!ratnaTrackerHtml.includes('Program Referal Kosong')) {
+  throw new Error('Bu Ratna referral tracker is not empty');
+}
+
+// Regression: Tracker list must have Tempel QRIS step
+const rianTrackerHtml = renderToStaticMarkup(<screens.tracker {...rian} />);
+if (!rianTrackerHtml.includes('Tempel QRIS')) {
+  throw new Error('Tracker missing Tempel QRIS progress pill');
+}
+
+const ratnaTransferHtml = renderToStaticMarkup(<screens.transfer {...ratnaIsolated} />);
+if (!ratnaTransferHtml.includes('Kirim Uang ke Bank') || !ratnaTransferHtml.includes('CV Berkah Pangan') || !ratnaTransferHtml.includes('BCA') || !ratnaTransferHtml.includes('Rp2.500') || !ratnaTransferHtml.includes('Coba →')) {
+  throw new Error('Transfer page missing Bank BCA admin fee simulation or Coba → button');
+}
+if (ratnaTransferHtml.includes('+Rp2.500')) {
+  throw new Error('Duplicate +Rp2.500 badge should not exist in transfer screen');
+}
+
+// Regression: Pak Joko manual photo verification button directly under progress stages
+const jokoBizWaitingTx = renderToStaticMarkup(
+  <screens.bizdash {...jokoIsolated} progress={{ stage1: true }} />
+);
+if (!jokoBizWaitingTx.includes('Menunggu 5 Transaksi Selesai')) {
+  throw new Error('Pak Joko BizDash should wait for 5 transactions before photo verification');
+}
+
+const jokoBizReadyPhoto = renderToStaticMarkup(
+  <screens.bizdash {...jokoIsolated} progress={{ stage1: true, stage2_tx: true }} />
+);
+if (!jokoBizReadyPhoto.includes('Verifikasi Tempel QRIS')) {
+  throw new Error('Pak Joko BizDash missing active photo verification button after 5 tx');
+}
+// The bulky separate card was removed as requested
+if (jokoBizReadyPhoto.includes('5/5 Transaksi Unik Selesai!')) {
+  throw new Error('Bulky separate card should be removed from BizDash');
+}
+
+// Regression: Bu Ratna kupon 2x gratis transfer TIDAK muncul sebelum Pak Joko selesai Tahap 1
+const ratnaBeforeStage1 = {
+  ...ratna,
+  s: {
+    ...ratna.s,
+    merchant: {
+      ...ratna.s.merchant,
+      firstPayment: 0,
+    },
+    referrals: [],
+  },
+  progress: {},
+};
+const ratnaRewardsBeforeStage1 = renderToStaticMarkup(<screens.rewards {...ratnaBeforeStage1} />);
+if (ratnaRewardsBeforeStage1.includes('Gratis Transfer 2x')) {
+  throw new Error('Bu Ratna should NOT see Gratis Transfer 2x before Pak Joko finishes Tahap 1');
+}
+if (!ratnaRewardsBeforeStage1.includes('Kupon Belum Tersedia')) {
+  throw new Error('Bu Ratna missing Kupon Belum Tersedia placeholder before Tahap 1');
+}
+
+// Regression: JUARA ⭐ dan B2B REWARD tidak boleh muncul di profil DANA Bisnis siapapun
+if (ratnaBiz.includes('JUARA') || ratnaBiz.includes('B2B REWARD')) {
+  throw new Error('ratnaBiz should not contain JUARA or B2B REWARD badges');
+}
+if (jokoBizWaitingTx.includes('JUARA') || jokoBizWaitingTx.includes('B2B REWARD')) {
+  throw new Error('jokoBizWaitingTx should not contain JUARA or B2B REWARD badges');
+}
+if (jokoBizReadyPhoto.includes('JUARA') || jokoBizReadyPhoto.includes('B2B REWARD')) {
+  throw new Error('jokoBizReadyPhoto should not contain JUARA or B2B REWARD badges');
+}
+
+// Regression: Bu Ratna juga memiliki button "Panduan Toko" di profil DANA Bisnis
+if (!ratnaBiz.includes('Panduan Toko')) {
+  throw new Error('ratnaBiz must include Panduan Toko button');
+}
+
+// Regression: Keuntungan Mengajak Bisnis Lain & Banner PROGRAM MITRA BISNIS tidak boleh muncul di profil DANA Bisnis siapapun
+if (ratnaBiz.includes('Keuntungan Mengajak Bisnis Lain') || ratnaBiz.includes('PROGRAM MITRA BISNIS')) {
+  throw new Error('ratnaBiz should not contain Keuntungan Mengajak Bisnis Lain or PROGRAM MITRA BISNIS');
+}
+if (jokoBizWaitingTx.includes('Keuntungan Mengajak Bisnis Lain') || jokoBizWaitingTx.includes('PROGRAM MITRA BISNIS')) {
+  throw new Error('jokoBizWaitingTx should not contain Keuntungan Mengajak Bisnis Lain or PROGRAM MITRA BISNIS');
+}
+
+// Regression: Differentiate AIDA guide between DANA Bisnis owners (Bu Ratna & Pak Joko) vs consumer (Rian)
+// Slide 0: Perkenalan track
+const rianGuideSlide0 = renderToStaticMarkup(<screens.hub {...rian} />);
+if (!rianGuideSlide0.includes('Warung Langganan Masih Repot Uang Tunai?') || !rianGuideSlide0.includes('Ribet cari kembalian &amp; resiko uang palsu')) {
+  throw new Error('Rian guide slide 0 missing consumer perspective');
+}
+if (rianGuideSlide0.includes('Ajak Rekan Usaha Sekitar Pakai QRIS!')) {
+  throw new Error('Rian guide slide 0 should not use merchant peer language');
+}
+
+const ratnaGuideSlide0 = renderToStaticMarkup(<screens.hub {...ratna} />);
+if (!ratnaGuideSlide0.includes('Ajak Rekan Usaha Sekitar Pakai QRIS!') || !ratnaGuideSlide0.includes('Rekan Masih Tunai')) {
+  throw new Error('Bu Ratna guide slide 0 missing merchant peer perspective');
+}
+
+// Slide 2: Reward slide differences
+const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
+if (!rianGuideReward.includes('Saldo DANA') || !rianGuideReward.includes('Total Rp35.000 Saldo DANA')) {
+  throw new Error('Rian guide reward slide must contain Saldo DANA rewards');
+}
+if (rianGuideReward.includes('Gratis Transfer 2x') || rianGuideReward.includes('Kupon Bebas Biaya Bertahap')) {
+  throw new Error('Rian guide reward slide should not contain merchant kupon rewards');
+}
+
+const ratnaGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={2} />);
+if (!ratnaGuideReward.includes('Kupon Bebas Biaya Bertahap') || !ratnaGuideReward.includes('Gratis Transfer 2x') || !ratnaGuideReward.includes('Gratis Admin 10x')) {
+  throw new Error('Bu Ratna guide reward slide must contain merchant kupon rewards');
+}
+if (ratnaGuideReward.includes('Saldo DANA Rp5.000') || ratnaGuideReward.includes('Total Rp35.000 Saldo DANA')) {
+  throw new Error('Bu Ratna guide reward slide should not contain consumer saldo rewards');
+}
+
+const jokoGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="referred" initialStep={2} />);
+if (!jokoGuideReward.includes('Kupon Bebas Biaya Bertahap') || !jokoGuideReward.includes('Gratis Transfer 2x') || !jokoGuideReward.includes('Gratis Admin 10x')) {
+  throw new Error('Pak Joko guide reward slide must contain merchant kupon rewards');
+}
+if (jokoGuideReward.includes('Saldo DANA Rp5.000') || jokoGuideReward.includes('Total Rp35.000 Saldo DANA')) {
+  throw new Error('Pak Joko guide reward slide should not contain consumer saldo rewards');
+}
+
+console.log('compact reward cards & pak joko referal isolation: ok');
+console.log('bu ratna clean referrals & transfer admin prompt: ok');
+console.log('tahap 2 5x tx trigger & manual photo verification: ok');
+console.log('ratna reward lock, no JUARA/B2B REWARD badges & ratna panduan toko button: ok');
+console.log('clean biz profile (no Keuntungan/Banner) & role-tailored AIDA guide: ok');
+
+
+

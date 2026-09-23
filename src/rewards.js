@@ -15,7 +15,7 @@ export const TIERS = [
   {
     stage: 1,
     label: 'Tahap 1: Pendaftaran s/d QRIS terbit & transaksi min. Rp10.000',
-    detail: 'Rian: Saldo Rp5.000 · Bu Ratna: Gratis transfer bank 2x · Pak Joko: Gratis tarik tunai 2x',
+    detail: 'Rian: Saldo Rp5.000 · Bu Putu: Gratis transfer bank 2x · Pak Joko: Gratis tarik tunai 2x',
     amount: 5000,
     type: 'saldo',
     merchant: 'Gratis Tarik Tunai 2x (exp. 1 bln)',
@@ -23,7 +23,7 @@ export const TIERS = [
   {
     stage: 2,
     label: 'Tahap 2: 5 transaksi unik & lolos validasi transaksi (1–14 hari)',
-    detail: 'Rian: Saldo Rp30.000 (Total Rp35.000) · Bu Ratna: Gratis admin 10x · Pak Joko: Gratis admin 10x',
+    detail: 'Rian: Saldo Rp30.000 (Total Rp35.000) · Bu Putu: Gratis admin 10x · Pak Joko: Gratis admin 10x',
     amount: 30000,
     type: 'saldo',
     merchant: 'Gratis Admin 10x (exp. 1 bln)',
@@ -53,7 +53,7 @@ export const PERSONA_REWARDS = {
     },
   },
   merchant: {
-    persona: 'Bu Ratna',
+    persona: 'Bu Putu',
     roleLabel: 'Mitra Bisnis DANA (Pengundang)',
     track: 'Mitra Bisnis',
     tahap1: {

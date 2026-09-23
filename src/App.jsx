@@ -28,12 +28,12 @@ const ROLES = [
   },
   {
     id: 'merchant',
-    label: 'Bu Ratna — DANA Bisnis',
+    label: 'Bu Putu — DANA Bisnis',
     hint: 'Track B · Mitra Bisnis (B2B)',
-    entry: 'bizdash',
-    name: 'Ratna Dewi',
-    initial: 'R',
-    store: 'Martabak Bu Ratna',
+    entry: 'transfer',
+    name: 'Putu Dewi',
+    initial: 'P',
+    store: 'Toko Grosir Bu Putu',
     balance: 96500,
   },
   {
@@ -62,10 +62,10 @@ const SCENARIOS = [
   },
   {
     id: 'ratna_joko',
-    title: 'Skenario 2: Bu Ratna (Merchant) ➔ Pak Joko (Warung)',
+    title: 'Skenario 2: Bu Putu (Merchant) ➔ Pak Joko (Warung)',
     tag: 'Track B · Mitra Bisnis (B2B)',
     badgeColor: 'bg-emerald-600 text-white',
-    summary: `Bu Ratna (Martabak Bu Ratna) mengajak warung sebelah. Reward: ${PERSONA_REWARDS.merchant.tahap1.title} (Tahap 1) + ${PERSONA_REWARDS.merchant.tahap2.title} (Tahap 2).`,
+    summary: `Bu Putu (Toko Grosir Bu Putu) mengajak warung sebelah. Reward: ${PERSONA_REWARDS.merchant.tahap1.title} (Tahap 1) + ${PERSONA_REWARDS.merchant.tahap2.title} (Tahap 2).`,
     role1: 'merchant',
     role2: 'referred',
   },
@@ -77,17 +77,20 @@ const SCENARIOS = [
  */
 const stepDefs = (scenario, role1) => {
   const r = PERSONA_REWARDS[role1];
-  const who1 = scenario === 'rian_joko' ? 'Rian' : 'Bu Ratna';
+  const who1 = scenario === 'rian_joko' ? 'Rian' : 'Bu Putu';
   return [
     {
       id: 'open_hub',
       stepNum: 1,
       phone: 1,
-      title: `${who1} membuka banner program`,
+      title:
+        scenario === 'rian_joko'
+          ? 'Rian membuka banner program'
+          : 'Bu Putu melihat simulasi transfer Bank BCA',
       hint:
         scenario === 'rian_joko'
           ? `Ketuk banner "Ajak Warung Langganan, Dapat Saldo s/d ${rupiah(MAX_PER_REFERRAL)}" di Beranda DANA.`
-          : 'Ketuk banner "Ajak Rekan Usaha" di dashboard DANA Bisnis.',
+          : 'Di halaman transfer Bank BCA, lihat biaya admin Rp2.500 lalu ketuk tombol "Coba →".',
     },
     {
       id: 'guide_done',
@@ -150,7 +153,7 @@ const stepDefs = (scenario, role1) => {
       stepNum: 10,
       phone: 2,
       title: '5 transaksi unik & foto verifikasi kasir (Tahap 2)',
-      hint: 'Tekan "Verifikasi Foto QRIS Kasir & Selesaikan Tahap 2" untuk mencairkan reward penuh Tahap 2!',
+      hint: 'Tekan "+ Tambah 5 Transaksi", lalu lakukan verifikasi foto kasir secara manual di HP Pak Joko.',
     },
   ];
 };
@@ -253,8 +256,18 @@ export default function App() {
   // Penanda UI yang dikirim layar lewat patch(), mis. hasSeenAffiliateGuide.
   const [flags, setFlags] = useState({});
 
-  // Shared application state
-  const [referrals, setReferrals] = useState(() => SEED_REFERRALS.map((r) => ({ ...r })));
+  // Shared application state: Rian memiliki mock data referral, Bu Putu bersih (tanpa histori referral)
+  const [referralsRian, setReferralsRian] = useState(() => SEED_REFERRALS.map((r) => ({ ...r })));
+  const [referralsRatna, setReferralsRatna] = useState(() => []);
+
+  const referrals = scenario === 'ratna_joko' ? referralsRatna : referralsRian;
+  const setReferrals = (updater) => {
+    if (scenario === 'ratna_joko') {
+      setReferralsRatna(updater);
+    } else {
+      setReferralsRian(updater);
+    }
+  };
   const [balances, setBalances] = useState(() => Object.fromEntries(ROLES.map((r) => [r.id, r.balance])));
   const [rewardQuotas, setRewardQuotas] = useState({
     merchant: { transfer: 2, admin: 10 },
@@ -269,9 +282,9 @@ export default function App() {
     firstPayment: 0,
   });
 
-  // Phone 1 (Pengundang: Rian / Bu Ratna) State
+  // Phone 1 (Pengundang: Rian / Bu Putu) State
   const activeRole1 = scenario === 'rian_joko' ? 'consumer' : 'merchant';
-  const [screen1, setScreen1] = useState(scenario === 'rian_joko' ? 'home' : 'bizdash');
+  const [screen1, setScreen1] = useState(scenario === 'rian_joko' ? 'home' : 'transfer');
   const [toast1, setToast1] = useState(null);
   const [soundbox1, setSoundbox1] = useState(null);
   const [whatsappPush1, setWhatsappPush1] = useState(null);
@@ -323,7 +336,7 @@ export default function App() {
     if (scId === scenario) return;
     setScenario(scId);
     resetDemo(scId);
-    const label = scId === 'rian_joko' ? 'Skenario 1 (Rian ➔ Pak Joko)' : 'Skenario 2 (Bu Ratna ➔ Pak Joko)';
+    const label = scId === 'rian_joko' ? 'Skenario 1 (Rian ➔ Pak Joko)' : 'Skenario 2 (Bu Putu ➔ Pak Joko)';
     notify1(`Beralih ke ${label}. Ikuti langkah 1 di bawah.`);
   };
 
@@ -342,7 +355,8 @@ export default function App() {
     setActiveWhatsAppChat2(null);
     setProgress({});
     setFlags({});
-    setReferrals(SEED_REFERRALS.map((r) => ({ ...r })));
+    setReferralsRian(SEED_REFERRALS.map((r) => ({ ...r })));
+    setReferralsRatna([]);
     setBalances(Object.fromEntries(ROLES.map((r) => [r.id, r.balance])));
     setRewardQuotas({
       merchant: { transfer: 2, admin: 10 },
@@ -356,7 +370,7 @@ export default function App() {
       testScan: false,
       firstPayment: 0,
     });
-    setScreen1(sc === 'rian_joko' ? 'home' : 'bizdash');
+    setScreen1(sc === 'rian_joko' ? 'home' : 'transfer');
     setScreen2('waiting');
   };
 
@@ -464,7 +478,7 @@ export default function App() {
     /** Pelanggan bayar ke QRIS Pak Joko: Tahap 1 Reward aktif */
     receivePayment: (amount = 15000) => {
       const qualifies = amount >= 10000;
-      setMerchant((m) => ({ ...m, firstPayment: amount }));
+      setMerchant((m) => ({ ...m, testScan: true, firstPayment: amount }));
       announce2(amount);
       if (qualifies) {
         mark('stage1_tx');
@@ -486,7 +500,6 @@ export default function App() {
         )
       );
 
-      notify2(`🎉 Pembayaran ${rupiah(amount)} diterima! Kupon Gratis Tarik Tunai 2x aktif di tab Reward.`);
       if (scenario === 'rian_joko') {
         notify1(`🎉 Warung Pak Joko transaksi pertama! Reward Tahap 1 (${rupiah(TIERS[0].amount)}) cair ke Saldo DANA.`);
       } else {
@@ -494,9 +507,26 @@ export default function App() {
       }
     },
 
-    /** Tahap 2: 5 transaksi unik tercapai & lolos audit validasi */
+    /** Menambahkan 5 transaksi unik (kriteria transaksi Tahap 2) tanpa menyelesaikan verifikasi foto */
+    triggerStage2Tx: () => {
+      playChime();
+      mark('stage2_tx');
+      setReferrals((prev) =>
+        prev.map((r) =>
+          r.name.toLowerCase().includes('joko') || r.id === 0
+            ? { ...r, tx: 5, day: '5 transaksi unik tercapai · Menunggu foto kasir' }
+            : r
+        )
+      );
+      announce2(75000);
+      notify2('🎉 5 transaksi unik dari pembeli berbeda masuk (5/5)! Silakan lakukan verifikasi foto kasir di HP Pak Joko.');
+      notify1('Warung Pak Joko mencapai 5 transaksi unik! Menunggu verifikasi foto kasir.');
+    },
+
+    /** Tahap 2: Foto kasir terverifikasi secara manual & reward Tahap 2 cair */
     completeStage2: () => {
       playChime();
+      mark('stage2_tx');
       mark('stage2_verify');
       mark('stage2');
       setBalances((prev) => ({
@@ -512,16 +542,17 @@ export default function App() {
         )
       );
 
-      notify2('🎉 Tokomu resmi memenuhi target 5 transaksi unik & foto kasir terverifikasi! Status toko naik menjadi Merchant Juara.');
+      notify2('🎉 Verifikasi foto kasir berhasil! Tokomu resmi terverifikasi & Kupon 10x Bebas Admin aktif.');
       if (scenario === 'rian_joko') {
-        notify1(`🎉 Target 5 transaksi warung binaan tercapai! Reward Tahap 2 (${rupiah(TIERS[1].amount)}) cair ke Saldo DANA.`);
+        notify1(`🎉 Verifikasi foto warung binaan selesai! Reward Tahap 2 (${rupiah(TIERS[1].amount)}) cair ke Saldo DANA.`);
       } else {
-        notify1(`🎉 Target 5 transaksi warung binaan tercapai! Kupon Bebas Biaya Admin 10x aktif di tab Reward.`);
+        notify1(`🎉 Verifikasi foto warung binaan selesai! Kupon Bebas Biaya Admin 10x aktif di tab Reward.`);
       }
     },
 
     completeBizGuide: () => {
       mark('biz_guide');
+      setFlags((prev) => ({ ...prev, hasSeenBizGuide: true }));
       notify2('🎉 Panduan aksi DANA Bisnis selesai dipelajari!');
     },
 
@@ -579,6 +610,8 @@ export default function App() {
     patch: applyPatch,
   };
 
+  const isStage2Done = !!(progress.stage2 || progress.stage2_verify);
+
   // Phone 1 context
   const ctx1 = {
     ...sharedCtx,
@@ -589,6 +622,7 @@ export default function App() {
       rewardQuotas,
       merchant,
       balances,
+      isStage2Done,
       ...flags,
     },
     user: user1,
@@ -607,16 +641,17 @@ export default function App() {
     progress,
   };
 
-  // Phone 2 context
+  // Phone 2 context (Pak Joko - merchant binaan)
   const ctx2 = {
     ...sharedCtx,
     s: {
       role: 'referred',
       screen: screen2,
-      referrals,
+      referrals: [],
       rewardQuotas,
       merchant,
       balances,
+      isStage2Done,
       ...flags,
     },
     user: user2,
@@ -632,9 +667,9 @@ export default function App() {
     nudge: makeNudge(notify2),
     openWhatsApp: (wa) => setActiveWhatsAppChat2(wa),
     inviter: user1.name,
-    earned: paidTotal(referrals),
-    activeCount: activeMerchants(referrals),
-    claimable: claimBreakdown(referrals),
+    earned: 0,
+    activeCount: 0,
+    claimable: { rows: [], saldo: 0, voucher: 0, total: 0 },
     mark,
     progress,
   };
@@ -656,8 +691,8 @@ export default function App() {
         setScreen2('qris');
       }
       actions.receivePayment(15000);
-    } else if (stepId === 'stage2_verify') {
-      actions.completeStage2();
+    } else if (stepId === 'stage2_verify' || stepId === 'stage2_tx') {
+      actions.triggerStage2Tx();
     }
   };
 
@@ -732,7 +767,7 @@ export default function App() {
 
         {/* Dual Phone Showcase Side-by-Side */}
         <div className="mt-2 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 xl:gap-14">
-          {/* ----------------- LEFT PHONE: Pengundang (Rian / Bu Ratna) ----------------- */}
+          {/* ----------------- LEFT PHONE: Pengundang (Rian / Bu Putu) ----------------- */}
           <div className="flex flex-col items-center gap-3">
             {/* Persona badge HP 1 (pengundang) */}
             <div className="w-[394px] rounded-2xl border border-slate-800 bg-slate-900 p-3 shadow-md">
@@ -977,15 +1012,20 @@ function ScenarioSteps({ steps, progress, onTriggerStep }) {
               {isStep10 && (
                 <div className="mt-2.5 pt-2 border-t border-slate-800/80">
                   <button
-                    onClick={() => onTriggerStep('stage2_verify')}
+                    onClick={() => onTriggerStep('stage2_tx')}
                     className={`flex w-full items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[10px] font-black shadow-md transition active:scale-95 cursor-pointer ${
-                      done
+                      progress.stage2_tx || done
                         ? 'bg-emerald-800/40 text-emerald-300 border border-emerald-500/30'
                         : 'bg-emerald-600 hover:bg-emerald-500 text-white ring-2 ring-emerald-300/60 shadow-emerald-500/30'
                     }`}
                   >
-                    {done ? '✓ 5 Transaksi Selesai' : '+ Tambah 5 Transaksi'}
+                    {progress.stage2_tx || done ? '✓ 5 Transaksi Masuk (5/5)' : '+ Tambah 5 Transaksi'}
                   </button>
+                  {progress.stage2_tx && !done && (
+                    <p className="mt-1 text-center text-[9px] font-bold text-amber-300 animate-pulse">
+                      Menunggu verifikasi foto di HP Pak Joko
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -1063,10 +1103,9 @@ function Phone({
 
         {/* Soundbox DANA: Nada DANA chime banner */}
         {soundbox && (
-          <div className="absolute inset-x-3 top-12 z-40 flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-3 text-white shadow-xl animate-in slide-in-from-top-3">
-            <span className="text-lg">🔊</span>
-            <span className="text-[11px] leading-snug font-bold">
-              Nada DANA: “Pembayaran diterima {new Intl.NumberFormat('id-ID').format(soundbox)} rupiah”
+          <div className="absolute inset-x-3 top-12 z-40 flex items-center justify-center rounded-2xl bg-emerald-600 px-4 py-3 text-white shadow-xl animate-in slide-in-from-top-3">
+            <span className="text-xs leading-snug font-bold">
+              Pembayaran diterima Rp {new Intl.NumberFormat('id-ID').format(soundbox)}
             </span>
           </div>
         )}

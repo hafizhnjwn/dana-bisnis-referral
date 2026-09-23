@@ -35,7 +35,7 @@ export const WHATSAPP_NOTIFICATIONS = [
     id: 'wa-invite-joko',
     recipient: 'Pak Joko',
     roleTarget: 'referred',
-    sender: 'Rian Prasetya / Bu Ratna',
+    sender: 'Rian Prasetya / Bu Putu',
     phone: '0812-4409-xxxx',
     time: 'Baru saja',
     tag: 'Undangan Warung',
@@ -120,15 +120,15 @@ Terima kasih telah rutin menerima pembayaran non-tunai di *Warung Sembako Pak Jo
   },
   {
     id: 'wa-h3-ratna',
-    recipient: 'Bu Ratna',
+    recipient: 'Bu Putu',
     roleTarget: 'merchant',
     sender: 'DANA Bisnis Official',
     phone: '0812-9901-xxxx',
     time: '09:00 WIB (Jam Operasional Toko H+3)',
     tag: 'Jam Operasional H+3',
     title: 'Pak Joko Belum Menerima Pembayaran QRIS',
-    preview: 'Halo Bu Ratna! Warung rekanan Pak Joko sudah terdaftar 3 hari lalu tapi belum menerima pembayaran QRIS...',
-    message: `Halo Bu Ratna! 👋
+    preview: 'Halo Bu Putu! Warung rekanan Pak Joko sudah terdaftar 3 hari lalu tapi belum menerima pembayaran QRIS...',
+    message: `Halo Bu Putu! 👋
 
 Warung rekanan yang Anda bantu daftarkan, *Warung Sembako Pak Joko*, sudah terdaftar sejak 3 hari lalu tapi *belum menerima transaksi QRIS pertamanya*.
 
@@ -144,7 +144,7 @@ Dampingi Pak Joko sekarang agar reward Tahap 1 Anda aktif!`,
   },
   {
     id: 'wa-h7-inactive',
-    recipient: 'Bu Ratna & Pak Joko',
+    recipient: 'Bu Putu & Pak Joko',
     roleTarget: 'merchant',
     sender: 'DANA Bisnis Official',
     phone: '0812-9901-xxxx',
@@ -154,7 +154,7 @@ Dampingi Pak Joko sekarang agar reward Tahap 1 Anda aktif!`,
     preview: '⚠️ Pemberitahuan: Sudah 7 hari tidak ada aktivitas transaksi QRIS di Warung Sembako Pak Joko...',
     message: `⚠️ *Pemberitahuan Aktivitas QRIS Warung Binaan*
 
-Halo Bu Ratna, sudah *7 hari tidak ada aktivitas transaksi QRIS* di *Warung Sembako Pak Joko*.
+Halo Bu Putu, sudah *7 hari tidak ada aktivitas transaksi QRIS* di *Warung Sembako Pak Joko*.
 
 Jangan biarkan peluang terlewat! Dampingi Pak Joko agar usahanya tetap aktif bertransaksi digital dan Anda bisa menyelesaikan target *Tahap 2 (Gratis Biaya Admin 10x)*:
 
@@ -219,25 +219,32 @@ function MiniShell({ title, tab, go, notify, s, onBack, children, unread = 0 }) 
 
 /* -------------------------------- Mini Program Beranda (hub) */
 
-function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer' }) {
-  // Reward slide mengikuti track pengundang: Rian dapat saldo, Bu Ratna dapat kupon.
-  const reward = PERSONA_REWARDS[role] ?? PERSONA_REWARDS.consumer;
-  const isSaldoTrack = reward.tahap1.type === 'saldo';
-  const [step, setStep] = useState(0);
+export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer', initialStep = 0 }) {
+  // Reward slide mengikuti track pengundang: Rian dapat saldo, Bu Putu & Pak Joko dapat benefit kupon pemilik Dana Bisnis.
+  const hasDanaBisnis = role === 'merchant' || role === 'referred';
+  const reward = PERSONA_REWARDS[hasDanaBisnis ? 'merchant' : 'consumer'];
+  const isSaldoTrack = !hasDanaBisnis;
+  const [step, setStep] = useState(initialStep);
   if (!isOpen) return null;
 
   const slides = [
     {
-      tag: '[A] ATTENTION · PERHATIAN',
-      title: 'Warung Langganan Masih Repot Uang Tunai?',
-      subtitle: 'Sering kekurangan kembalian atau pembeli batal jajan karena tidak bawa uang pas. Saatnya bantu mereka beralih ke QRIS DANA!',
+      tag: hasDanaBisnis ? 'SESAMA PEMILIK USAHA' : 'TENTANG PROGRAM',
+      title: hasDanaBisnis
+        ? 'Ajak Rekan Usaha Sekitar Pakai QRIS!'
+        : 'Warung Langganan Masih Repot Uang Tunai?',
+      subtitle: hasDanaBisnis
+        ? 'Sebagai sesama pemilik usaha, bantu warung rekanan beralih ke transaksi digital bebas repot kembalian & raih keuntungan bersama!'
+        : 'Sering kekurangan kembalian atau pembeli batal jajan karena tidak bawa uang pas. Saatnya bantu mereka beralih ke QRIS DANA!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center text-xs">
             <div className="rounded-xl border border-rose-400/30 bg-rose-500/15 p-2.5">
               <span className="text-xl">❌</span>
-              <p className="mt-1 font-bold text-rose-200">Uang Tunai</p>
-              <p className="mt-0.5 text-[9px] text-white/70">Ribet cari kembalian &amp; resiko uang palsu</p>
+              <p className="mt-1 font-bold text-rose-200">{hasDanaBisnis ? 'Rekan Masih Tunai' : 'Uang Tunai'}</p>
+              <p className="mt-0.5 text-[9px] text-white/70">
+                {hasDanaBisnis ? 'Repot cari receh & rawan tolak pembeli e-wallet' : 'Ribet cari kembalian & resiko uang palsu'}
+              </p>
             </div>
             <div className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 p-2.5">
               <span className="text-xl">✅</span>
@@ -246,13 +253,15 @@ function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer' }
             </div>
           </div>
           <p className="mt-3 text-center text-[10px] text-white/80 font-medium">
-            💡 7 dari 10 pelanggan lebih suka bayar non-tunai. Jadilah pahlawan warung sekitarmu!
+            {hasDanaBisnis
+              ? '💡 Ekosistem digital di sekitar tokomu makin ramai, bisnis makin maju & hemat biaya operasional!'
+              : '💡 7 dari 10 pelanggan lebih suka bayar non-tunai. Jadilah pahlawan warung sekitarmu!'}
           </p>
         </div>
       ),
     },
     {
-      tag: '[I] INTEREST · KETERTARIKAN',
+      tag: 'KEMUDAHAN DAFTAR',
       title: 'Daftar Kilat 30 Detik Tanpa e-KTP di Awal',
       subtitle: 'Cukup 3 data singkat, QRIS langsung terbit seketika (< 5 detik) secara gratis Rp0.',
       visual: (
@@ -294,50 +303,70 @@ function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer' }
       ),
     },
     {
-      tag: '[D] DESIRE · NILAI & REWARD',
-      title: isSaldoTrack
-        ? `Raih Reward Saldo Bertahap s/d ${rupiah(MAX_PER_REFERRAL)}`
-        : 'Raih Kupon Bebas Biaya Bertahap untuk Usahamu',
-      subtitle: `Tahap 1: ${reward.tahap1.title} di transaksi pertama ≥Rp10k · Tahap 2: ${reward.tahap2.title} saat 5 transaksi unik lolos verifikasi.`,
+      tag: hasDanaBisnis ? 'REWARD PEMILIK DANA BISNIS' : 'REWARD SALDO DANA',
+      title: hasDanaBisnis
+        ? 'Kupon Bebas Biaya Bertahap untuk Usahamu'
+        : `Raih Reward Saldo Bertahap s/d ${rupiah(MAX_PER_REFERRAL)}`,
+      subtitle: hasDanaBisnis
+        ? 'Tahap 1: 2x Bebas Biaya Transfer Bank (transaksi ≥Rp10k) · Tahap 2: 10x Bebas Biaya Admin Transaksi (5 transaksi unik).'
+        : `Tahap 1: ${reward.tahap1.title} di transaksi pertama ≥Rp10k · Tahap 2: ${reward.tahap2.title} saat 5 transaksi unik lolos verifikasi.`,
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
           <div className="grid grid-cols-2 gap-2 text-center">
             <div className="rounded-xl border border-amber-300/40 bg-white/15 p-2.5">
               <p className="text-[10px] font-bold text-amber-200">TAHAP 1</p>
               <p className="mt-0.5 text-sm font-black text-white">
-                {isSaldoTrack ? `+${rupiah(reward.tahap1.amount)}` : reward.tahap1.title}
+                {hasDanaBisnis ? 'Gratis Transfer 2x' : `+${rupiah(reward.tahap1.amount)}`}
               </p>
-              <p className="text-[9px] text-white/80">Transaksi min. Rp10k</p>
+              <p className="text-[9px] text-white/80">
+                {hasDanaBisnis ? 'Bebas biaya TF ke semua bank' : 'Saldo DANA · Transaksi min. Rp10k'}
+              </p>
             </div>
             <div className="rounded-xl border border-emerald-300/40 bg-white/15 p-2.5">
               <p className="text-[10px] font-bold text-emerald-200">TAHAP 2</p>
               <p className="mt-0.5 text-sm font-black text-white">
-                {isSaldoTrack ? `+${rupiah(reward.tahap2.amount)}` : reward.tahap2.title}
+                {hasDanaBisnis ? 'Gratis Admin 10x' : `+${rupiah(reward.tahap2.amount)}`}
               </p>
-              <p className="text-[9px] text-white/80">5 transaksi unik pembeli</p>
+              <p className="text-[9px] text-white/80">
+                {hasDanaBisnis ? 'Bebas admin listrik PLN & pulsa' : 'Saldo DANA · 5 transaksi unik'}
+              </p>
             </div>
           </div>
           <div className="mt-2.5 rounded-xl border border-amber-300/40 bg-amber-400/20 p-2 text-center">
             <p className="text-[11px] font-black text-amber-200">
-              {isSaldoTrack
-                ? `Total ${rupiah(MAX_PER_REFERRAL)} Saldo DANA per Warung Binaan`
-                : 'Kupon bebas biaya operasional untuk 2 tahap'}
+              {hasDanaBisnis
+                ? 'Kupon Bebas Biaya Operasional untuk Usaha Tokomu'
+                : `Total ${rupiah(MAX_PER_REFERRAL)} Saldo DANA per Warung Binaan`}
             </p>
-            <p className="text-[9px] text-white/80">⭐ Ditambah Bonus Rp1.000.000 tiap 50 warung aktif!</p>
+            <p className="text-[9px] text-white/80">
+              {hasDanaBisnis
+                ? '⭐ Perpanjangan bebas MDR 0% 30 hari & prioritas modal usaha!'
+                : '⭐ Cair otomatis langsung ke Saldo DANA tanpa perlu klaim manual!'}
+            </p>
           </div>
         </div>
       ),
     },
     {
-      tag: '[A] ACTION · LANGKAH NYATA',
-      title: 'Ajak Warung Langgananmu Hari Ini!',
-      subtitle: 'Tiga langkah mudah: tanya nomor WA warung, masukkan di Bantu Daftarkan, dan dampingi transaksi pertamanya!',
+      tag: hasDanaBisnis ? 'LANGKAH AJAK REKAN USAHA' : 'LANGKAH AJAK WARUNG',
+      title: hasDanaBisnis
+        ? 'Ajak Rekan Usaha Sebelah Hari Ini!'
+        : 'Ajak Warung Langgananmu Hari Ini!',
+      subtitle: hasDanaBisnis
+        ? 'Tiga langkah mudah: sapa pemilik usaha rekanan, bantu daftarkan lewat akun bisnismu, dan raih kupon operasional!'
+        : 'Tiga langkah mudah: tanya nomor WA warung, masukkan di Bantu Daftarkan, dan dampingi transaksi pertamanya!',
       visual: (
         <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md space-y-2">
           {[
-            ['1', 'Tanya nama & No. WhatsApp pemilik warung saat jajan.'],
-            ['2', 'Ketik di fitur "Bantu Daftarkan" (kode referral otomatis terisi).'],
-            ['3', 'Dampingi transaksi pertama ≥Rp10k pakai DANA untuk cairkan reward!'],
+            hasDanaBisnis
+              ? ['1', 'Ajak rekan pemilik warung/toko di sekitarmu bergabung.']
+              : ['1', 'Tanya nama & No. WhatsApp pemilik warung saat jajan.'],
+            hasDanaBisnis
+              ? ['2', 'Ketik nomor WA rekan di menu "Bantu Daftarkan".']
+              : ['2', 'Ketik di fitur "Bantu Daftarkan" (kode referral otomatis terisi).'],
+            hasDanaBisnis
+              ? ['3', 'Dampingi transaksi QRIS pertamanya untuk aktifkan kupon gratis tokomu!']
+              : ['3', 'Dampingi transaksi pertama ≥Rp10k pakai DANA untuk cairkan reward!'],
           ].map(([num, text]) => (
             <div key={num} className="flex items-center gap-2.5 rounded-xl bg-white/15 p-2 text-xs">
               <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-400 text-[10px] font-black text-amber-950">
@@ -393,7 +422,7 @@ function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer' }
               D
             </span>
             <span className="text-[10px] font-extrabold tracking-wider text-white/90">
-              PANDUAN REFERER (AIDA MODEL)
+              PANDUAN REFERER
             </span>
           </div>
           <button
@@ -426,7 +455,7 @@ function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'consumer' }
             }}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-300 py-3.5 text-center text-sm font-black text-amber-950 shadow-xl shadow-amber-500/30 transition active:scale-98"
           >
-            Bantu Daftarkan Warung Sekarang! <Icon name="next" className="h-4 w-4" />
+            {hasDanaBisnis ? 'Bantu Daftarkan Rekan Usaha!' : 'Bantu Daftarkan Warung Sekarang!'} <Icon name="next" className="h-4 w-4" />
           </button>
         ) : (
           <button
@@ -450,7 +479,7 @@ function Hub(p) {
   // Panduan hanya boleh muncul sekali: tandai lokal + simpan ke state aplikasi,
   // supaya tombol CTA-nya tidak langsung membuka ulang panduan yang sama.
   const [guideDone, setGuideDone] = useState(false);
-  // Panduan muncul untuk kedua track pengundang (Rian & Bu Ratna), bukan hanya konsumen.
+  // Panduan muncul untuk kedua track pengundang (Rian & Bu Putu), bukan hanya konsumen.
   const showGuide = (!s.hasSeenAffiliateGuide && !guideDone) || manualGuide;
   const handleCloseGuide = () => {
     setManualGuide(false);
@@ -459,7 +488,8 @@ function Hub(p) {
       patch({ hasSeenAffiliateGuide: true });
     }
   };
-  const biz = s.role === 'merchant';
+  const hasDanaBisnis = s.role === 'merchant' || s.role === 'referred';
+  const biz = hasDanaBisnis;
   const inProgress = s.referrals.filter((r) => r.stage === 1).length;
 
   if (showGuide) {
@@ -489,9 +519,13 @@ function Hub(p) {
               💡
             </span>
             <div>
-              <p className="text-xs font-bold text-dana-900">Panduan Lengkap Program Referal</p>
+              <p className="text-xs font-bold text-dana-900">
+                {hasDanaBisnis ? 'Panduan Mitra Bisnis' : 'Panduan Lengkap Program Referal'}
+              </p>
               <p className="text-[10px] text-dana-700">
-                Skema 2 tahap reward s/d {rupiah(MAX_PER_REFERRAL)} per warung
+                {hasDanaBisnis
+                  ? 'Kupon 2 tahap: Bebas Biaya Transfer 2x & Bebas Admin 10x'
+                  : `Skema 2 tahap reward s/d ${rupiah(MAX_PER_REFERRAL)} per warung`}
               </p>
             </div>
           </div>
@@ -502,9 +536,19 @@ function Hub(p) {
 
         <div className="mt-4 space-y-4">
           {/* Summary card */}
-          <div className="rounded-3xl bg-gradient-to-br from-dana-500 to-dana-900 p-4 text-white shadow-lg shadow-dana-700/25">
-            <p className="text-[11px] text-white/80">Total Saldo Reward Masuk ke Akun Anda</p>
-            <p className="text-3xl font-extrabold">{rupiah(earned)}</p>
+          <div
+            className={`rounded-3xl p-4 text-white shadow-lg ${
+              hasDanaBisnis
+                ? 'bg-gradient-to-br from-[#1B4E9B] to-slate-900 shadow-slate-900/25'
+                : 'bg-gradient-to-br from-dana-500 to-dana-900 shadow-dana-700/25'
+            }`}
+          >
+            <p className="text-[11px] text-white/80">
+              {hasDanaBisnis ? 'Total Kupon Reward Diperoleh' : 'Total Saldo Reward Masuk ke Akun Anda'}
+            </p>
+            <p className="text-3xl font-extrabold">
+              {hasDanaBisnis ? `${(activeCount * 2) + (inProgress ? 2 : 0)} Kupon` : rupiah(earned)}
+            </p>
             <div className="mt-3 grid grid-cols-3 gap-2 text-center">
               {[
                 [inProgress, 'Menunggu Transaksi'],
@@ -574,13 +618,17 @@ function Hub(p) {
                     <p className="mt-0.5 text-[9px] font-medium text-emerald-600">Benefit Warung: {t.merchant}</p>
                   </div>
                   <span className="text-xs font-extrabold text-dana-700">
-                    {t.amount > 0 ? rupiah(t.amount) : 'Rp 0'}
+                    {hasDanaBisnis
+                      ? (i === 0 ? 'Kupon 2x' : (i === 1 ? 'Kupon 10x' : 'Selesai'))
+                      : (t.amount > 0 ? rupiah(t.amount) : 'Rp 0')}
                   </span>
                 </div>
               ))}
             </div>
             <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
-              * Reward Tahap 1 &amp; 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.
+              {hasDanaBisnis
+                ? '* Kupon bebas biaya transfer & bebas admin otomatis aktif di tab Reward akun bisnismu.'
+                : '* Reward Tahap 1 & 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.'}
             </p>
           </div>
 
@@ -634,28 +682,17 @@ function Hub(p) {
 
 function Nominate(p) {
   const { s, nominate, go } = p;
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState('Warung Sembako Pak Joko');
+  const [category, setCategory] = useState('Toko Kelontong');
+  const [phone, setPhone] = useState('081244098822');
   const phoneOk = /^(\+62|62|0)8[1-9][0-9]{6,10}$/.test(phone.replace(/[\s-]/g, ''));
   const ready = name.trim().length >= 3 && category && phoneOk;
 
   return (
     <MiniShell title="Bantu Daftarkan Warung" onBack={() => go('hub')} {...p}>
       <div className="space-y-3 px-4 pt-3 pb-8">
-        <div className="flex items-center justify-between">
+        <div>
           <span className="text-[11px] font-bold text-slate-700">Formulir Undangan Toko</span>
-          <button
-            type="button"
-            onClick={() => {
-              setName('Warung Sembako Pak Joko');
-              setCategory('Toko Kelontong');
-              setPhone('081244098822');
-            }}
-            className="rounded-full bg-dana-50 px-2.5 py-1 text-[10px] font-extrabold text-dana-700 active:bg-dana-100 border border-dana-200"
-          >
-            ⚡ Isi Data Warung Pak Joko
-          </button>
         </div>
 
         <Field step="1" label="Nama usaha / warung" hint="Contoh: Warung Sembako Pak Joko">
@@ -725,7 +762,7 @@ function Tracker(p) {
   const { s, nudge } = p;
   const [tab, setTab] = useState('all');
   const [q, setQ] = useState('');
-  const list = s.referrals
+  const list = (s.referrals || [])
     .filter((r) => r.name.toLowerCase().includes(q.toLowerCase()))
     .filter((r) => {
       if (tab === 'registered') return r.stage === 1;
@@ -761,20 +798,41 @@ function Tracker(p) {
 
       <div className="space-y-3 px-4 pb-8">
         {list.length === 0 && (
-          <p className="rounded-2xl bg-white p-6 text-center text-xs text-slate-400">Tidak ada usaha di kategori ini.</p>
+          <div className="rounded-2xl bg-white p-6 text-center shadow-xs">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xl text-slate-400">
+              👥
+            </span>
+            <p className="mt-2 text-xs font-bold text-slate-700">Program Referal Kosong</p>
+            <p className="mt-1 text-[11px] leading-relaxed text-slate-400">
+              {s.role === 'referred'
+                ? 'Akun Pak Joko terdaftar sebagai merchant binaan. Reward kupon usaha Anda dapat diakses dan digunakan di tab Reward.'
+                : 'Belum ada usaha di kategori ini.'}
+            </p>
+            {s.role === 'referred' && (
+              <button
+                onClick={() => p.go('rewards')}
+                className="mt-3 inline-flex items-center gap-1 rounded-xl bg-dana-500 px-4 py-2 text-xs font-bold text-white shadow-xs active:bg-dana-600 transition"
+              >
+                Buka Tab Reward
+              </button>
+            )}
+          </div>
         )}
         {list.map((r) => {
           const isRegisteredNoTx = r.stage === 1 && (r.tx === 0 || !r.tx);
-          const isStage1Done = r.stage === 1 && r.tx >= 1;
+          const isStage1Done = r.stage === 1 && r.tx >= 1 && (r.tx < 5);
+          const isStage2TxOnly = (r.tx || 0) >= 5 && r.stage < 2;
           const isStage2Done = r.stage >= 2;
 
           const st = isStage2Done
-            ? { label: 'Tahap 2 Selesai · Merchant Aktif', short: 'Aktif', color: 'emerald', progress: 100 }
-            : isStage1Done
-              ? { label: 'Tahap 1 Selesai · Menuju 5 Transaksi Unik', short: 'Tahap 1 Selesai', color: 'amber', progress: 75 }
-              : isRegisteredNoTx
-                ? { label: 'Terdaftar (QRIS Aktif) · Menunggu Transaksi Pertama', short: 'Terdaftar', color: 'amber', progress: 50 }
-                : { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 25 };
+            ? { label: 'Tahap 2 Selesai · Tempel QRIS Terverifikasi', short: 'Aktif', color: 'emerald', progress: 100 }
+            : isStage2TxOnly
+              ? { label: '5 Transaksi Tercapai · Menunggu Tempel QRIS', short: '5 Transaksi', color: 'amber', progress: 80 }
+              : isStage1Done
+                ? { label: 'Tahap 1 Selesai · Menuju 5 Transaksi Unik', short: 'Tahap 1 Selesai', color: 'amber', progress: 60 }
+                : isRegisteredNoTx
+                  ? { label: 'Terdaftar (QRIS Aktif) · Menunggu Transaksi Pertama', short: 'Terdaftar', color: 'amber', progress: 40 }
+                  : { label: 'Undangan terkirim, menunggu pendaftaran', short: 'Terkirim', color: 'slate', progress: 20 };
 
           const style = STAGE_STYLE[st.color] || STAGE_STYLE.slate;
           return (
@@ -796,17 +854,19 @@ function Tracker(p) {
               <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-100">
                 <div className={`h-full rounded-full ${style.bar}`} style={{ width: `${st.progress}%` }} />
               </div>
-              <div className="mt-2 flex gap-1.5 text-[9px] font-bold">
+              <div className="mt-2 flex gap-1 text-[8px] font-bold">
                 {[
                   ['Undangan', true],
                   ['Terdaftar', r.stage >= 1],
-                  ['Transaksi ≥Rp10k', r.stage >= 1 && r.tx >= 1],
-                  ['Aktif (5 tx)', r.stage >= 2],
+                  ['Transaksi ≥Rp10k', r.stage >= 1 && (r.tx || 0) >= 1],
+                  ['5 Transaksi', r.stage >= 2 || (r.tx || 0) >= 5],
+                  ['Tempel QRIS', r.stage >= 2],
                 ].map(([label, done]) => (
                   <span
                     key={label}
-                    className={`flex-1 rounded-md py-1 text-center ${done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-400'
-                      }`}
+                    className={`flex-1 rounded-md py-1 text-center truncate ${
+                      done ? 'bg-emerald-50 text-emerald-700 font-extrabold' : 'bg-slate-100 text-slate-400'
+                    }`}
                   >
                     {label}
                   </span>
@@ -835,6 +895,14 @@ function Tracker(p) {
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
                 >
                   <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Transaksi via WhatsApp
+                </button>
+              )}
+              {isStage2TxOnly && (
+                <button
+                  onClick={() => nudge(r)}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500 py-2 text-[11px] font-bold text-emerald-600 active:bg-emerald-50"
+                >
+                  <Icon name="share" className="h-3.5 w-3.5" /> Dampingi Tempel QRIS via WhatsApp
                 </button>
               )}
             </div>
@@ -884,6 +952,31 @@ function Rewards(p) {
     notify('Kupon reward berhasil direset ke kuota awal.');
   };
 
+  // Expired 30 hari ke depan (misal: 22 Okt 2026)
+  const expiryDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  })();
+
+  const isStage2Done = !!(
+    p.progress?.stage2 ||
+    p.progress?.stage2_verify ||
+    s?.isStage2Done ||
+    (s?.referrals?.find((r) => r.name?.toLowerCase().includes('joko') || r.id === 0)?.stage ?? 0) >= 2 ||
+    (s?.merchant?.stage ?? 0) >= 2
+  );
+
+  const jokoRef = s?.referrals?.find((r) => r.name?.toLowerCase().includes('joko') || r.id === 0);
+  const isStage1Done = Boolean(
+    p.progress?.stage1 ||
+    p.progress?.stage1_tx ||
+    (s?.merchant?.firstPayment || 0) >= 10000 ||
+    (jokoRef && (jokoRef.claimedStage >= 1 || (jokoRef.stage >= 1 && (jokoRef.tx || 0) >= 1) || jokoRef.stage >= 2)) ||
+    isStage2Done
+  );
+
   return (
     <MiniShell title="Management Reward" tab="rewards" {...p}>
       <div className="space-y-4 px-4 pt-3 pb-8">
@@ -901,247 +994,236 @@ function Rewards(p) {
             </div>
 
             {/* Tahap 1 Card */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
-                    TAHAP 1
-                  </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">
-                    {PERSONA_REWARDS.consumer.tahap1.title}
-                  </h4>
-                  <p className="mt-0.5 text-[10px] text-slate-500">
-                    Cair otomatis di transaksi pertama warung binaan ≥ Rp10.000
-                  </p>
-                </div>
-                <span className="text-sm font-black text-emerald-600">+{rupiah(TIERS[0].amount)}</span>
+            <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
+              <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                <p className="text-xs font-bold text-slate-800 truncate">
+                  Reward Tahap 1 : Warung Sembako Pak Joko
+                </p>
+                <span className="shrink-0 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <span>✓</span> Telah masuk ke saldo
+                </span>
               </div>
-              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-800">Syarat &amp; Ketentuan:</p>
-                <p>• Warung binaan (Pak Joko) terbit QRIS &amp; menerima pembayaran pertama min. Rp10k.</p>
-                <p>• Uang {rupiah(TIERS[0].amount)} seketika masuk ke Pocket Saldo DANA pengundang.</p>
+              <div className="mt-2.5 flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-extrabold text-slate-900">Saldo DANA Rp 5.000</p>
+                  <p className="text-[10px] text-slate-400 font-medium">Transaksi pertama QRIS ≥ Rp10.000</p>
+                </div>
+                <span className="rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-black text-emerald-700">
+                  +Rp5.000
+                </span>
               </div>
             </div>
 
-            {/* Tahap 2 Card */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700">
-                    TAHAP 2
-                  </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Saldo DANA Rp30.000</h4>
-                  <p className="mt-0.5 text-[10px] text-slate-500">
-                    Total reward: {rupiah(MAX_PER_REFERRAL)} per warung aktif binaan
+            {/* Tahap 2 Card - Hanya muncul setelah lolos 5 transaksi unik */}
+            {isStage2Done && (
+              <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                  <p className="text-xs font-bold text-slate-800 truncate">
+                    Reward Tahap 2 : Warung Sembako Pak Joko
                   </p>
+                  <span className="shrink-0 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span>✓</span> Telah masuk ke saldo
+                  </span>
                 </div>
-                <span className="text-sm font-black text-emerald-600">+Rp30.000</span>
+                <div className="mt-2.5 flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-extrabold text-slate-900">Saldo DANA Rp 30.000</p>
+                    <p className="text-[10px] text-slate-400 font-medium">5 transaksi unik tervalidasi</p>
+                  </div>
+                  <span className="rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-black text-emerald-700">
+                    +Rp30.000
+                  </span>
+                </div>
               </div>
-              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-800">Syarat &amp; Ketentuan:</p>
-                <p>• 5 transaksi unik dari pembeli berbeda dalam 1–14 hari.</p>
-                <p>• Lolos audit validitas transaksi DANA untuk mencegah fraud.</p>
-              </div>
-            </div>
-
-            {/* Hadiah Pencapaian */}
-            <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 shadow-sm">
-              <div className="flex items-center gap-2">
-                <Icon name="trophy" className="h-4 w-4 text-amber-600" />
-                <p className="flex-1 text-xs font-bold text-amber-950">Hadiah Pencapaian Rp1.000.000</p>
-                <Pill tone="amber">Rp1 Juta</Pill>
-              </div>
-              <p className="mt-1 text-[10px] text-amber-800">
-                Ekstra bonus Rp1.000.000 setiap kelipatan 50 warung aktif binaan!
-              </p>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-amber-200">
-                <div
-                  className="h-full rounded-full bg-amber-500"
-                  style={{ width: `${Math.min(100, (activeCount / 50) * 100)}%` }}
-                />
-              </div>
-              <p className="mt-1 text-[9px] font-bold text-amber-900">
-                {activeCount} / 50 warung aktif memakai QRIS
-              </p>
-            </div>
+            )}
           </div>
         )}
 
-        {/* ROLE 2: BU RATNA (MITRA BISNIS) */}
+        {/* ROLE 2: BU PUTU (MITRA BISNIS) */}
         {currentRole === 'merchant' && (
           <div className="space-y-3">
             <div className="rounded-3xl bg-gradient-to-br from-[#1B4E9B] to-slate-900 p-4 text-white shadow-lg">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Bu Ratna · Mitra Bisnis</p>
-              <p className="mt-1 text-sm font-black text-white">Martabak Bu Ratna</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Bu Putu · Mitra Bisnis</p>
+              <p className="mt-1 text-sm font-black text-white">Toko Grosir Bu Putu</p>
               <p className="mt-1 text-[11px] text-white/80">
                 Kelola kupon gratis transfer &amp; bebas biaya admin hasil mereferensikan warung rekanan.
               </p>
               <div className="mt-3 flex gap-2 text-center text-xs">
                 <div className="flex-1 rounded-xl bg-white/15 p-2">
                   <span className="block text-base font-black text-amber-300">
-                    {quotas.merchant?.transfer ?? PERSONA_REWARDS.merchant.tahap1.quota}x
+                    {isStage1Done ? `${quotas.merchant?.transfer ?? 2}x` : '0x'}
                   </span>
                   <span className="text-[9px] text-white/80">Sisa Gratis Transfer</span>
                 </div>
-                <div className="flex-1 rounded-xl bg-white/15 p-2">
-                  <span className="block text-base font-black text-emerald-300">{quotas.merchant?.admin ?? 10}x</span>
-                  <span className="text-[9px] text-white/80">Sisa Bebas Admin</span>
-                </div>
+                {isStage2Done && (
+                  <div className="flex-1 rounded-xl bg-white/15 p-2">
+                    <span className="block text-base font-black text-emerald-300">
+                      {quotas.merchant?.admin ?? 10}x
+                    </span>
+                    <span className="text-[9px] text-white/80">Sisa Bebas Admin</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Tahap 1 Card */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
-                    TAHAP 1
-                  </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">
-                    {PERSONA_REWARDS.merchant.tahap1.title}
-                  </h4>
-                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
-                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
+            {/* Tahap 1 Card - Hanya muncul setelah Pak Joko selesai Tahap 1 */}
+            {isStage1Done ? (
+              <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                  <p className="text-xs font-bold text-slate-800 truncate">
+                    Reward Tahap 1 : Warung Sembako Pak Joko
                   </p>
-                </div>
-                <span className="rounded-lg bg-dana-50 px-2.5 py-1 text-xs font-black text-dana-700">
-                  {quotas.merchant?.transfer ?? PERSONA_REWARDS.merchant.tahap1.quota}/
-                  {PERSONA_REWARDS.merchant.tahap1.quota}
-                </span>
-              </div>
-              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
-                <p>• Bebas biaya transfer antar bank Rp2.500 ke rekening mana saja di Indonesia.</p>
-                <p>• Aktif saat warung binaan (Pak Joko) selesai daftar QRIS &amp; transaksi pertama ≥Rp10k.</p>
-              </div>
-              <button
-                onClick={() => handleUseVoucher('merchant', 'transfer', 'Gratis Transfer Antar Bank')}
-                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-dana-500 py-2.5 text-xs font-bold text-white active:bg-dana-600 shadow-xs"
-              >
-                Gunakan Kupon (Kirim Saldo / Transfer)
-              </button>
-            </div>
-
-            {/* Tahap 2 Card */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700">
-                    TAHAP 2
+                  <span className="shrink-0 text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                    Expired {expiryDate}
                   </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Admin 10x</h4>
-                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
-                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
-                  </p>
                 </div>
-                <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">
-                  {quotas.merchant?.admin ?? 10}/10
-                </span>
+                <div className="mt-2.5 flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-extrabold text-slate-900">Gratis Transfer 2x</p>
+                    <p className="text-[10px] text-slate-400 font-medium">
+                      Sisa kuota: {quotas.merchant?.transfer ?? 2}/2
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleUseVoucher('merchant', 'transfer', 'Gratis Transfer Antar Bank')}
+                    disabled={(quotas.merchant?.transfer ?? 2) <= 0}
+                    className="rounded-xl bg-dana-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-dana-600 active:scale-95 transition disabled:opacity-40"
+                  >
+                    {(quotas.merchant?.transfer ?? 2) > 0 ? 'Gunakan Kupon' : 'Kupon Habis'}
+                  </button>
+                </div>
               </div>
-              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-800">Cakupan Layanan Bebas Biaya Admin:</p>
-                <p className="text-emerald-700 font-semibold">
-                  • Termasuk bayar listrik PLN, isi pulsa &amp; data, transfer antar bank, top up e-money, dll.
+            ) : (
+              <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-5 text-center shadow-2xs">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-xl text-amber-600">
+                  ⏳
+                </span>
+                <p className="mt-2.5 text-xs font-bold text-slate-800">Kupon Belum Tersedia</p>
+                <p className="mt-1 text-[11px] leading-relaxed text-slate-500 max-w-xs mx-auto">
+                  Kupon 2x Gratis Transfer akan aktif otomatis setelah warung binaan (Pak Joko) menyelesaikan transaksi pertama min. Rp10.000 (Tahap 1).
                 </p>
-                <p>• Aktif setelah 5 transaksi unik warung binaan lolos validasi DANA.</p>
               </div>
-              <button
-                onClick={() => handleUseVoucher('merchant', 'admin', 'Gratis Admin 10x')}
-                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white active:bg-emerald-700 shadow-xs"
-              >
-                Gunakan Kupon (Bebas Biaya Admin)
-              </button>
-            </div>
+            )}
+
+            {/* Tahap 2 Card - Hanya muncul setelah Pak Joko menyelesaikan Tahap 2 */}
+            {isStage2Done && (
+              <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                  <p className="text-xs font-bold text-slate-800 truncate">
+                    Reward Tahap 2 : Warung Sembako Pak Joko
+                  </p>
+                  <span className="shrink-0 text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                    Expired {expiryDate}
+                  </span>
+                </div>
+                <div className="mt-2.5 flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-extrabold text-slate-900">Gratis Admin 10x</p>
+                    <p className="text-[10px] text-slate-400 font-medium">
+                      Sisa kuota: {quotas.merchant?.admin ?? 10}/10
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleUseVoucher('merchant', 'admin', 'Gratis Admin 10x')}
+                    disabled={(quotas.merchant?.admin ?? 10) <= 0}
+                    className="rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-700 active:scale-95 transition disabled:opacity-40"
+                  >
+                    {(quotas.merchant?.admin ?? 10) > 0 ? 'Gunakan Kupon' : 'Kupon Habis'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
-        {/* ROLE 3: PAK JOKO (WARUNG TERDAFTAR) */}
+        {/* ROLE 3: PAK JOKO (WARUNG TERDAFTAR / MERCHANT BARU) */}
         {currentRole === 'referred' && (
           <div className="space-y-3">
             <div className="rounded-3xl bg-gradient-to-br from-emerald-600 to-slate-900 p-4 text-white shadow-lg">
               <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">Reward Pak Joko · Merchant Binaan</p>
-              <p className="mt-1 text-sm font-black text-white">Warung Nasi Pak Joko</p>
+              <p className="mt-1 text-sm font-black text-white">Warung Sembako Pak Joko</p>
               <p className="mt-1 text-[11px] text-white/80">
                 Benefit eksklusif merchant baru: Bebas biaya tarik tunai dan gratis biaya admin transaksi.
               </p>
               <div className="mt-3 flex gap-2 text-center text-xs">
                 <div className="flex-1 rounded-xl bg-white/15 p-2">
-                  <span className="block text-base font-black text-amber-300">{quotas.referred?.withdraw ?? 2}x</span>
+                  <span className="block text-base font-black text-amber-300">
+                    {quotas.referred?.withdraw ?? 2}x
+                  </span>
                   <span className="text-[9px] text-white/80">Gratis Tarik Tunai</span>
                 </div>
-                <div className="flex-1 rounded-xl bg-white/15 p-2">
-                  <span className="block text-base font-black text-emerald-300">{quotas.referred?.admin ?? 10}x</span>
-                  <span className="text-[9px] text-white/80">Gratis Bebas Admin</span>
-                </div>
+                {isStage2Done && (
+                  <div className="flex-1 rounded-xl bg-white/15 p-2">
+                    <span className="block text-base font-black text-emerald-300">
+                      {quotas.referred?.admin ?? 10}x
+                    </span>
+                    <span className="text-[9px] text-white/80">Gratis Bebas Admin</span>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Tahap 1 Card */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="rounded-full bg-dana-50 px-2 py-0.5 text-[9px] font-extrabold text-dana-700">
-                    TAHAP 1
-                  </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Tarik Tunai 2x</h4>
-                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
-                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
-                  </p>
-                </div>
-                <span className="rounded-lg bg-dana-50 px-2.5 py-1 text-xs font-black text-dana-700">
-                  {quotas.referred?.withdraw ?? 2}/2
+            <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
+              <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                <p className="text-xs font-bold text-slate-800 truncate">
+                  Reward Tahap 1 : Merchant Baru
+                </p>
+                <span className="shrink-0 text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                  Expired {expiryDate}
                 </span>
               </div>
-              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
-                <p>• Bebas biaya tarik tunai saldo penjualan di ATM BCA/BRI atau gerai Alfamart/Indomaret.</p>
-                <p>• Aktif setelah QRIS terbit &amp; transaksi pertama min. Rp10.000 diterima.</p>
-                <p className="text-emerald-700 font-bold">• Ekstra: Notifikasi Audio Nada DANA Aktif!</p>
+              <div className="mt-2.5 flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-extrabold text-slate-900">Gratis Tarik Tunai 2x</p>
+                  <p className="text-[10px] text-slate-400 font-medium">
+                    Sisa kupon: {quotas.referred?.withdraw ?? 2}/2
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleUseVoucher('referred', 'withdraw', 'Gratis Tarik Tunai')}
+                  disabled={(quotas.referred?.withdraw ?? 2) <= 0}
+                  className="rounded-xl bg-dana-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-dana-600 active:scale-95 transition disabled:opacity-40"
+                >
+                  {(quotas.referred?.withdraw ?? 2) > 0 ? 'Gunakan Kupon' : 'Kupon Habis'}
+                </button>
               </div>
-              <button
-                onClick={() => handleUseVoucher('referred', 'withdraw', 'Gratis Tarik Tunai')}
-                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-dana-500 py-2.5 text-xs font-bold text-white active:bg-dana-600 shadow-xs"
-              >
-                Gunakan Kupon (Tarik Tunai Kasir/ATM)
-              </button>
             </div>
 
-            {/* Tahap 2 Card */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-extrabold text-emerald-700">
-                    TAHAP 2
-                  </span>
-                  <h4 className="mt-1.5 text-sm font-black text-slate-900">Gratis Admin 10x</h4>
-                  <p className="mt-0.5 text-[10px] font-semibold text-rose-600">
-                    ⏰ Expired dalam 1 bulan (30 hari sejak diperoleh)
+            {/* Tahap 2 Card - Hanya muncul setelah menyelesaikan 5 transaksi unik */}
+            {isStage2Done && (
+              <div className="rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+                  <p className="text-xs font-bold text-slate-800 truncate">
+                    Reward Tahap 2 : Merchant Baru
                   </p>
+                  <span className="shrink-0 text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                    Expired {expiryDate}
+                  </span>
                 </div>
-                <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-black text-emerald-700">
-                  {quotas.referred?.admin ?? 10}/10
-                </span>
+                <div className="mt-2.5 flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-extrabold text-slate-900">Gratis Admin 10x</p>
+                    <p className="text-[10px] text-slate-400 font-medium">
+                      Sisa kupon: {quotas.referred?.admin ?? 10}/10
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleUseVoucher('referred', 'admin', 'Gratis Admin 10x')}
+                    disabled={(quotas.referred?.admin ?? 10) <= 0}
+                    className="rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-emerald-700 active:scale-95 transition disabled:opacity-40"
+                  >
+                    {(quotas.referred?.admin ?? 10) > 0 ? 'Gunakan Kupon' : 'Kupon Habis'}
+                  </button>
+                </div>
               </div>
-              <div className="mt-3 rounded-xl bg-slate-50 p-2.5 text-[10px] text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-800">Cakupan &amp; Syarat:</p>
-                <p className="text-emerald-700 font-semibold">
-                  • Bebas biaya admin transaksi bayar tagihan listrik warung, isi pulsa &amp; data, transfer bank, dll.
-                </p>
-                <p>• Aktif setelah 5 transaksi unik dari pembeli berbeda tercapai.</p>
-              </div>
-              <button
-                onClick={() => handleUseVoucher('referred', 'admin', 'Gratis Admin 10x')}
-                className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-2.5 text-xs font-bold text-white active:bg-emerald-700 shadow-xs"
-              >
-                Gunakan Kupon (Bebas Biaya Admin)
-              </button>
-            </div>
+            )}
           </div>
         )}
 
         <button
           onClick={handleResetQuotas}
-          className="w-full text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 py-2"
+          className="w-full text-center text-[10px] font-bold text-slate-400 hover:text-slate-600 py-2 transition"
         >
           Reset Kuota Kupon Simulasi
         </button>
@@ -1421,7 +1503,7 @@ function Inbox(p) {
   const [tab, setTab] = useState('app'); // 'app' | 'wa'
   const m = s.merchant;
 
-  // Isi notifikasi mengikuti track pengundang: Rian dapat saldo, Bu Ratna dapat kupon.
+  // Isi notifikasi mengikuti track pengundang: Rian dapat saldo, Bu Putu dapat kupon.
   const rw = PERSONA_REWARDS[s.role] ?? PERSONA_REWARDS.consumer;
   const rewardLine = (tahap) =>
     rw[tahap].type === 'saldo'
@@ -1759,7 +1841,7 @@ function Qris(props) {
   const steps = [
     { done: m.issued, title: 'QRIS toko aktif (KYC Light)', desc: 'Akun siap menerima pembayaran digital dari seluruh bank & e-wallet.' },
     {
-      done: m.testScan,
+      done: m.testScan || isPaid,
       title: 'Uji coba scan QRIS toko',
       desc: 'Scan QRIS untuk mencoba pembayaran dan mendengarkan Nada DANA.',
     },
@@ -1863,7 +1945,8 @@ function Qris(props) {
 /* -------------------------- Profile Bisnis & Step-by-Step Guidance (Referred Merchant) */
 
 function BizProfile(props) {
-  return <BizDash {...props} initialTour={true} />;
+  const hasCompletedGuide = Boolean(props.progress?.biz_guide || props.s?.hasSeenBizGuide);
+  return <BizDash {...props} initialTour={!hasCompletedGuide} />;
 }
 
 /* -------------------------- Full WhatsApp Chat View Modal */
@@ -1956,6 +2039,153 @@ export function WhatsAppChatModal({ chat, onClose, go }) {
   );
 }
 
+/* -------------------------- Transfer Bank Screen (Bu Putu Step 1: Kena Biaya Admin) */
+
+function TransferBank(props) {
+  const { go, notify, mark, user } = props;
+  const storeName = user?.store || 'Toko Grosir Bu Putu';
+  const balance = user?.balance ?? 96500;
+
+  return (
+    <Shell>
+      <div className="flex-1 overflow-y-auto no-scrollbar pb-8">
+        <div className="bg-[#1B4E9B] pb-4 text-white">
+          <StatusBar dark />
+          <TopBar
+            title="Kirim Uang ke Bank"
+            onBack={() => go('bizdash')}
+            right={<Pill tone="rose">BIAYA ADMIN</Pill>}
+            dark
+          />
+        </div>
+
+        <div className="-mt-2 space-y-3 px-4">
+          {/* Card Tujuan Transfer (Bank BCA) */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs border border-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+                Rekening Bank Tujuan
+              </span>
+              <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-700 border border-emerald-200">
+                Terverifikasi ✓
+              </span>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 text-sm font-black border border-blue-200">
+                BCA
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-black text-slate-900 truncate">
+                  CV Berkah Pangan
+                </p>
+                <p className="text-[11px] font-semibold text-slate-600">
+                  BCA · 8820 1928 4401
+                </p>
+                <p className="text-[10px] text-slate-400 truncate">
+                  Supplier Bahan Martabak (Terigu &amp; Telur)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Sumber Dana */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs border border-slate-100">
+            <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">
+              Sumber Dana Bisnis
+            </p>
+            <div className="mt-2.5 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-dana-50 text-dana-600">
+                  <Icon name="store" className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-xs font-black text-slate-900">Saldo DANA Bisnis</p>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    {storeName} · Saldo {rupiah(balance)}
+                  </p>
+                </div>
+              </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-dana-500 text-white text-xs font-bold">
+                ✓
+              </span>
+            </div>
+          </div>
+
+          {/* Card Rincian Pembayaran & Biaya Admin */}
+          <div className="rounded-2xl bg-white p-4 shadow-xs border border-slate-100">
+            <p className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">
+              Rincian Transfer
+            </p>
+            <div className="mt-2.5 space-y-2 text-xs">
+              <div className="flex justify-between text-slate-600">
+                <span>Nominal Transfer</span>
+                <span className="font-semibold text-slate-900">Rp150.000</span>
+              </div>
+
+              {/* Terkena Biaya Admin Highlighted */}
+              <div className="flex items-center justify-between border-t border-dashed border-slate-200 pt-2 text-slate-600">
+                <span className="flex items-center gap-1.5 font-bold text-rose-700">
+                  <span>⚠️</span> Biaya Admin Transfer Bank
+                </span>
+                <span className="font-black text-rose-700">Rp2.500</span>
+              </div>
+
+              {/* Hook Promosi Bebas Admin yang diminta user: Coba → tanpa tanda kurung dan panah benar */}
+              <div className="mt-2 rounded-xl border border-amber-300/80 bg-gradient-to-r from-amber-50 to-orange-50 p-2.5 text-xs text-amber-950 shadow-2xs">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-400 text-white text-xs shadow-2xs">
+                      💡
+                    </span>
+                    <div>
+                      <p className="text-[11px] leading-tight font-black text-amber-950">
+                        Ingin tidak terkena admin?
+                      </p>
+                      <p className="text-[9px] text-amber-800 leading-tight">
+                        Ajak warung sebelah pakai QRIS &amp; raih kupon gratis transfer!
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (mark) mark('open_hub');
+                      go('hub');
+                      notify('Membuka program referral DANA Bisnis...');
+                    }}
+                    className="shrink-0 rounded-lg bg-dana-500 hover:bg-dana-600 active:scale-95 px-3 py-1 text-xs font-extrabold text-white shadow-xs transition cursor-pointer"
+                  >
+                    Coba →
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-between border-t border-slate-200 pt-2.5 text-sm font-extrabold text-slate-900">
+                <span>Total Bayar</span>
+                <span className="text-dana-700 text-base">Rp152.500</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            <Btn
+              variant="primary"
+              onClick={() => {
+                notify('Transfer disimulasikan: saldo terpotong Rp152.500 termasuk admin Rp2.500.');
+                go('bizdash');
+              }}
+            >
+              Konfirmasi &amp; Bayar Rp152.500
+            </Btn>
+            <Btn variant="ghost" onClick={() => go('bizdash')}>
+              Kembali ke DANA Bisnis
+            </Btn>
+          </div>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
 export default {
   waiting: WaitingInvite,
   home: Home,
@@ -1974,5 +2204,7 @@ export default {
   bizprofile: BizProfile,
   receipt_data: ReceiptData,
   receipt_emoney: ReceiptEmoney,
+  transfer: TransferBank,
 };
+
 
