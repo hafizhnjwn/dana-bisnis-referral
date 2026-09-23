@@ -841,11 +841,6 @@ function Hub(p) {
                 );
               })}
             </div>
-            {!hasDanaBisnis && (
-              <p className="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-500">
-                * Reward Tahap 1 &amp; 2 otomatis masuk langsung ke Saldo Pocket DANA Anda saat syarat transaksi terpenuhi.
-              </p>
-            )}
           </div>
 
           <div className="rounded-3xl bg-white p-4 shadow-sm">

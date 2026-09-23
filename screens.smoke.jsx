@@ -109,8 +109,8 @@ if (!hubAfterGuide.includes('Saldo DANA Rp5.000') || !hubAfterGuide.includes('Sa
 if (hubAfterGuide.includes('Bu Putu: Gratis') || hubAfterGuide.includes('Pak Joko: Gratis')) {
   throw new Error('hubAfterGuide should not show business persona tiers');
 }
-if (hubAfterGuide.includes('Benefit Warung:') || hubAfterGuide.includes('Kupon bebas biaya transfer &amp; bebas admin')) {
-  throw new Error('hubAfterGuide should not contain Benefit Warung or business coupon footnote');
+if (hubAfterGuide.includes('Benefit Warung:') || hubAfterGuide.includes('Kupon bebas biaya transfer &amp; bebas admin') || hubAfterGuide.includes('Reward Tahap 1 &amp; 2 otomatis masuk')) {
+  throw new Error('hubAfterGuide should not contain Benefit Warung, business coupon footnote, or consumer footnote');
 }
 if (hubAfterGuide.includes('Panduan Affiliate')) {
   throw new Error('Hub should not contain Panduan Affiliate section');
