@@ -408,50 +408,38 @@ if (rianGuideSlide0.includes('Box Uang Tunai') || rianGuideSlide0.includes('Box 
 if (!rianGuideSlide0.includes('Uang Tunai') || !rianGuideSlide0.includes('QRIS Dana Bisnis')) {
   throw new Error('Rian guide slide 0 missing "Uang Tunai" or "QRIS Dana Bisnis"');
 }
-if (!rianGuideSlide0.includes('DANA SAHABAT WARUNG')) {
-  throw new Error('Rian guide slide 0 missing DANA SAHABAT WARUNG tag');
+if (!rianGuideSlide0.includes('DANA SAHABAT WARUNG (1/4)')) {
+  throw new Error('Rian guide slide 0 missing DANA SAHABAT WARUNG (1/4)');
 }
 
-// Slide 2 (Index 1): Reward slide (Saldo Rp35k untuk Rian)
-const rianGuideReward = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />);
-if (!rianGuideReward.includes('DANA Sahabat Warung, dapatkan saldo hingga Rp 35 Ribu')) {
-  throw new Error('Rian guide reward slide must contain Saldo DANA rewards headline with DANA Sahabat Warung');
+// Slide 2 (Index 1): Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu
+const guideSlide1 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />);
+if (!guideSlide1.includes('Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu')) {
+  throw new Error('Guide slide 1 missing headline');
 }
-if (rianGuideReward.includes('Program Referral Merchant')) {
-  throw new Error('Rian guide reward slide should not contain "Program Referral Merchant"');
+if (!guideSlide1.includes('Warung Favoritmu')) {
+  throw new Error('Guide slide 1 missing Warung Favoritmu badge');
 }
-if (rianGuideReward.includes('10x bebas biaya admin')) {
-  throw new Error('Rian guide reward slide should not contain merchant kupon rewards');
+if (guideSlide1.includes('usaha kenalanmu') || guideSlide1.includes('Sahabat Dana')) {
+  throw new Error('Guide slide 1 should not contain "usaha kenalanmu" or "Sahabat Dana"');
 }
 
-// Slide 3 (Index 2): Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu
+// Slide 3 (Index 2): Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!
 const guideSlide2 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />);
-if (!guideSlide2.includes('Cukup bantu daftarin warung favoritmu, lewat hp tanpa babibuu')) {
-  throw new Error('Guide slide 2 missing headline');
+if (!guideSlide2.includes('Ka Adit telah membantu 5 warung menjadi Sahabat Dana') || !guideSlide2.includes('100K!')) {
+  throw new Error('Guide slide 2 missing Ka Adit testimonial headline');
 }
-if (!guideSlide2.includes('Warung Favoritmu')) {
-  throw new Error('Guide slide 2 missing Warung Favoritmu badge');
-}
-if (guideSlide2.includes('usaha kenalanmu') || guideSlide2.includes('Sahabat Dana')) {
-  throw new Error('Guide slide 2 should not contain "usaha kenalanmu" or "Sahabat Dana"');
+if (guideSlide2.includes('Bu Roro')) {
+  throw new Error('Guide slide 2 should not contain Bu Roro');
 }
 
-// Slide 4 (Index 3): Ka Adit telah membantu 5 warung menjadi Sahabat Dana, dan udah dapetin saldo Dana >100K!
+// Slide 4 (Index 3): Daftarkan warung favoritmu, hanya 1 menit!
 const guideSlide3 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={3} />);
-if (!guideSlide3.includes('Ka Adit telah membantu 5 warung menjadi Sahabat Dana') || !guideSlide3.includes('100K!')) {
-  throw new Error('Guide slide 3 missing Ka Adit testimonial headline');
+if (!guideSlide3.includes('Daftarkan warung favoritmu, hanya 1 menit!') || !guideSlide3.includes('Daftarkan Warung Favoritmu Sekarang')) {
+  throw new Error('Guide slide 3 missing 1-minute CTA content');
 }
-if (guideSlide3.includes('Bu Roro')) {
-  throw new Error('Guide slide 3 should not contain Bu Roro');
-}
-
-// Slide 5 (Index 4): Daftarkan warung favoritmu, hanya 1 menit!
-const guideSlide4 = renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={4} />);
-if (!guideSlide4.includes('Daftarkan warung favoritmu, hanya 1 menit!') || !guideSlide4.includes('Daftarkan Warung Favoritmu Sekarang')) {
-  throw new Error('Guide slide 4 missing 1-minute CTA content');
-}
-if (guideSlide4.includes('usaha kenalanmu') || guideSlide4.includes('Sahabat Dana')) {
-  throw new Error('Guide slide 4 should not contain "usaha kenalanmu" or "Sahabat Dana"');
+if (guideSlide3.includes('usaha kenalanmu') || guideSlide3.includes('Sahabat Dana')) {
+  throw new Error('Guide slide 3 should not contain "usaha kenalanmu" or "Sahabat Dana"');
 }
 
 // Business Owner Guide checks (Bu Putu / Pak Joko: role="merchant" or role="referred")
@@ -512,11 +500,9 @@ console.log('bu ratna clean referrals & transfer admin prompt: ok');
 const allRenderedScreens = [
   jokoBizHtml,
   ratnaBizHtml,
-  rianGuideSlide0,
-  rianGuideReward,
+  guideSlide1,
   guideSlide2,
   guideSlide3,
-  guideSlide4,
   renderToStaticMarkup(<screens.landing {...jokoQris} />),
   renderToStaticMarkup(<screens.bizprofile {...jokoQris} />),
   renderToStaticMarkup(<screens.inbox {...jokoQris} />),

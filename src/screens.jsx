@@ -273,71 +273,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
     ),
   };
 
-  // 2. DANA Sahabat Warung (Hanya untuk Konsumen / Rian, dihilangkan untuk Bu Putu)
-  const slide2 = {
-      tag: 'REWARD SALDO DANA',
-      title:
-        'DANA Sahabat Warung, dapatkan saldo hingga Rp 35 Ribu dengan membantu usaha disekitarmu naik kelas!',
-      visual: (
-        <div className="relative mx-auto my-2 flex h-56 w-full max-w-[280px] items-center justify-center">
-          {/* Radial aura glow */}
-          <div className="absolute inset-0 rounded-full bg-amber-400/25 blur-2xl animate-pulse" />
-
-          {/* Floating celebratory particles */}
-          <div className="absolute top-2 left-6 animate-bounce">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-400 text-sm shadow-lg shadow-amber-500/50">
-              🪙
-            </span>
-          </div>
-          <div className="absolute top-4 right-8 animate-bounce delay-200">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-300 text-base shadow-lg shadow-amber-400/50">
-              🎁
-            </span>
-          </div>
-          <div className="absolute bottom-5 left-6 animate-float-slow">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-xs shadow-md shadow-emerald-500/40">
-              ⭐
-            </span>
-          </div>
-          <div className="absolute bottom-6 right-7 animate-bounce delay-300">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-200 text-sm shadow-md">
-              ✨
-            </span>
-          </div>
-
-          {/* Central phone with person receiving prize */}
-          <div className="relative z-10 flex flex-col items-center">
-            <div className="relative h-44 w-28 rounded-3xl border-4 border-white/80 bg-gradient-to-b from-[#108EE9] via-[#0D5995] to-[#0A3D66] p-2 shadow-2xl shadow-dana-900/60 flex flex-col items-center justify-between">
-              <div className="h-1 w-8 rounded-full bg-white/40" />
-
-              {/* Character inside phone cheering */}
-              <div className="my-auto flex flex-col items-center text-center">
-                <div className="relative flex h-16 w-16 items-center justify-center">
-                  <div className="absolute inset-0 rounded-full bg-amber-400/30 animate-ping opacity-50" />
-                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-400 via-amber-300 to-amber-100 shadow-xl shadow-amber-500/50 animate-bounce">
-                    <span className="text-3xl">🥳</span>
-                  </div>
-                </div>
-                <span className="mt-2 rounded-full bg-amber-400 px-2.5 py-0.5 text-[8.5px] font-black uppercase text-amber-950 tracking-wider shadow">
-                  Dapat Saldo!
-                </span>
-              </div>
-
-              <div className="h-1 w-10 rounded-full bg-white/50" />
-            </div>
-
-            {/* Glowing Reward Banner */}
-            <div className="mt-2.5 rounded-full border border-amber-300/40 bg-white/20 px-3.5 py-1 text-center shadow-lg backdrop-blur-md animate-pulse">
-              <p className="text-[11px] font-black text-amber-200">
-                🎉 Saldo DANA hingga Rp 35 Ribu
-              </p>
-            </div>
-          </div>
-        </div>
-      ),
-  };
-
-  // 3. Pendaftaran Kilat Lewat HP
+  // 2. Pendaftaran Kilat Lewat HP
   const slide3 = {
     tag: 'PENDAFTARAN KILAT',
     title: isBiz
@@ -583,9 +519,7 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
       ),
   };
 
-  const slides = isBiz
-    ? [slide1, slide3, slide4, slide5]
-    : [slide1, slide2, slide3, slide4, slide5];
+  const slides = [slide1, slide3, slide4, slide5];
 
   const curr = slides[step] || slides[0];
 
