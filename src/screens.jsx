@@ -465,8 +465,8 @@ export function AffiliateCarouselGuide({ isOpen, onClose, onAction, role = 'cons
           <div className="relative z-20 flex flex-col items-center -ml-1 animate-float-slow delay-150">
             {/* The Acrylic QRIS Stand */}
             <div className="relative w-36 rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-dana-950/50 flex flex-col items-center">
-              {/* National QRIS Red Header */}
-              <div className="w-full rounded-t-xl bg-[#E1251B] px-2 py-1.5 flex items-center justify-center text-white shadow-xs">
+              {/* QRIS Blue Header */}
+              <div className="w-full rounded-t-xl bg-gradient-to-r from-[#0B5DA7] via-[#0D7AD0] to-[#108EE9] px-2 py-1.5 flex items-center justify-center text-white shadow-xs">
                 <span className="text-[13px] font-black tracking-wider uppercase leading-none font-sans">
                   QRIS
                 </span>
