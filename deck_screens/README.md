@@ -13,6 +13,7 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 6. `3_1_6_hub_beranda.png` — **Beranda Mini Program:** Header DANA Sahabat Warung, banner panduan, kode referral box, dan skema reward 2 tahap.
 7. `3_1_7_discovery_transfer_bca.png` — **Discovery via Transfer Bank BCA (Bu Putu):** Layar konfirmasi transfer BCA dengan biaya admin Rp2.500 & Banner Penyelamat Admin: *"Ingin tidak terkena admin? Ajak warung sebelah pakai QRIS & raih kupon gratis transfer! [Coba →]"*.
 8. `3_1_8_discovery_biz_profile.png` — **Discovery via Profil DANA Bisnis (Bu Putu):** Banner *"Ajak usaha sekitarmu, nikmati bebas biaya admin!"* di dashboard kasir DANA Bisnis Bu Putu.
+9. `3_1_9_discovery_receipt_data.png` — **Discovery via Pembayaran Tagihan/Pulsa (Rian):** Konfirmasi pembayaran Telkomsel Data kena admin Rp1.500 dengan banner: *"Ingin gratis biaya admin? [Coba →]"*.
 
 ---
 
@@ -40,3 +41,4 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 19. `3_4_3_merchant_qris_active.png` — **Standee QRIS Kasir Toko Aktif:** QRIS instan siap pakai + Simulasi Uji Coba Scan & Notifikasi Audio Suara DANA *"Pembayaran Berhasil!"*.
 20. `3_4_4_merchant_bizdash.png` — **Dashboard & Onboarding DANA Bisnis Toko:** Panduan fitur interaktif (*Bubble Feature Guidance* "Buka QRIS"), monitoring saldo & penjualan toko, serta checklist progress bar *"Progres Tahap Toko"* (33%) dan tombol verifikasi tempel QRIS.
 21. `3_4_5_merchant_progres_tahap_toko.png` — **Checkpoint Progres Tahap Toko:** Tampilan fokus card Progres Tahap Toko (1/3 Tahap Selesai, 3 checkpoint indikator, dan tombol aksi Verifikasi Tempel QRIS).
+22. `3_4_6_qris_verification_modal.png` — **Modal Verifikasi Meja Kasir (Tahap 2):** Audit foto standee kasir terpasang, validasi GPS toko (`GPS MATCH ✓`), checklist 5/5 transaksi unik, dan tombol konfirmasi klaim Tahap 2.

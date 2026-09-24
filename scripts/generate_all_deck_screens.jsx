@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import fs from 'node:fs';
 import path from 'node:path';
 import screens, { AffiliateCarouselGuide } from '../src/screens.jsx';
+import { QrisCashierVerificationModal } from '../src/hostApp.jsx';
 
 const base = {
   s: {
@@ -141,6 +142,7 @@ const list = [
   { id: '3_1_6_hub_beranda', html: wrapHtml(renderToStaticMarkup(<screens.hub {...rian} s={{ ...rian.s, hasSeenAffiliateGuide: true }} />)) },
   { id: '3_1_7_discovery_transfer_bca', html: wrapHtml(renderToStaticMarkup(<screens.transfer {...putu} />)) },
   { id: '3_1_8_discovery_biz_profile', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...putu} />)) },
+  { id: '3_1_9_discovery_receipt_data', html: wrapHtml(renderToStaticMarkup(<screens.receipt_data {...rian} />)) },
 
   // 3.2 Referral Experience
   { id: '3_2_1_hub_nominate_cta', html: wrapHtml(renderToStaticMarkup(<screens.hub {...rian} s={{ ...rian.s, hasSeenAffiliateGuide: true }} />)) },
@@ -174,6 +176,24 @@ const list = [
   { id: '3_4_3_merchant_qris_active', html: wrapHtml(renderToStaticMarkup(<screens.qris {...joko} />)) },
   { id: '3_4_4_merchant_bizdash', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoWithGuideAndCheckpoint} initialTour={true} />)) },
   { id: '3_4_5_merchant_progres_tahap_toko', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
+  {
+    id: '3_4_6_qris_verification_modal',
+    html: wrapHtml(
+      renderToStaticMarkup(
+        <div className="relative h-full w-full">
+          <screens.bizdash {...jokoCheckpoint} />
+          <QrisCashierVerificationModal
+            isOpen={true}
+            onClose={() => {}}
+            onConfirm={() => {}}
+            merchant={jokoCheckpoint.s.merchant}
+            has5Tx={true}
+            txCount={5}
+          />
+        </div>
+      )
+    ),
+  },
 ];
 
 for (const item of list) {
