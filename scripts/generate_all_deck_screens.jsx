@@ -148,6 +148,12 @@ const list = [
   { id: '3_1_3_guide_slide2', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={1} />), '#0D5995') },
   { id: '3_1_4_guide_slide3', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={2} />), '#0D5995') },
   { id: '3_1_5_guide_slide4', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="consumer" initialStep={3} />), '#0D5995') },
+
+  // Bu Putu (Merchant Persona) Guide Slides
+  { id: '3_1_2b_guide_merchant_slide1', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={0} />), '#0D5995') },
+  { id: '3_1_3b_guide_merchant_slide2', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={1} />), '#0D5995') },
+  { id: '3_1_4b_guide_merchant_slide3', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={2} />), '#0D5995') },
+  { id: '3_1_5b_guide_merchant_slide4', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={3} />), '#0D5995') },
   { id: '3_1_6_hub_beranda', html: wrapHtml(renderToStaticMarkup(<screens.hub {...rian} s={{ ...rian.s, hasSeenAffiliateGuide: true }} />)) },
   { id: '3_1_7_discovery_transfer_bca', html: wrapHtml(renderToStaticMarkup(<screens.transfer {...putu} />)) },
   { id: '3_1_8_discovery_biz_profile', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...putu} />)) },

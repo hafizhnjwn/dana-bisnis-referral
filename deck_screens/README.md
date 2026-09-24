@@ -6,10 +6,14 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 
 ## 3.1 Program Discovery & Understanding
 1. `3_1_1_dana_home.png` — **DANA Home Screen:** Entry point banner promosi *"Ajak Warung Langganan"* & ikon *"Sahabat Warung"* pada menu grid utama.
-2. `3_1_2_guide_slide1.png` — **Carousel Guide Slide 1:** Edukasi Masalah vs Solusi (Uang Tunai vs QRIS DANA Bisnis, quote 7 dari 10 orang cashless).
-3. `3_1_3_guide_slide2.png` — **Carousel Guide Slide 2:** Edukasi Kemudahan: Pendaftaran Kilat lewat HP (< 5 Detik Instan).
-4. `3_1_4_guide_slide3.png` — **Carousel Guide Slide 3:** Bukti Nyata Program (Testimoni Ka Adit membantu 5 warung).
-5. `3_1_5_guide_slide4.png` — **Carousel Guide Slide 4:** CTA Final: Tombol *"Daftarkan Warung Favoritmu Sekarang"*.
+2. `3_1_2_guide_slide1.png` — **Carousel Guide Slide 1 (Konsumen - Rian):** Edukasi Masalah vs Solusi (Uang Tunai vs QRIS DANA Bisnis, quote 7 dari 10 orang cashless).
+3. `3_1_3_guide_slide2.png` — **Carousel Guide Slide 2 (Konsumen - Rian):** Edukasi Kemudahan: Pendaftaran Kilat lewat HP (< 5 Detik Instan).
+4. `3_1_4_guide_slide3.png` — **Carousel Guide Slide 3 (Konsumen - Rian):** Bukti Nyata Program (Testimoni Ka Adit membantu 5 warung).
+5. `3_1_5_guide_slide4.png` — **Carousel Guide Slide 4 (Konsumen - Rian):** CTA Final: Tombol *"Daftarkan Warung Favoritmu Sekarang"*.
+5b. `3_1_2b_guide_merchant_slide1.png` — **Carousel Guide Slide 1 (Merchant - Bu Putu):** Masalah vs Solusi Operasional Usaha: *"Bantu Usaha Sekitarmu Lebih Maju, Nikmati Gratis Biaya Admin hingga 10 Transaksi!"*.
+5c. `3_1_3b_guide_merchant_slide2.png` — **Carousel Guide Slide 2 (Merchant - Bu Putu):** Pendaftaran Kilat Lewat HP: *"Cukup bantu daftarin usaha sekitarmu, lewat hp tanpa ribet"*.
+5d. `3_1_4b_guide_merchant_slide3.png` — **Carousel Guide Slide 3 (Merchant - Bu Putu):** Bukti Nyata Program: *"Bu Roro telah membantu 5 usaha menjadi Sahabat Dana, dan telah menghemat operasional hingga 100K!"*.
+5e. `3_1_5b_guide_merchant_slide4.png` — **Carousel Guide Slide 4 (Merchant - Bu Putu):** CTA Final Bisnis: *"Daftarkan usaha sekitarmu, hanya 1 menit!"*.
 6. `3_1_6_hub_beranda.png` — **Beranda Mini Program:** Header DANA Sahabat Warung, banner panduan, kode referral box, dan skema reward 2 tahap.
 7. `3_1_7_discovery_transfer_bca.png` — **Discovery via Transfer Bank BCA (Bu Putu):** Layar konfirmasi transfer BCA dengan biaya admin Rp2.500 & Banner Penyelamat Admin: *"Ingin tidak terkena admin? Ajak warung sebelah pakai QRIS & raih kupon gratis transfer! [Coba →]"*.
 8. `3_1_8_discovery_biz_profile.png` — **Discovery via Profil DANA Bisnis (Bu Putu):** Banner *"Ajak usaha sekitarmu, nikmati bebas biaya admin!"* di dashboard kasir DANA Bisnis Bu Putu.
