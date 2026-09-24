@@ -21,6 +21,9 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 7. `3_2_1_hub_nominate_cta.png` — **Beranda Mini Program (Aksi):** Tombol aksi utama *"Bantu Daftarkan Warung Langganan"* & Box Salin Kode Referral (`HAF58W`).
 8. `3_2_2_nominate_form.png` — **Formulir Nominasi Warung:** *Assisted Onboarding* cepat hanya 3 data (Nama Usaha, Kategori, WhatsApp) + Sinyal Keamanan resmi.
 9. `3_2_3_tracker_status.png` — **Halaman Pantau Warung:** *Real-time Milestone Tracker* status pendaftaran, Tahap 1, Tahap 2, dan riwayat warung binaan.
+10. `3_2_4_whatsapp_nudge_tx1.png` — **WhatsApp Reminder: Dampingi Transaksi Pertama (Rian ke Pak Joko):** Pesan ramah mengingatkan QRIS aktif, ajakan memajang QRIS di meja kasir, dan info kupon Gratis Tarik Tunai 2x begitu transaksi perdana masuk min. Rp10.000 (Tombol: *Lihat QRIS Toko →*).
+11. `3_2_5_whatsapp_nudge_tx5.png` — **WhatsApp Reminder: Dampingi Target 5 Transaksi (Rian ke Pak Joko):** Pesan pengingat ramah untuk memajang QRIS demi memudahkan pembeli tanpa receh dan mengejar kupon Gratis Biaya Admin 10x (Tombol: *Cek Transaksi Toko →*).
+12. `3_2_6_whatsapp_nudge_tempel.png` — **WhatsApp Reminder: Dampingi Tempel QRIS (Rian ke Pak Joko):** Pengingat tahap final untuk memverifikasi foto pajangan QRIS di meja kasir demi resmi menjadi Sahabat DANA (Tombol: *Verifikasi Tempel QRIS →*).
 
 ---
 

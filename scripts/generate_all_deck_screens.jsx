@@ -2,7 +2,7 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import fs from 'node:fs';
 import path from 'node:path';
-import screens, { AffiliateCarouselGuide } from '../src/screens.jsx';
+import screens, { AffiliateCarouselGuide, WHATSAPP_NOTIFICATIONS } from '../src/screens.jsx';
 import { QrisCashierVerificationModal } from '../src/hostApp.jsx';
 
 const base = {
@@ -148,6 +148,9 @@ const list = [
   { id: '3_2_1_hub_nominate_cta', html: wrapHtml(renderToStaticMarkup(<screens.hub {...rian} s={{ ...rian.s, hasSeenAffiliateGuide: true }} />)) },
   { id: '3_2_2_nominate_form', html: wrapHtml(renderToStaticMarkup(<screens.nominate {...rian} />)) },
   { id: '3_2_3_tracker_status', html: wrapHtml(renderToStaticMarkup(<screens.tracker {...rian} />)) },
+  { id: '3_2_4_whatsapp_nudge_tx1', html: wrapHtml(renderToStaticMarkup(<screens.whatsapp_invite chat={WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tx1')} />), '#ECE5DD') },
+  { id: '3_2_5_whatsapp_nudge_tx5', html: wrapHtml(renderToStaticMarkup(<screens.whatsapp_invite chat={WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tx5')} />), '#ECE5DD') },
+  { id: '3_2_6_whatsapp_nudge_tempel', html: wrapHtml(renderToStaticMarkup(<screens.whatsapp_invite chat={WHATSAPP_NOTIFICATIONS.find((n) => n.id === 'wa-nudge-tempel')} />), '#ECE5DD') },
 
   // 3.3 Reward Experience
   { id: '3_3_1_reward_consumer', html: wrapHtml(renderToStaticMarkup(<screens.rewards {...rian} />)) },
