@@ -647,25 +647,7 @@ export function QrisCashierVerificationModal({ isOpen, onClose, onConfirm, merch
           </div>
         </div>
 
-        {/* Verification Checklist */}
-        <div className="mt-3 space-y-1.5 rounded-xl bg-slate-50 p-2.5 text-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-600">1. Transaksi Pembeli Berbeda:</span>
-            {has5Tx ? (
-              <span className="font-extrabold text-emerald-600">5 / 5 Unik ✓</span>
-            ) : (
-              <span className="font-bold text-amber-600">{txCount || 1} / 5 (Menunggu 5 transaksi) ⏳</span>
-            )}
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-slate-600">2. Standee QRIS Meja Kasir:</span>
-            <span className="font-extrabold text-emerald-600">Terpasang Rapi ✓</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-slate-600">3. Audit Foto Kasir:</span>
-            <span className="font-extrabold text-emerald-600">Lolos Verifikasi ✓</span>
-          </div>
-        </div>
+
 
         {/* Unlocked rewards summary */}
         {has5Tx ? (

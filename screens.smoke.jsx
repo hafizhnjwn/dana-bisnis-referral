@@ -314,15 +314,18 @@ if (!jokoBizPhotoOnly.includes('Bukti Nyata Rekan Usaha')) {
 const modalWaitingTxHtml = renderToStaticMarkup(
   <QrisCashierVerificationModal isOpen has5Tx={false} txCount={1} />
 );
-if (!modalWaitingTxHtml.includes('Menunggu 5 transaksi') || !modalWaitingTxHtml.includes('Konfirmasi Verifikasi Tempel QRIS ✓')) {
+if (!modalWaitingTxHtml.includes('Status Syarat Tahap 2') || !modalWaitingTxHtml.includes('Konfirmasi Verifikasi Tempel QRIS ✓')) {
   throw new Error('Modal with < 5 tx missing waiting status or confirmation text');
 }
 
 const modalReadyTxHtml = renderToStaticMarkup(
   <QrisCashierVerificationModal isOpen has5Tx={true} txCount={5} />
 );
-if (!modalReadyTxHtml.includes('5 / 5 Unik ✓') || !modalReadyTxHtml.includes('Konfirmasi &amp; Klaim Reward Tahap 2 ✓')) {
-  throw new Error('Modal with 5 tx missing 5/5 unik or claim button');
+if (!modalReadyTxHtml.includes('Reward Terbuka Pasca Konfirmasi') || !modalReadyTxHtml.includes('Konfirmasi &amp; Klaim Reward Tahap 2 ✓')) {
+  throw new Error('Modal with 5 tx missing reward summary or claim button');
+}
+if (modalReadyTxHtml.includes('Transaksi Pembeli Berbeda') || modalReadyTxHtml.includes('Standee QRIS Meja Kasir')) {
+  throw new Error('Modal should not contain checklist items');
 }
 
 // Regression: Rewards screen also must NOT consider Tahap 2 done if only photo is verified
