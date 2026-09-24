@@ -71,6 +71,16 @@ const jokoCheckpoint = {
   },
   progress: { stage1: true, biz_guide: true },
 };
+const jokoWithGuideAndCheckpoint = {
+  ...joko,
+  s: {
+    ...joko.s,
+    role: 'referred',
+    referrals: [],
+    hasSeenBizGuide: false,
+  },
+  progress: { stage1: true },
+};
 
 // Read compiled CSS
 const cssDir = path.resolve('dist/assets');
@@ -162,7 +172,7 @@ const list = [
   { id: '3_4_1_merchant_landing', html: wrapHtml(renderToStaticMarkup(<screens.landing {...joko} inviter="Rian Prasetya" />)) },
   { id: '3_4_2_merchant_register', html: wrapHtml(renderToStaticMarkup(<screens.register {...joko} />)) },
   { id: '3_4_3_merchant_qris_active', html: wrapHtml(renderToStaticMarkup(<screens.qris {...joko} />)) },
-  { id: '3_4_4_merchant_bizdash', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
+  { id: '3_4_4_merchant_bizdash', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoWithGuideAndCheckpoint} initialTour={true} />)) },
   { id: '3_4_5_merchant_progres_tahap_toko', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
 ];
 
