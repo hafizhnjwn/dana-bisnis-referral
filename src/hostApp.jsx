@@ -1153,7 +1153,7 @@ export function BizDash({
                       className="mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-black transition active:scale-98 bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer ring-2 ring-emerald-400/50 shadow-sm shadow-emerald-500/20"
                     >
                       <Icon name="camera" className="h-4 w-4" />
-                      📸 Verifikasi Tempel QRIS
+                      Verifikasi Tempel QRIS
                     </button>
                   )}
                 </div>

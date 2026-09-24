@@ -70,7 +70,7 @@ const jokoCheckpoint = {
     referrals: [],
     hasSeenBizGuide: true,
   },
-  progress: { stage1: true, biz_guide: true },
+  progress: { stage1: true, stage2_tx: true, biz_guide: true },
 };
 const jokoWithGuideAndCheckpoint = {
   ...joko,
@@ -170,7 +170,7 @@ const list = [
   },
   { id: '3_3_4_inbox_notifications', html: wrapHtml(renderToStaticMarkup(<screens.inbox {...rian} />)) },
   { id: '3_3_5_reward_joko', html: wrapHtml(renderToStaticMarkup(<screens.rewards {...joko} />)) },
-  { id: '3_3_6_bizprofile_checkpoint_progres', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
+  { id: '3_3_6_bizprofile_checkpoint_progres', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} initialTour={false} />)) },
 
   // 3.4 Referred Merchant Experience
   { id: '3_4_0_whatsapp_invite_joko', html: wrapHtml(renderToStaticMarkup(<screens.whatsapp_invite />), '#ECE5DD') },
@@ -178,7 +178,7 @@ const list = [
   { id: '3_4_2_merchant_register', html: wrapHtml(renderToStaticMarkup(<screens.register {...joko} />)) },
   { id: '3_4_3_merchant_qris_active', html: wrapHtml(renderToStaticMarkup(<screens.qris {...joko} />)) },
   { id: '3_4_4_merchant_bizdash', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoWithGuideAndCheckpoint} initialTour={true} />)) },
-  { id: '3_4_5_merchant_progres_tahap_toko', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
+  { id: '3_4_5_merchant_progres_tahap_toko', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} initialTour={false} />)) },
   {
     id: '3_4_6_qris_verification_modal',
     html: wrapHtml(

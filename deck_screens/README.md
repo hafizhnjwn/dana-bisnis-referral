@@ -33,7 +33,7 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 12. `3_3_3_bizprofile_milestone.png` — **Profil DANA Bisnis Mitra Binaan (Pak Joko):** Tampilan profil DANA Bisnis Pak Joko setelah panduan fitur selesai (status Sahabat DANA, monitoring transaksi penjualan, 4 aksi operasional toko, dan kupon reward aktif penuh).
 13. `3_3_4_inbox_notifications.png` — **Notifikasi Inbox DANA:** Log transparansi notifikasi pencairan saldo otomatis dan validasi transaksi real-time.
 14. `3_3_5_reward_joko.png` — **Tab Reward Mitra Binaan (Pak Joko):** Kupon eksklusif operasional merchant baru: Bebas Biaya Tarik Tunai (2x) & Bebas Admin Transaksi (10x).
-15. `3_3_6_bizprofile_checkpoint_progres.png` — **Profil DANA Bisnis Checkpoint Progres (Pak Joko):** Card Progres Tahap Toko (Transaksi ≥ Rp10k ✓, 5 Transaksi, Tempel QRIS) dengan tombol Verifikasi Tempel QRIS.
+15. `3_3_6_bizprofile_checkpoint_progres.png` — **Profil DANA Bisnis Checkpoint Progres (Pak Joko):** Tampilan profil tanpa bubble guide, 5 transaksi selesai, progress bar 67% (2/3 selesai: Transaksi ≥ Rp10k ✓, 5 Transaksi ✓), dan tombol aksi *Verifikasi Tempel QRIS*.
 
 ---
 
@@ -43,5 +43,5 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 18. `3_4_2_merchant_register.png` — **Konfirmasi Registrasi Kilat:** Data toko sudah otomatis ter-prefill dari pengundang, aktif < 30 detik tanpa upload e-KTP di awal (*KYC Light*).
 19. `3_4_3_merchant_qris_active.png` — **Standee QRIS Kasir Toko Aktif:** QRIS instan siap pakai + Simulasi Uji Coba Scan & Notifikasi Audio Suara DANA *"Pembayaran Berhasil!"*.
 20. `3_4_4_merchant_bizdash.png` — **Dashboard & Onboarding DANA Bisnis Toko:** Panduan fitur interaktif (*Bubble Feature Guidance* "Buka QRIS"), monitoring saldo & penjualan toko, serta checklist progress bar *"Progres Tahap Toko"* (33%) dan tombol verifikasi tempel QRIS.
-21. `3_4_5_merchant_progres_tahap_toko.png` — **Checkpoint Progres Tahap Toko:** Tampilan fokus card Progres Tahap Toko (1/3 Tahap Selesai, 3 checkpoint indikator, dan tombol aksi Verifikasi Tempel QRIS).
+21. `3_4_5_merchant_progres_tahap_toko.png` — **Checkpoint Progres Tahap Toko (Tinggal Verifikasi Foto QRIS):** Tampilan profil DANA Bisnis Pak Joko pasca melewati feature guidance, target 5 transaksi selesai tercapai (Rp76.000 omset hari ini), progress bar 67% (2/3 Tahap Selesai), dan tombol aksi *Verifikasi Tempel QRIS*.
 22. `3_4_6_qris_verification_modal.png` — **Modal Verifikasi Meja Kasir (Tahap 2):** Audit foto standee kasir terpasang, validasi GPS toko (`GPS MATCH ✓`), checklist 5/5 transaksi unik, dan tombol konfirmasi klaim Tahap 2.
