@@ -88,7 +88,20 @@ const cssDir = path.resolve('dist/assets');
 const cssFile = fs.readdirSync(cssDir).find((f) => f.startsWith('index-') && f.endsWith('.css'));
 const cssContent = fs.readFileSync(path.join(cssDir, cssFile), 'utf8');
 
-function wrapHtml(content, bg = '#f8fafc') {
+function wrapHtml(content, bg = '#f8fafc', scrollToBottom = false) {
+  const scrollScript = scrollToBottom
+    ? `<script>
+    function doScroll() {
+      const els = document.querySelectorAll('.overflow-y-auto');
+      els.forEach(el => { el.scrollTop = el.scrollHeight; });
+    }
+    doScroll();
+    document.addEventListener('DOMContentLoaded', doScroll);
+    window.addEventListener('load', doScroll);
+    setTimeout(doScroll, 50);
+  </script>`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="id">
 <head>
@@ -134,6 +147,7 @@ function wrapHtml(content, bg = '#f8fafc') {
   <div id="phone-container">
     ${content}
   </div>
+  ${scrollScript}
 </body>
 </html>`;
 }
@@ -155,6 +169,8 @@ const list = [
   { id: '3_1_4b_guide_merchant_slide3', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={2} />), '#0D5995') },
   { id: '3_1_5b_guide_merchant_slide4', html: wrapHtml(renderToStaticMarkup(<AffiliateCarouselGuide isOpen role="merchant" initialStep={3} />), '#0D5995') },
   { id: '3_1_6_hub_beranda', html: wrapHtml(renderToStaticMarkup(<screens.hub {...rian} s={{ ...rian.s, hasSeenAffiliateGuide: true }} />)) },
+  { id: '3_1_6b_hub_beranda_scrolled_rian', html: wrapHtml(renderToStaticMarkup(<screens.hub {...rian} s={{ ...rian.s, hasSeenAffiliateGuide: true }} />), '#f8fafc', true) },
+  { id: '3_1_6c_hub_beranda_scrolled_putu', html: wrapHtml(renderToStaticMarkup(<screens.hub {...putu} s={{ ...putu.s, hasSeenAffiliateGuide: true }} />), '#f8fafc', true) },
   { id: '3_1_7_discovery_transfer_bca', html: wrapHtml(renderToStaticMarkup(<screens.transfer {...putu} />)) },
   { id: '3_1_8_discovery_biz_profile', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...putu} />)) },
   { id: '3_1_9_discovery_receipt_data', html: wrapHtml(renderToStaticMarkup(<screens.receipt_data {...rian} />)) },
