@@ -110,6 +110,15 @@ function wrapHtml(content, bg = '#f8fafc') {
       font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .screen-in {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
     #phone-container {
       width: 375px;
       height: 812px;
