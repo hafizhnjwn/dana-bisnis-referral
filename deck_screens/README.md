@@ -29,12 +29,14 @@ Seluruh gambar di folder ini berformat PNG resolusi tinggi dengan ukuran standar
 12. `3_3_3_bizprofile_milestone.png` — **Profil DANA Bisnis Mitra Binaan (Pak Joko):** Tampilan profil DANA Bisnis Pak Joko setelah panduan fitur selesai (status Sahabat DANA, monitoring transaksi penjualan, 4 aksi operasional toko, dan kupon reward aktif penuh).
 13. `3_3_4_inbox_notifications.png` — **Notifikasi Inbox DANA:** Log transparansi notifikasi pencairan saldo otomatis dan validasi transaksi real-time.
 14. `3_3_5_reward_joko.png` — **Tab Reward Mitra Binaan (Pak Joko):** Kupon eksklusif operasional merchant baru: Bebas Biaya Tarik Tunai (2x) & Bebas Admin Transaksi (10x).
+15. `3_3_6_bizprofile_checkpoint_progres.png` — **Profil DANA Bisnis Checkpoint Progres (Pak Joko):** Card Progres Tahap Toko (Transaksi ≥ Rp10k ✓, 5 Transaksi, Tempel QRIS) dengan tombol Verifikasi Tempel QRIS.
 
 ---
 
 ## 3.4 Referred Merchant Experience
-15. `3_4_0_whatsapp_invite_joko.png` — **Undangan WhatsApp Personal (Rian ke Pak Joko):** Pesan WhatsApp resmi & personal dari Rian berisi ajakan DANA Sahabat Warung, link preview interaktif, dan tombol pendaftaran kilat.
-16. `3_4_1_merchant_landing.png` — **Merchant Landing Page:** Halaman sambutan undangan personal via link WhatsApp dengan 3 nilai tambah utama DANA Bisnis.
-17. `3_4_2_merchant_register.png` — **Konfirmasi Registrasi Kilat:** Data toko sudah otomatis ter-prefill dari pengundang, aktif < 30 detik tanpa upload e-KTP di awal (*KYC Light*).
-18. `3_4_3_merchant_qris_active.png` — **Standee QRIS Kasir Toko Aktif:** QRIS instan siap pakai + Simulasi Uji Coba Scan & Notifikasi Audio Suara DANA *"Pembayaran Berhasil!"*.
-19. `3_4_4_merchant_bizdash.png` — **Dashboard DANA Bisnis Toko:** Monitoring saldo toko Pak Joko, riwayat penerimaan uang, dan checklist menuju Toko Sahabat DANA Aktif.
+16. `3_4_0_whatsapp_invite_joko.png` — **Undangan WhatsApp Personal (Rian ke Pak Joko):** Pesan WhatsApp resmi & personal dari Rian berisi ajakan DANA Sahabat Warung, link preview interaktif, dan tombol pendaftaran kilat.
+17. `3_4_1_merchant_landing.png` — **Merchant Landing Page:** Halaman sambutan undangan personal via link WhatsApp dengan 3 nilai tambah utama DANA Bisnis.
+18. `3_4_2_merchant_register.png` — **Konfirmasi Registrasi Kilat:** Data toko sudah otomatis ter-prefill dari pengundang, aktif < 30 detik tanpa upload e-KTP di awal (*KYC Light*).
+19. `3_4_3_merchant_qris_active.png` — **Standee QRIS Kasir Toko Aktif:** QRIS instan siap pakai + Simulasi Uji Coba Scan & Notifikasi Audio Suara DANA *"Pembayaran Berhasil!"*.
+20. `3_4_4_merchant_bizdash.png` — **Dashboard DANA Bisnis Toko:** Monitoring saldo toko Pak Joko, riwayat penerimaan uang, dan checklist milestone Progres Tahap Toko menuju status Sahabat DANA.
+21. `3_4_5_merchant_progres_tahap_toko.png` — **Checkpoint Progres Tahap Toko:** Tampilan fokus card Progres Tahap Toko (1/3 Tahap Selesai, 3 checkpoint indikator, dan tombol aksi Verifikasi Tempel QRIS).

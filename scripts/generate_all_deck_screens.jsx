@@ -61,6 +61,16 @@ const asRole = (id, name, initial, store, balance) => ({
 const rian = asRole('consumer', 'Rian Prasetya', 'R', null, 152300);
 const putu = asRole('merchant', 'Putu Dewi', 'P', 'Toko Grosir Bu Putu', 96500);
 const joko = asRole('referred', 'Joko Santoso', 'J', 'Warung Sembako Pak Joko', 15000);
+const jokoCheckpoint = {
+  ...joko,
+  s: {
+    ...joko.s,
+    role: 'referred',
+    referrals: [],
+    hasSeenBizGuide: true,
+  },
+  progress: { stage1: true, biz_guide: true },
+};
 
 // Read compiled CSS
 const cssDir = path.resolve('dist/assets');
@@ -145,13 +155,15 @@ const list = [
   },
   { id: '3_3_4_inbox_notifications', html: wrapHtml(renderToStaticMarkup(<screens.inbox {...rian} />)) },
   { id: '3_3_5_reward_joko', html: wrapHtml(renderToStaticMarkup(<screens.rewards {...joko} />)) },
+  { id: '3_3_6_bizprofile_checkpoint_progres', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
 
   // 3.4 Referred Merchant Experience
   { id: '3_4_0_whatsapp_invite_joko', html: wrapHtml(renderToStaticMarkup(<screens.whatsapp_invite />), '#ECE5DD') },
   { id: '3_4_1_merchant_landing', html: wrapHtml(renderToStaticMarkup(<screens.landing {...joko} inviter="Rian Prasetya" />)) },
   { id: '3_4_2_merchant_register', html: wrapHtml(renderToStaticMarkup(<screens.register {...joko} />)) },
   { id: '3_4_3_merchant_qris_active', html: wrapHtml(renderToStaticMarkup(<screens.qris {...joko} />)) },
-  { id: '3_4_4_merchant_bizdash', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...joko} />)) },
+  { id: '3_4_4_merchant_bizdash', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
+  { id: '3_4_5_merchant_progres_tahap_toko', html: wrapHtml(renderToStaticMarkup(<screens.bizdash {...jokoCheckpoint} />)) },
 ];
 
 for (const item of list) {
